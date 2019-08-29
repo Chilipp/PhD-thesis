@@ -40,10 +40,11 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{textcomp}
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[backend=biber,style=authoryear,sorting=nyt,maxbibnames=100,bibencoding=utf8]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[backend=biber,style=authoryear-icomp,sorting=nyt,maxbibnames=100,bibencoding=utf8,natbib,uniquelist=false,maxcitenames=2]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 \addbibresource{mybib.bib} % The filename of the bibliography
 
@@ -60,6 +61,7 @@ headsepline, % Uncomment to get a line under the header
 	bindingoffset=.5cm, % Binding offset
 	top=1.5cm, % Top margin
 	bottom=1.5cm, % Bottom margin
+	marginparwidth=2.5cm,
 	%showframe, % Uncomment to show how the type block is set on the page
 }
 
@@ -92,6 +94,12 @@ headsepline, % Uncomment to get a line under the header
 %	CUSTOM LATEX PACKAGES
 %----------------------------------------------------------------------------------------
 \usepackage{appendix}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{hyperref}
+\usepackage[acronym,toc,nomain,savenumberlist,counter=chapter]{glossaries}
+\usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM LATEX COMMANDS
@@ -100,6 +108,40 @@ headsepline, % Uncomment to get a line under the header
 \newcommand\Chapter[2]{
 	\chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
 }
+\newcommand\tophline{\hline\noalign{\vspace{1mm}}}
+\newcommand\middlehline{\noalign{\vspace{1mm}}\hline\noalign{\vspace{1mm}}}
+\newcommand\bottomhline{\noalign{\vspace{1mm}}\hline}
+\newcommand\hhline{\noalign{\vspace{1mm}}\hline\noalign{\vspace{1mm}}}
+\DeclareRobustCommand*\unit[1]%
+{\ensuremath{%
+		{\thinmuskip3mu\relax
+			\def\mu{\text{\textmu}}\def~{\,}%
+			\ifx\f@series\testbx\mathbf{#1}\else\mathrm{#1}\fi}}}
+		
+\newcommand{\addref}[1][]{\todo[color=red!40]{Add reference. #1}}
+\newcommand{\rewrite}[1]{\todo[color=green!40, size=\normalsize, inline]{#1}}
+		
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\makeglossaries
+
+\newacronym{esm}{ESM}{Earth System Model}
+\newacronym{gcm}{GCM}{General Circulation Model}
+\newacronym{nao}{NAO}{North Atlantic Oscillation}
+\newacronym{pmip}{PMIP}{Paleoclimate Modelling Intercomparison Project}
+\newacronym{cmip}{CMIP}{Coupled Model Intercomparison Project}
+\newacronym{ipcc}{IPCC}{Intergovernmental Panel on Climate Change}
+\newacronym{epd}{EPD}{European Pollen Database}
+\newacronym{napd}{NAPD}{North American Pollen Database}
+\newacronym{empd}{EMPD}{Eurasian Modern Pollen Database}
+\newacronym{noaa}{NOAA}{National Oceanic and Atmospheric Administration}
+\newacronym{mpi-esm}{MPI-ESM-LR}{Max-Planck-Insitute Earth System Model at low resolution}
+\newacronym{htm}{HTM}{Holocene Thermal Maximum}
+\newacronym{lig}{LIG}{Last Interglacial}
+\newacronym{lgm}{LGM}{Last Glacial Maximum}
+
 
 \begin{document}
 
@@ -190,10 +232,10 @@ headsepline, % Uncomment to get a line under the header
 %	ABSTRACT PAGE
 %----------------------------------------------------------------------------------------
 
-\begin{abstract}
+\begin{thesisabstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
-\end{abstract}
+\end{thesisabstract}
 
 %----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
@@ -248,6 +290,13 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \hypertarget{appendix}{\appendixpage}
 \addappheadtotoc
 
+%----------------------------------------------------------------------------------------
+%	TODO notes
+%----------------------------------------------------------------------------------------
+
+\todototoc
+\listoftodos
+
 %\addcontentsline{toc}{chapter}{\listfigurename}
 %\listoffigures % Prints the list of figures
 %
@@ -257,13 +306,8 @@ The acknowledgments and the people to thank go here, don't forget to include you
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
-
-\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 	
-	\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
-	\textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
-	
-\end{abbreviations}
+	\printacronyms[title={List of Abbreviations}]
 
 %----------------------------------------------------------------------------------------
 %	SYMBOLS

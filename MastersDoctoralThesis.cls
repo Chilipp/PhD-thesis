@@ -344,7 +344,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 \providecaptionname{german,ngerman,austrian,naustrian}{\byname}{von}
 \providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\byname}{by}
 \ifbool{consistentlayout}{
-	\DeclareDocumentEnvironment{abstract}{ O{} }{%
+	\DeclareDocumentEnvironment{thesisabstract}{ O{} }{%
 		\addchap*{\abstractname}%
 		{\chapteralign\normalsize\abstractauthorfont \authorname \par}% Author name
 		\vspace{\baselineskip}
@@ -353,7 +353,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 	}%
 	{}%end alt-abstract
 }{%
-	\DeclareDocumentEnvironment{abstract}{ O{\null\vfill} }{
+	\DeclareDocumentEnvironment{thesisabstract}{ O{\null\vfill} }{
 		\checktoopen
 		\tttypeout{\abstractname}
 		#1%added to be able to have abstract more than one page long
@@ -537,6 +537,55 @@ breaklinks=true,
 	}
 }{%nothing
 }
+
+%---------------------------------------------------------------------------------------
+%     CUSTOM SECTIONS FROM COPERNICUS.STY
+%--------------------------------------------------------------------------------------
+\def\authorcontribname{Author contributions}%
+\def\acknowname{Acknowledgement}%
+\def\acknowsname{Acknowledgements}%
+
+\def\authorcontributionlabel#1{%
+  \hspace\labelsep
+      \itshape#1.%
+    \pdfbookmark[1]{\authorcontribname}{authorcontrib}%
+  }
+\def\authorcontribution#1{%
+  \vspace{\baselineskip}
+  \list{}{\labelwidth\z@ \leftmargin\z@ \itemindent-\leftmargin
+          \parsep\z@
+          \listparindent\parindent
+          \let\makelabel\authorcontributionlabel
+          \reset@font\small}%
+  \item[\authorcontribname]#1%
+  \endlist}
+
+
+\def\acknowledgementlabel#1{%
+  \hspace\labelsep
+    \itshape#1.%
+  }
+\def\@cknowledgements#1{%
+  \vspace{\baselineskip}%
+  \pdfbookmark[1]{#1}{acknow}%
+  \list{}{\labelwidth\z@ \leftmargin\z@ \itemindent-\leftmargin
+          \parsep\z@
+          \listparindent\parindent
+          \let\makelabel\acknowledgementlabel
+          \reset@font\small}%
+  \item[#1]}
+\newenvironment{subacknowledgements}{%
+  \@cknowledgements\acknowsname}
+ {\endlist}
+\newenvironment{subacknowledgement}{%
+  \@cknowledgements\acknowname}
+ {\endlist}
+
+\newenvironment{abstract}{%
+    \reset@font\normalsize\par\noindent
+    \subpdfbookmark{\abstractname}{abstract}%
+    {\bfseries\abstractname.} \ignorespaces}
+
 
 %----------------------------------------------------------------------------------------
 
