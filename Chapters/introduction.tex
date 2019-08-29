@@ -4,52 +4,112 @@
 
 \label{chp:intro}
 
+\begin{refsection}
+
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Learning from the past – Why we study Palaeoclimates} \label{sec:intro-palaeo}
+\section{Motivation} \label{sec:motivation}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt. Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac risus convallis pellentesque.
+Climate science and in particular the study of past climates face an increasing need for the analysis, standardization and sharing of data. Scientists made huge efforts to explore climate archives throughout the world to investigate the evolution of the Earths climate\addref. In parallel, computational climate models grew in complexity and data ouput due to an increase of computational power and the availability of supercomputers\addref. This generates new challenges for big data analysis that can only solved by high quality and flexible software packages.
 
+The Neotoma Database, a global international database for palaeoenvironmental proxies \citep{WilliamsGrimmBloisEtAl2018} currently lists XXX datasets with in total XXX samples for past 12'000 years, the Holocene. Such data collections enable large-scale reconstructions of past climates that however face considerable challenges. They mainly arise from the heterogeneity of the data and the necessity of further quality control and standardization. One key problem is the accessibility of data. A lot of data is not available in standardized relational databases and either held private, or is stored in less standardized archives such as PANGAEA\addref[\url{https://pangaea.de/}], or is not available in a digital format at all. The latter often results in the need of digitizing the associated data from a published diagram, a tedious and imprecise task \citep{SommerRechChevalierEtAl2019}. Additionally handling such a big heterogeneous data resource and analyzing its contents is a key challenge and requires flexible visualization resources that efficiently allow the querying of spatial data with heterogeneous time and meta data information\addref[EMPD paper].
+
+An additional challenge arises from the combination with numerical models that usually operate on a structured \citep{Edwards2010,TreutSomervilleCubaschEtAl2007} or unstructured \addref[ICON] grid with a fixed timestep. The development and analysis of such models requires visualization techniques that are interoperable with the specific data structure of the model \citep[e.g.][]{RewDavis1990, BrownFolkGoucherEtAl1993} while still being flexible enough for general purposes and computations \citep{Sommer2017, HoyerHamman2017}. Additionally it requires techniques to process observational data to make it comparable with climate models \citep{MauriDavisCollinsEtAl2015} \addref[POLNET-gridding paper] or to feed a model with the data using data assimilation of statistical models \citep{SommerKaplan2017b}.
+
+In the following section \ref{sec:intro-palaeo} I will lay down the interest in the study of palaeo-climates, both from the observational and the modellers perspective. This is continued by a section \ref{sec:intro-software} which highlights the specific requirements and the historical development of software in palaeo-science and concludes with section \ref{sec:intro-software-tools} that provides an overview on the contents of this thesis.
+
+\section{Learning from the Past – Why we study palaeo-climates} \label{sec:intro-palaeo}
+
+Mankind is facing large infrastructural challenges during this century, such as the loss of biodiversity\addref, an exponentially growing world population \addref and an acceleration of growth and globalization of markets\addref[cite World bank report?]. They all interact with a global climate change that may lead to a new environment none of us ever experienced. Any future global planning has to account highly diverse responses that range from regional to continental scales. The complex (climate) system will enter a state that is significantly different from everything we had since the beginning of the satellite era in the 19th century, the beginning of global meteorological data acquisition\addref.
+
+Our knowledge about this new climate is therefore mainly based on computational \glspl{esm}. They face the challenge of simulating a new climate based on our present knowledge of the interactions between the different compartments Ocean, Land and Atmosphere. Running such a model for the entire Earth with a reasonable resolution is therefore very cost-intensive and requires large computational resources. The validation of it becomes technically difficult considering the large amount of data output, and additionally conceptually difficult because of the aforementioned transition into a warmer world during the next century. We are entering a new state and it is questionable how well our models perform \citep{UldenOldenborgh2006, Karpechko2010, HargreavesAnnanOhgaitoEtAl2013}\addref[check these references! taken from Achilles PhD thesis, there might be better ones].
+
+To evaluate their skill, we can only use our knowledge of the past climate from before the systematic measurement of temperature, precipitation, etc. These climates, also referred to as palaeo-climates, provide the only opportunity to evaluate an \gls{esm} under conditions very different than today. palaeo-climatic research has therefore been an integral part for climate sciences since the 80s \citep{COHMAPMembers1988, JoussaumeTaylor1995}, particularly in the \glsfirst{pmip} \citep{BraconnotOttoBliesnerHarrisonEtAl2007, BraconnotOttoBliesnerHarrisonEtAl2007a, BraconnotHarrisonKageyamaEtAl2012, KageyamaBraconnotHarrisonEtAl2016, Otto-BliesnerBraconnotHarrisonEtAl2017, JungclausBardBaroniEtAl2017}. 
+
+The current geological period is the Quaternary. It is characterized by glacial-interglacial cycles mainly driven by orbital changes \citep{HaysImbrieShackleton1976, ImbrieBergerBoyleEtAl1993}\addref[Check these] that cause a varying insolation on the planet. 
+
+The end of this period can be used for data-model comparisons due to the availability of palaeo-climate archives. It started with the \gls{lig} about 127'000 years ago and was followed by the \gls{lgm} at 21'000 years ago. The warming of the atmosphere in the following interglacial  has been interrupted by a rapid cooling, called the Younger Dryas, between 12'900 and 11'700 years ago, which then let to the onset of the current epoch, the Holocene \citep{WalkerJohnsenRasmussenEtAl2009} \addref[check \cite{WalkerJohnsenRasmussenEtAl2009}].
+
+\todo[inline]{Add some background on the Holocene. How did it change (global mean temperature estimate?), how was the insolation? CO$_2$ effects, impact of the ice sheets during the early holocene, changes in altitude, large-scale atmospheric circulation, human influences.}
+
+This epoch is of particular interest because the continental setup is comparable to nowadays while still having a climate that is significantly different from present day \addref[PMIP paper]. Additionally we have a large set of proxies available to quantify the climate, independent from the model estimates, and for the entire globe \citep{WannerBeerButikoferEtAl2008} \addref[check \cite{WannerBeerButikoferEtAl2008}]. 
+
+
+\subsection{Proxy Data from the Holocene}  \label{sec:holo-data}
+Before 1850, there is almost no instrumental measurement of temperature. Instead we rely on archives such as lake sediments, glaciers, peat bogs, or speleothems that preserve climate proxies. The latter is a set of variables that are influenced by climate conditions and therefore allow an indirect measurement of climate parameters at ancient times, e.g. temperature, precipitation or sea-level. The most prominent proxies are isotopic compositions of $\delta^{18}$O in glacial ice cores\addref, marine sediments\addref, peat bogs\addref or speleothems\addref; bio-ecologic assemblages such as pollen\addref, chironomids \addref or diatoms \addref in lake sediments; foraminifera and alkenone in marine sediments\addref; and the widths of tree rings. 
+
+The most abundant climate proxy, that I will also focus on in the next chapters, are pollen assemblages. It is the  geographically most wide spread palaeo-climate proxy \citep{BirksBirks1980} \addref[Don't know about \cite{BirksBirks1980}, took it from Manus review paper...] and has a long history in quantitative palaeo-climatologic reconstructions \citep[e.g.][]{Nichols1967, Nichols1969, Bradley1985}. 
+
+The ability to serve as a proxy for the past arises from the chemically stable polymer sporopollenin, that allows it to be preserved over very long periods of time, in various environments such as lakes, wetlands or ocean sediments \addref[Manus review paper] \citep{FaegriKalandKrzywinski1989, Havinga1967}. Pollen are produced by seed-bearing plants (spermatophytes, \cite{Wodehouse1935} \addref[Don't know about \cite{Wodehouse1935}, took it from Manus review paper...]) and as such have a high spatial continuity and prevalence. Their compositions (closely related to the surrounding vegetation) is highly dependent on the climate and allows the reconstruction of the latter through an inverse modelling approach \addref[cite some MAT, WAPLS, Bayesian, etc. papers].
+
+\rewrite{\textbf{This paragraph should be rewritten based on \cite{Grimm2008}, section 1.3.1!} Another useful feature of this proxy for data-model intercomparisons is the existence of databases for fossil pollen assemblages. Freely available data comes from the \gls{epd} \citep{VincensLezineBuchetEtAl2007} or the \gls{napd}, that both started in the 80s, and more recent from Africa and Latin America \citep{FyfeBeaulieuBinneyEtAl2009, FlantuaHooghiemstraGrimmEtAl2015, MarchantAlmeidaBehlingEtAl2002}). Another recent attempt is the Neotoma database \citep{WilliamsGrimmBloisEtAl2018}, a global multiproxy database that also incorporates many of the regional pollen databases.}
+The use of the above-mentioned proxies, particularly pollen, for palaeo-climate reconstruction has a long academic tradition in geology \citep{Bradley1985} and provides the source of large-scale palaeo-climatic reconstructions in number of different studies \citep{MauriDavisCollinsEtAl2015, DavisBrewerStevensonEtAl2003, MarsicekShumanBartleinEtAl2018, NeukomSteigerGomezNavarroEtAl2019, NeukomBarbozaErbEtAl2019}\addref[add more..., Climate12K].
+
+\todo[inline]{Add paragraph about heterogeneity of data, distribution of data, accessibility of data -- need for software tools}
+
+
+\subsection{Model Simulations from the Holocene}  \label{sec:holo-model}
+\todo[inline]{add PMIP experments, highlight transient model runs}
+
+\todo[inline]{Add paragraph about size of data, distribution of data, accessibility of data -- need for software tools}
+
+\todo[inline]{Add models for transient runs: LOVECLIM, TRACE, MPI-ESM-LR, HadCM3, FAMOUS}
+
+\subsection{Large-scale Data-Model intercomparisons} \label{sec:data-model-comparison}
+
+\rewrite{This thesis is not about data-model intercomparisons, although I collaborated in some projects \citep{WeitzelWagnerSjolteEtAl2019}, but nonetheless, this is the target of the HORNET project and the tools developed in this thesis aim to foster these.}
+
+\todo[inline, size=\normalsize]{Data model intercomparisons: \cite{MauriDavisCollinsEtAl2014, MarsicekShumanBartleinEtAl2018, MarcottShakunClarkEtAl2013}}
+
+Multiple studies used this data collection in the past for large-scale climatic reconstructions. One of them is \cite{MauriDavisCollinsEtAl2015} who extended the methodology of \cite{DavisBrewerStevensonEtAl2003} for a gridded European reconstruction of summer/winter and annual temperature, precipitation and growing degree-days above 5°C.. The most recent study, \cite{MarsicekShumanBartleinEtAl2018} 
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
-\section{The importance of software and numeric for climate science} \label{sec:intro-software}
+\section{Software for Palaeoclimatologic Analysis} \label{sec:intro-software}
 
 \begin{enumerate}
 	\item History of Software development in Earth System Science
-		\begin{itemize}
-			\item Development of Climate models
-			\item Statistics
-			\item Visualization
-			\item Distribution and Synthesis of Data
-			\item Quantitative and large-scale reconstructions through proxies
-		\end{itemize}
+	\begin{itemize}
+		\item Development of Climate models
+		\item Statistics
+		\item Visualization
+		\item Distribution and Synthesis of Data
+		\item Quantitative and large-scale reconstructions through proxies
+	\end{itemize}
 	\item An overview on open-source Software Development
-		\begin{itemize}
-			\item
-			Version control
-			\item
-			Transparency
-			\item
-			Automated tests through Continuous Integration
-			\item
-			Accessible and extensive documentation
-			\item
-			Distribution of Software through Package managers (conda, PyPi,
-			Docker)
-		\end{itemize}
+	\begin{itemize}
+		\item
+		Version control
+		\item
+		Transparency
+		\item
+		Automated tests through Continuous Integration
+		\item
+		Accessible and extensive documentation
+		\item
+		Distribution of Software through Package managers (conda, PyPi,
+		Docker)
+	\end{itemize}
 \end{enumerate}
 
+\subsection{An Introduction into Open-Source Software Development} \label{sec:intro-software-tools}
+
+\subsection{Challenges and History of Proxy Data Analysis} \label{sec:intro-software-data}
+
+\subsection{The Development of Computational Climate Simulations} \label{sec:intro-software-model}
+Software and computational numerics play a crucial row for our understanding of climate since the beginning of the development of \glspl{gcm} after world war II \citep{Edwards2010, Phillips1956, Lewis1998}. The first simulations and analysis of \glspl{gcm} where limited by the available computational facilities, the model by \cite{Phillips1956} for example operated on a $17 \times 16$ grid simulating a surface with the size of roughly one tenth of the Earth. 
+
+\todo[inline, size=\normalsize]{\cite{TreutSomervilleCubaschEtAl2007, Schneider2012,BoettingerRoeber2019, NockeSterzelBoettingerEtAl2008, RautenhausBottingerSiemenEtAl2018, HoyerHamman2017}, \href{https://uv-cdat.llnl.gov/}{UV-CDAT}}
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
-\section{Challenges tackled by this} \label{sec:intro-thesis-overview}
+\section{Challenges tackled in this thesis} \label{sec:intro-thesis-overview}
 
 \begin{itemize}
 	\item Visual analysis of large amounts of data (psyplot)
@@ -62,3 +122,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies lacin
 			\item \hyperlink{appendix}{Appendix}
 		\end{enumerate}
 \end{itemize}
+
+
+\printbibliography[heading=subbibintoc]
+
+\end{refsection}
