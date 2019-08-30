@@ -57,19 +57,11 @@ The use of the above-mentioned proxies, particularly pollen, for palaeo-climate 
 
 \todo[inline]{Add models for transient runs: LOVECLIM, TRACE, MPI-ESM-LR, HadCM3, FAMOUS}
 
-\subsection{Large-scale Data-Model intercomparisons} \label{sec:data-model-comparison}
-
-\rewrite{This thesis is not about data-model intercomparisons, although I collaborated in some projects \citep{WeitzelWagnerSjolteEtAl2019}, but nonetheless, this is the target of the HORNET project and the tools developed in this thesis aim to foster these.}
-
-\todo[inline, size=\normalsize]{Data model intercomparisons: \cite{MauriDavisCollinsEtAl2014, MarsicekShumanBartleinEtAl2018, MarcottShakunClarkEtAl2013}}
-
-Multiple studies used this data collection in the past for large-scale climatic reconstructions. One of them is \cite{MauriDavisCollinsEtAl2015} who extended the methodology of \cite{DavisBrewerStevensonEtAl2003} for a gridded European reconstruction of summer/winter and annual temperature, precipitation and growing degree-days above 5°C.. The most recent study, \cite{MarsicekShumanBartleinEtAl2018} 
-
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
-\section{Software for Palaeoclimatologic Analysis} \label{sec:intro-software}
+\section{Software for Palaeoclimatology} \label{sec:intro-software}
 
 \begin{enumerate}
 	\item History of Software development in Earth System Science
@@ -96,14 +88,30 @@ Multiple studies used this data collection in the past for large-scale climatic 
 	\end{itemize}
 \end{enumerate}
 
-\subsection{An Introduction into Open-Source Software Development} \label{sec:intro-software-tools}
+The usage of software is crucial for the quantitative reconstruction of Earth's Climate. Palaeoclimate research is facing an information overload problem and requires innovative methodologies in the realm of visual analytics, the interplay between automated analysis techniques and interactive visualization \citep{KeimAndrienkoFeketeEtAl2008, Nocke2014}. As such, a visual representation of the palaeoclimate reconstruction has been essential for both, proxies \citep{Nichols1967, Bradley1985, Grimm1988} and models \citep{Phillips1956, RautenhausBoettingerSiemenEtAl2018, NockeSterzelBoettingerEtAl2008, Nocke2014, BoettingerRoeber2019}, although the visualization methods significantly differ due to the differences in data size and data heterogeneity.
 
-\subsection{Challenges and History of Proxy Data Analysis} \label{sec:intro-software-data}
+The second important aspect for software and palaeoclimate is the distribution of data to make it accessible to other researchers, the community and policy makers\addref[cite some open-data publications], which is commonly established through online accessible data archives and recently also through map-based web interfaces \citep{WilliamsGrimmBloisEtAl2018, BollietBrockmannMassonDelmotteEtAl2016}.
+
+The following sections provide an overview on the different techniques used by modelers and palynologists to visualize and distribute their data and concludes with an introduction into Open-Source Software Development, which forms the basis of the software solutions that are presented later in this thesis (chapters \ref{chp:psyplot}, \ref{chp:straditize}, and \ref{chp:empd}, and appendix \ref{chp:software}).
+
+\subsection{Sofware for Proxy Data Analysis, Visualization and Distribution} \label{sec:intro-software-data}
+Due to the nature of stratigraphic data, proxies, especially pollen assemblages, are often treated as a collection of multiple time-series (one-dimensional arrays). The size of one dataset is generally small (in the range of kB) and can be treated as plain text files. Traditionally, numerical and statistical analysis are separated from the visualization. 
+
+In palynology, standard analytical tools are Microsoft Excel\footnote{\url{https://products.office.com/en/excel}} and the R software for statistical computing \citep{RCT2019}. The latter also involves multiple packages for palaeoclimatic reconstruction, such as \texttt{rioja} \citep{Juggins2017} and \texttt{analogue} \citep{SimpsonOksanen2019, Simpson2007} or bayesian methods \citep{NolanTiptonBoothEtAl2019, Tipton2017}\addref[add more?]. Alternatively, desktop applications exist, such as Polygon\footnote{\url{http://polsystems.rits-palaeo.com}} by \cite{NakagawaTarasovNishidaEtAl2002} or the CREST software by \cite{ChevalierCheddadiChase2014, Chevalier2019}.
+
+It is a long-standing tradition to visualize stratigraphic data, and especially pollen data, in form of a stratigraphic (pollen) diagram \citep{Bradley1985, Grimm1988}. Especially during the 19th century, when it was not yet common to distribute data alongside a peer-reviewed publication, pollen diagrams where the only possibility to publish the entire dataset (see also chapter \ref{chp:straditize}). The generation of these diagrams is usually based on desktop applications such as C2 \citep{Juggins2007}, Tilia\footnote{\url{https://www.tiliait.com/}} \citep{Grimm1988, Grimm1991}. A more recent implementation into the psyplot framework \citep[chapter \ref{chp:psyplot}]{Sommer2017} is also provided with the psy-strat plugin\footnote{\url{https://psy-strat.readthedocs.io}} \citep{Sommer2019}.
+
+Raw pollen data is at present made available through web archives, such as PANGAEA\footnote{\url{https://pangaea.de/}} or the \gls{ncdc} by the \glsfirst{noaa}\footnote{\url{https://www.ncdc.noaa.gov/data-access/paleoclimatology-data}} where researchers can create a DOI for their raw data. Collections of data, such as regional pollen databases or project specific collections \citep[e.g.][]{WhitmoreGajewskiSawadaEtAl2005, DavisZanonCollinsEtAl2013} are usually published in one of the above-mentioned archives or associated with a publication. A different approach has been developed by \cite{BollietBrockmannMassonDelmotteEtAl2016} to develop a small web application as an interface into the data collection, the \textit{ClimateProxiesFinder} \citep[, see also chapter \ref{chp:empd}]{Brockmann2016}. 
+
+Outstanding compared to the previous data interfaces is the new infrastructure for the Neotoma database \citep{WilliamsGrimmBloisEtAl2018}. It consists of the map-based web interface, the Neotoma Explorer\footnote{\url{https://apps.neotomadb.org/Explorer}}, a RESTful api\footnote{\url{https://api.neotomadb.org}} that allows an interaction with other web services, the neotoma R package \citep{GoringDawsonSimpsonEtAl2015} and an interface into the Tilia software for stratigraphic and map-based visualizations \citep{WilliamsGrimmBloisEtAl2018}. This rich functionality is, however, bound to the structure of Neotoma and as such, different from the Javascript-based approach developed in chapter \ref{chp:empd} cannot easily be transferred to other projects.
+
 
 \subsection{The Development of Computational Climate Simulations} \label{sec:intro-software-model}
 Software and computational numerics play a crucial row for our understanding of climate since the beginning of the development of \glspl{gcm} after world war II \citep{Edwards2010, Phillips1956, Lewis1998}. The first simulations and analysis of \glspl{gcm} where limited by the available computational facilities, the model by \cite{Phillips1956} for example operated on a $17 \times 16$ grid simulating a surface with the size of roughly one tenth of the Earth. 
 
-\todo[inline, size=\normalsize]{\cite{TreutSomervilleCubaschEtAl2007, Schneider2012,BoettingerRoeber2019, NockeSterzelBoettingerEtAl2008, RautenhausBottingerSiemenEtAl2018, HoyerHamman2017}, \href{https://uv-cdat.llnl.gov/}{UV-CDAT}}
+\todo[inline, size=\normalsize]{\cite{TreutSomervilleCubaschEtAl2007, Schneider2012,BoettingerRoeber2019, NockeSterzelBoettingerEtAl2008, RautenhausBoettingerSiemenEtAl2018, HoyerHamman2017}, \href{https://uv-cdat.llnl.gov/}{UV-CDAT}}
+
+\subsection{An Introduction into Open-Source Software Development} \label{sec:intro-software-tools}
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
