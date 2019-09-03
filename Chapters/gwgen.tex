@@ -7,7 +7,7 @@
 \begin{refsection}
 	
 \begin{abstract}
-	While a wide range of earth system processes occur at daily and even sub-daily timescales, many global vegetation and other terrestrial dynamics models historically used monthly meteorological forcing, both to reduce computational demand and because global datasets were lacking. Recently, dynamic land surface modeling has moved towards resolving daily and subdaily processes, and global datasets containg daily or sub-daily meteorology have become available. These meteorological datasets, however, cover only the instrumental era of the last ca. 100 years at best, are subject to considerable uncertainty, and represent extremely large data files with associated computational costs of data input/output and file transfer. For periods before the recent past or into the future, global meteorological forcing can be provided by climate model output, but the quality of these data at high temporal resolution is low, particularly e.g., with daily precipitation frequency and amount. Here we present ARVE-WGEN, a globally applicable statistical weather generator for the temporal downscaling of monthly climatology to daily meteorology. Our weather generator is parameterized using a global meteorological database and simulates daily values of five common daily weather variables: minimum and maximum temperature, precipitation, cloud cover, and windspeed. ARVE-WGEN is lightweight, modular, and requires a minimal set of monthly mean variables as input. The weather generator may be used in a range of applications, for example, in global vegetation, crop, erosion, or hydrological models.
+	While a wide range of earth system processes occur at daily and even sub-daily timescales, many global vegetation and other terrestrial dynamics models historically used monthly meteorological forcing, both to reduce computational demand and because global datasets were lacking. Recently, dynamic land surface modeling has moved towards resolving daily and subdaily processes, and global datasets containg daily and sub-daily meteorology have become available. These meteorological datasets, however, cover only the instrumental era of the last ca. 120 years at best, are subject to considerable uncertainty, and represent extremely large data files with associated computational costs of data input/output and file transfer. For periods before the recent past or into the future, global meteorological forcing can be provided by climate model output, but the quality of these data at high temporal resolution is low, particularly for daily precipitation frequency and amount. Here we present GWGEN, a globally applicable statistical weather generator for the temporal downscaling of monthly climatology to daily meteorology. Our weather generator is parameterized using a global meteorological database and simulates daily values of five common variables: minimum and maximum temperature, precipitation, cloud cover, and wind speed. GWGEN is lightweight, modular, and requires a minimal set of monthly mean variables as input. The weather generator may be used in a range of applications, for example, in global vegetation, crop, soil erosion, or hydrological models. While GWGEN does not currently perform spatially autocorrelated multi-point downscaling of daily weather, this additional functionality could be implemented in future versions. 
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -15,332 +15,36 @@
 %----------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:gwgen-intro}
 
-The development of the first global vegetation models in the 1970’s \citep[e.g.][]{Lieth1975} brought about the demand for meteorological forcing datasets with global extent and relatively high spatial resolution, e.g., ~1x1°. While a global weather station-based monthly climate dataset was available at this time \citep{WalterLieth1967}, limitations in computers and data storage allowed only the simplest treatment of these data. The first global simulations of the net primary productivity of the terrestrial biosphere \citep{Lieth1975}, thus used rasterized polygons of annual meteorological variables that had been crudely interpolated from the station-based climatology. A decade later saw the development of better computers and more sophisticated global vegetation models \citep{PrenticeCramerHarrisonEtAl1992, Prentice1989} that recognized the need for forcing at a sub-annual timestep and development of these models was done in parallel with the first global, gridded high resolution (0.5°) monthly climatology \citep{LeemansCramer1991}. At the time, monthly meteorological data was the only feasible global data that could be produced, in terms of the raw station data available to feed the interpolation process, the processing time required to produce gridded maps, and the data storage and transfer capabilities of contemporary computer systems and networks. Global gridded monthly climate data became the standard for not only large-extent vegetation modeling \citep{HaxeltinePrentice1996a, HaxeltinePrenticeCreswell1996,KaplanBigelowPrenticeEtAl2003, KucharikFoleyDelireEtAl2000, WoodwardSmithEmanuel1995}, but also for a wide range of studies on biodiversity and species distribution \citep[e.g.][]{ElithGrahamAndersonEtAl2006}, vegetation trace gas emissions \citep[e.g.][]{GuentherHewittEricksonEtAl1995}, and even the geographic distribution of human diseases \citep[e.g.][]{BhattGethingBradyEtAl2013}
+The development of the first global vegetation models in the 1970’s \citep[e.g.,][]{Lieth1975} brought about the demand for meteorological forcing datasets with global extent and relatively high spatial resolution, e.g., $1^{\circ}\times1^{\circ}$. While a global weather station-based monthly climate dataset was available at this time \citep{WalterLieth1967}, limitations in computers and storage allowed only the simplest treatment of these data. The first global simulations of the net primary productivity of the terrestrial biosphere \citep{Lieth1975}, thus used rasterized polygons of annual meteorological variables that had been crudely interpolated from the station-based climatology. A decade later saw the development of better computers and more sophisticated global vegetation models \citep{PrenticeCramerHarrisonEtAl1992, Prentice1989} that recognized the need for forcing at a sub-annual timestep and development of these models was done in parallel with the first global, gridded high resolution (0.5$^{\circ}$) monthly climatology \citep{LeemansCramer1991}. At the time, monthly meteorological data was the only feasible global data that could be produced, in terms of the raw station data available to feed the interpolation process, the processing time required to produce gridded maps, and the data storage and transfer capabilities of contemporary computer systems and networks. Global gridded monthly climate data thus became the standard for not only large-extent vegetation modeling \citep{HaxeltinePrentice1996a, HaxeltinePrenticeCreswell1996,KaplanBigelowPrenticeEtAl2003, KucharikFoleyDelireEtAl2000, WoodwardSmithEmanuel1995}, but also for a wide range of studies on biodiversity and species distribution \citep[e.g.,][]{ElithGrahamAndersonEtAl2006}, vegetation trace gas emissions \citep[e.g.,][]{GuentherHewittEricksonEtAl1995}, and even the geographic distribution of human diseases \citep[e.g.,][]{BhattGethingBradyEtAl2013}
 
-Over subsequent years, the global gridded monthly climate datasets were improved \citep{NewHulmeJones1999,NewListerHulmeEtAl2002}, developed with very high spatial resolution \citep{HijmansCameronParraEtAl2005}, and expanded beyond climatological mean climate to cover continuous timeseries over decades \citep{HarrisJonesOsbornEtAl2014,MitchellJones2005,NewHulmeJones2000}. The latter was an essential requirement for forcing dynamic global vegetation models (DGVMs) \citep[e.g.][]{SitchSmithPrenticeEtAl2003}. However despite increasing quality, spatial resolution, and temporal extent in these datasets, the basic time step remained monthly, partly for legacy reasons – models had been developed in an earlier era subject to computational limitations and therefore used a monthly timestep for efficiency even if this was no longer strictly a constraint – and partly because of the challenge in developing a global, high-resolution climate dataset with a daily or shorter timestep still presented a major data management challenge.
+Over subsequent years, the global gridded monthly climate datasets were improved \citep{NewHulmeJones1999,NewListerHulmeEtAl2002}, developed with very high spatial resolution \citep{HijmansCameronParraEtAl2005}, and expanded beyond climatological mean climate to cover continuous timeseries over decades \citep{HarrisJonesOsbornEtAl2014,MitchellJones2005,NewHulmeJones2000}. The latter was an essential requirement for forcing dynamic global vegetation models (DGVMs) \citep[e.g.,][]{SitchSmithPrenticeEtAl2003}. However, despite increasing quality, spatial resolution, and temporal extent in these datasets, the basic time step remained monthly, partly for legacy reasons --- models had been developed in an earlier era subject to computational limitations and therefore used a monthly timestep for efficiency even if this was no longer strictly a constraint --- and partly because of the challenge in developing a global, high-resolution climate dataset with a daily or shorter timestep still presented a major data management challenge.
 
-On the other hand, there was increasing awareness that accurate simulation of many earth surface processes required representation of processes at a shorter-than-monthly timestep. Global simulation of surface hydrology \citep{GertenSchaphoffHaberlandtEtAl2004}, crop growth \citep{BondeauSmithZaehleEtAl2007}, or biogeophysical processes \citep{KrinnerViovyNoblet-DucoudreEtAl2005} needed sub-monthly forcing to produce reliable results. To address this need for better forcing data, two main approaches were taken: either monthly climate data were downscaled online using a stochastic weather generator \citep{PfeifferSpessaKaplan2013}, or a sub-daily, high-resolution, gridded climate timeseries was generated directly by merging high-temporal-resolution reanalysis data (e.g., NCEP, 6h, 2.5°) with high-spatial-resolution monthly climate data (e.g., CRU, 0.5°). The latter process resulted in the CRUNCEP dataset \citep{ViovyCiais2016,WeiLiuHuntzingerEtAl2014}, which, while global, is large even by modern standards (ca. 350 Gb), is not available at spatial resolution greater than 0.5°, and covers only the period 1901-2014.
+On the other hand, there was increasing awareness that accurate simulation of many earth surface processes required representation of processes at a shorter-than-monthly timestep. Global simulation of surface hydrology \citep{GertenSchaphoffHaberlandtEtAl2004}, crop growth \citep{BondeauSmithZaehleEtAl2007}, or biogeophysical processes \citep{KrinnerViovyNoblet-DucoudreEtAl2005} needed sub-monthly forcing to produce reliable results. To address this need for better forcing data, two main approaches were taken: either monthly climate data were downscaled online using a stochastic weather generator \citep[e.g.,][]{PfeifferSpessaKaplan2013}, or a sub-daily, high-resolution, gridded climate timeseries was generated directly by merging high-temporal-resolution reanalysis data (e.g., NCEP, 6h, 2.5$^{\circ}$) with high-spatial-resolution monthly climate data (e.g., CRU, 0.5$^{\circ}$). The latter process resulted in the CRUNCEP dataset \citep{ViovyCiais2016,WeiLiuHuntzingerEtAl2014}, which, while global, is large even by modern standards (ca. 350 Gb), is not available at spatial resolution greater than 0.5$^{\circ}$, and covers only the period 1901-2014.
 
-Forcing data for global vegetation and other models with shorter than monthly resolution at higher spatial resolutions than 0.5°, or for any other period than the last ca. 120 years, e.g., for the future or the more distant past, may therefore only be available through downscaling techniques. One approach to overcome the limitations of currently available datasets could be to use GCM output directly, however, most GCM output currently available does not have greater than 0.5° spatial resolution, with the current generation of GCMs typically approaching ca. 1°x1° degree. Furthermore, there is a general observation that daily meteorology produced by GCMs is not realistic, particularly for precipitation \citep{Dai2006,StephensLEcuyerForbesEtAl2010,SunSolomonDaiEtAl2006}. An alternative approach is, therefore, to perform temporal downscaling on monthly meteorological data using a statistical weather generator.
+Forcing data for global vegetation and other models with shorter than monthly resolution at higher spatial resolutions than 0.5$^{\circ}$, or for any other period than the last ca. 120 years, e.g., for the future or the more distant past, may therefore only be available through downscaling techniques. One approach to overcome the limitations of currently available datasets could be to use GCM output directly, however, most GCM output currently available does not have greater than 0.5$^{\circ}$ spatial resolution, with the current generation of GCMs typically approaching ca. $1^{\circ}\times1^{\circ}$. Furthermore, there is a general observation that daily meteorology produced by GCMs is not realistic, particularly for precipitation \citep{Dai2006,StephensLEcuyerForbesEtAl2010,SunSolomonDaiEtAl2006}. An alternative approach is, therefore, to perform temporal downscaling on monthly meteorological data using a statistical weather generator.
 
-Statistical weather generators were first developed primarily for crop and hydrological modeling at the field to catchment scale \citep{Richardson1981,WoolhiserPegram1979,WoolhiserRoldan1982}. The weather generator was parameterized using daily meteorological observations at one or more weather stations close to the area of interest, although some attempts were made to generalize the parameterization over larger, sub-continental regions \citep[e.g.][]{Wilks1999a,Wilks1998,WoolhiserRoldan1986}. Locally parameterized weather generators have been applied to a very wide range of studies \citep{Wilks2010,WilksWilby1999}, and enhanced to include additional meteorological variables beyond the original precipitation, temperature, and solar radiation \citep[e.g.][]{ParlangeKatz2000}. Applications of a weather generator at continental to global scales was still limited, however, because of the need to perform local parameterization.
+Statistical weather generators were first developed primarily for crop and hydrological modeling at the field to catchment scale \citep{Richardson1981,WoolhiserPegram1979,WoolhiserRoldan1982}. The weather generator was parameterized using daily meteorological observations at one or more weather stations close to the area of interest, although some attempts were made to generalize the parameterization over larger, sub-continental regions \citep[e.g.,][]{Wilks1999a,Wilks1998,WoolhiserRoldan1986}. Locally parameterized weather generators have been applied to a very wide range of studies \citep{Wilks2010,WilksWilby1999}, and enhanced to include additional meteorological variables beyond the original precipitation, temperature, and solar radiation \citep[e.g.,][]{ParlangeKatz2000}. Applications of a weather generator at continental to global scales was still limited, however, because of the need to perform local parameterization.
 
-The need to simulate daily meteorology in regions of the world with short, unreliable, or unavailable daily meteorological timeseries brought about the realization that certain features of weather generator parameterization might be generalized across a range of climates \citep{GengAuburn1987,GengDevriesSupit1986}. This ultimately led to the development of globally applicable weather generators \citep{Friend1998}, and their incorporation in DGVMs \citep{BondeauSmithZaehleEtAl2007,GertenSchaphoffHaberlandtEtAl2004,PfeifferSpessaKaplan2013}. The original global parameterization \citep{GengDevriesSupit1986} of these weather generators was, however, limited to seven weather stations, mostly in the temperate latitudes. \cite{Friend1998} does not publish the parameters used in his global weather generator, but we assume these were the same as the original \cite{GengAuburn1987,GengDevriesSupit1986} models. Given the availability of 1) large datasets of daily meteorology, and 2) computers powerful enough to process these data, we therefore decided that it would be valuable to revisit these parameterizations, perform a systematic and quantitative evaluation of the resulting downscaled meteorology, and potentially improve our ability to perform monthly-to-daily downscaling of common meteorological variables with a single, globally applicable parameterization.
+The need to simulate daily meteorology in regions of the world with short, unreliable, or unavailable daily meteorological timeseries brought about the realization that certain features of weather generator parameterization might be generalized across a range of climates \citep{GengAuburn1987,GengDevriesSupit1986}. This ultimately led to the development of globally applicable weather generators \citep{Friend1998}, and their incorporation in DGVMs \citep{BondeauSmithZaehleEtAl2007,GertenSchaphoffHaberlandtEtAl2004,PfeifferSpessaKaplan2013}. The original global parameterization \citep{GengDevriesSupit1986} of these weather generators was, however, limited to seven weather stations, mostly in the temperate latitudes. \cite{Friend1998} does not publish the parameters used in his global weather generator, but we assume these were the same as the original \cite{GengAuburn1987} and \cite{GengDevriesSupit1986} models. Given the availability of 1) large datasets of daily meteorology, and 2) computers powerful enough to process these data, we therefore decided that it would be valuable to revisit these parameterizations, perform a systematic and quantitative evaluation of the resulting downscaled meteorology, and potentially improve our ability to perform monthly-to-daily downscaling of common meteorological variables with a single, globally applicable parameterization.
 
-In the following sections we describe GWGEN, a weather generator parameterized using more than 50 million daily weather observations, from all continents and latitudes. We demonstrate how updated schemes for simulating precipitation occurrence and amount, and for correcting bias in temperature and wind speed, further improve the quality of the model simulations. We perform an extensive model evaluation and parameter uncertainty analysis in order to settle on a parameter set that provides the most accurate, globally applicable results. We comment on the limitations of the model and priorities for future research. The GWGEN is an open-source, stand-alone model that may be incorporated into any number of models designed to work at global scale, including, e.g., vegetation, hydrology, climatology, and animal distribution models.
-
-
-\section{Model development}
-
-Our WGEN type weather generator follows the methodology described by \cite{Richardson1981}, the simple method described by \cite{GengDevriesSupit1986}. It uses a second-order Markov chain as described in \cite{Wilks1999} to calculate the precipitation occurrence and a hybrid Gamma-GP distribution \citep{NeykovNeytchevZucchini2014} to estimate the amount. Temperature, cloud cover and wind speed are calculated via cross correlation and depending on the wet/dry-state of the day. An additional quantile-based bias correction for wind speed and minimum temperature improves the simulation results significantly.
-
-In this section, we describe the global weather station database and provide the underlying figures and equations that have been used for the parameterization of GWGEN. A full model description can be found in section \ref{sec:model}.
-
-\subsection{Development of global weather station database}
-\begin{figure}
-	\includegraphics[width=12cm]{figures/stations_plot.pdf}
-	\caption[Stations that are used for parameterization and evaluation of the weather generator.]{Stations that are used for parameterization and evaluation of the weather generator. The upper stations are used for parameterizing precipitation and temperature, the middle ones for cloud and wind parameterization, as well as the cross correlation of cloud, temperature and wind. The lower plot shows the
-		evaluation stations.}
-	\label{fig:stations}
-\end{figure}
-For the parametrization we used temperature, wind and cloud data from the Synoptic Cloud Reports (EECRA) databases \citep{HahnWarren1999}, as well as precipitation and temperature from the daily Global Historical Climatology Network (GHCN) \citep{MenneDurreVoseEtAl2012,Menne2012}. The latter consists of roughly 100'000 different stations from which we selected the one with the longest record for each grid cell in a global grid $0.5\times0.5^\circ$. Since several of the US stations measure precipitation in inches instead of millimeter per day, we furthermore selected the station that have all numbers from 0.1 to 1.0 millimeter per day in its record. This selection procedure resulted in 16'590 stations.
-
-Our parameterization only uses months with complete records for each day of the month. The finally selected stations from the EECRA and GHCN data are displayed in figure \ref{fig:stations}.
-
-\subsection{Parameterization} \label{sec:param}
-
-\subsubsection{Precipitation occurrence} \label{sec:markov}
-
-\begin{figure}
-	\includegraphics[width=12cm]{figures/markov.pdf}
-	\caption[Transition probabilities vs. wet fraction]{Transition probabilities vs. wet fraction. The red lines show the fit of the probability against the wet fraction. The fit for the $p_{11}$ transition probability was forced to the point $(1, 1)$, the others were forced to $(0, 0)$.}
-	\label{fig:markov}
-\end{figure}
-
-To apply the Markov chain, we calculated the transition probabilities for a wet day being followed by a wet day ($p_{11}$), for a wet day being followed by a dry day being followed by a wet day ($p_{101}$) and for two dry days being followed by a wet day ($p_{001})$.  We did this by first extracting all (complete) Januaries, Februaries, etc. for each of the parameterization stations separately. In a second step, all Januaries were merged together into one large multi-year series and the above mentioned transition probabilities were calculated and fitted towards the number of wet days in this series (see figure \ref{fig:markov}). Like-wise we did it for all Februaries, Marchs, etc..
-
-%%%%%%%%%%%%%%%%% MOVE THIS TO sec:model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The result of this procedure are the following relationships
-
-\begin{align}
-	p_{11} &= 0.2549 + 0.7451\cdot \frac{\text{wet days in month}}{\text{days in month}} \label{eq:p11}\\
-	p_{101} &= 0.8463 \cdot \frac{\text{wet days in month}}{\text{days in month}} \label{eq:p101}\\
-	p_{001} &= 0.7240 \cdot \frac{\text{wet days in month}}{\text{days in month}}. \label{eq:p001}
-\end{align}
-
-Those equation are used in the weather generator to decide whether the current simulated day is a wet day or not based upon the total number of wet days in the month.
-%%%%%%%%%%%%%%%%% END: MOVE THIS TO sec:model %%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsubsection{Precipitation amount} \label{sec:dist_params}
-
-\begin{figure}
-	\includegraphics[width=12cm,page=1]{figures/prcp.pdf}
-	\caption[Mean precipitation - Gamma scale relationship]{Mean precipitation - Gamma scale relationship. The blue line represents the best fit line of the mean precipitation on wet days to the estimated gamma scale parameter of the corresponding distribution. Each data point corresponds to one multi-year series of one month for one station.}
-	\label{fig:gscale_meanw}
-\end{figure}
-
-We apply a hybrid gamma-GP distribution consisting of the the gamma and the generalized pareto (GP) distribution. The gamma distribution function is defined as
-\begin{equation}
-f(x) = \begin{cases}
-\frac{x^{\alpha - 1}\exp^{-\frac{x}{\theta}}}{\theta^{\alpha} \Gamma(\alpha)} & \text{for } x > 0 \\
-0 & \text{for } x = 0
-\end{cases} \label{eq:gamma}
-\end{equation}
-where $\alpha > 0$ is the shape, and $\theta > 0$ the scale parameter.
-The generalized pareto (GP) distribution is defined via
-\begin{equation}
-g(x) = \frac{1}{\sigma}\, \left( 1 + \frac{\xi\,\left(x - \mu\right)}{\sigma}\right)^{-\frac{1}{\xi} - 1} \label{eq:GP}
-\end{equation}
-with $\sigma > 0$ being the scale parameter and $\xi \in \mathbb{R}$ the shape parameter. $\mu$ is the location parameter.
-
-Following \cite{FurrerKatz2008}, we define the hybrid gamma-GP distribution as
-\begin{equation}
-h(x) = \begin{cases}
-f(x) & \text{for } x \leq \mu \\
-(1 - F(\mu))\,g(x) & \text{for }  x > \mu
-\end{cases}, \label{eq:GammaGP}
-\end{equation}
-where $F(\mu)$ describes the cumulative gamma distribution function at the threshold $\mu$. \cite{FurrerKatz2008} and \cite{NeykovNeytchevZucchini2014} have shown, that this distribution better simulates the heavy tail of the precipitation distribution than the gamma distribution alone.
-
-To determine the parameters of the hybrid distribution for precipitation, we started with the simple stategy by \cite{GengDevriesSupit1986}. As we did above when calculating the markov chain parameters, we created multi-year series for each of the parameterization stations for each month and extracted the days with precipitation. If a series contained more than 100 entries, we fit a gamma distribution to it and estimated the $\alpha$ and $\theta$ parameters.
-
-Following \cite{GengDevriesSupit1986}, we then fit a regression line of the gamma scale parameter against the mean precipitation on wet days $\bar{p}_d$ (see figure \ref{fig:gscale_meanw}) and found the relationship
-\begin{equation}
-\theta = 1.268\, \bar{p}_d. \label{eq:gamma_scale}
-\end{equation}
-As proposed by \cite{GengDevriesSupit1986}, we use this relationship in our model to estimate the scale parameter of the distribution. The gamma shape parameter $\alpha$ is calculated dynamically in the weather generator via
-\begin{equation}
-\alpha = \frac{\bar{p}_d}{\theta}. \label{eq:gamma_shape}
-\end{equation}
-
-The GP scale parameter $\sigma$ on the other hand is calculated during the simulation following \cite{NeykovNeytchevZucchini2014} via
-
-\begin{equation}
-\sigma = \frac{1 - F(\mu)}{f(\mu)}. \label{eq:gp_scale}
-\end{equation}
-
-The other parameters of the GP distribution are obtained through a sensitivity analysis described later.
-
-\subsubsection{Temperature}
-
-\begin{figure}
-	\includegraphics[width=12cm]{figures/temp.pdf}
-	\caption[Correlation of minimum temperature on wet and dry days to the monthly mean]{Correlation of minimum temperature on wet and dry days to the monthly mean. The y-axes show the mean minimum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:tmin}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=2]{figures/temp.pdf}
-	\caption[Correlation of standard deviation of min. temperature to the monthly mean]{Correlation of standard deviation of the minimum temperature on wet and dry days to the monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:tmin_sd}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=3]{figures/temp.pdf}
-	\caption[Correlation of maximum temperature on wet and dry days to the monthly mean]{Correlation of maximum temperature on wet and dry days to the monthly mean. The y-axes show the mean maximum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:tmax}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=4]{figures/temp.pdf}
-	\caption[Correlation of standard deviation of min. temperature to the monthly mean]{Correlation of standard deviation of the minimum temperature on wet and dry days to the monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:tmax_sd}
-\end{figure}
-\begin{table}[t]
-	\caption[Fit results of temperature correlation for wet and dry days.]{Fit results of temperature correlation for wet and dry days for figure \ref{fig:tmin} and \ref{fig:tmax}. $N$ is the total number of measurements used for the fit. The values of $a$ and $b$ correspond to the values in equation \eqref{eq:linear} and \eqref{eq:sd_linear}.}
-	\label{tab:t-corr}
-	\input{figures/temperature_correlations}
-\end{table}
-
-For each day we know from the Markov chain approach, whether the current simulated day is a wet or dry day. Based upon the simple linear relationships
-
-\begin{align}
-	x_\mathrm{wet} &= a_{x, \mathrm{wet}} + b_{x, \mathrm{wet}} \cdot \bar{x} \nonumber \\
-	x_\mathrm{dry} &= a_{x, \mathrm{dry}} + b_{x, \mathrm{dry}} \cdot \bar{x} \label{eq:linear}
-\end{align}
-
-we adjust the monthly mean $\bar{x}$ of the variable $x\in\{T_\mathrm{min}, T_\mathrm{max}\}$. The intercept $a$ and slope $b$ of those linear relationships have been determined through a fit of the mean maximum and minimum temperature on wet or dry days in one month to the overall monthly mean (see figures \ref{fig:tmin}, \ref{fig:tmax} and table \ref{tab:t-corr}) on our parameterization data.
-
-The standard deviation  $\sigma_x$ of variable $x\in\{T_\mathrm{min}, T_\mathrm{max}\}$ is then calculated from the adjusted mean via
-
-\begin{align}
-	\sigma_{x, \mathrm{wet}} &= a_{\sigma, x, \mathrm{wet}} + b_{\sigma, x, \mathrm{wet}} \cdot x_\mathrm{wet} \nonumber \\
-	\sigma_{x, \mathrm{dry}} &= a_{\sigma, x, \mathrm{dry}} + b_{\sigma, x, \mathrm{dry}} \cdot x_\mathrm{dry}. \label{eq:sd_linear}
-\end{align}
-
-To estimate the values of the parameters $a$ and $b$ in equation \eqref{eq:sd_linear}, we used a fit to the GHCN data (figures \ref{fig:tmin_sd}, \ref{fig:tmax_sd} and table \ref{tab:t-corr}). The linear model does not really satisfy  the complex behaviour of the standard deviation, but since this value is only used for the random noise (see below), we think that the error is negligible.
-
-\subsubsection{Cloud fraction}
-\begin{figure}
-	\includegraphics[width=12cm]{figures/cloud.pdf}
-	\caption[Correlation of cloud fraction on wet and dry days to the monthly mean]{Correlation of cloud fraction on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
-	\label{fig:cloud}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=2]{figures/cloud.pdf}
-	\caption[Correlation of standard deviation of cloud fraction to the monthly mean]{Correlation of standard deviation of the cloud fraction on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
-	\label{fig:cloud_sd}
-\end{figure}
-\begin{table}[t]
-	\caption[Fit results of cloud correlation for wet and dry days.]{Fit results of cloud correlation for wet and dry days for figure \ref{fig:cloud}}
-	\label{tab:cloud-corr}
-	\input{figures/cloud_correlations}
-\end{table}
-
-To parameterize the cloud fraction, we first calculated the variable from the EECRA dataset. The original dataset contains eight measurements per day of the total cloud cover ranging from 0 (clear sky) to 8 (overcast). Hence, to calculate the daily cloud fraction, those values were averaged and divided by 8 to get the daily mean.
-
-To adjust the monthly mean depending on the wet-dry state of the day, we could not use the simple linear relationship as we used for temperature because the cloud fraction bounded by the lower limit 0 and the upper limit 1. However, the cloud cover on wet days is usually greater or equal to the monthly mean cloud cover whereas the cloud cover on dry days is usually less or equal to the monthly mean cloud cover. This results in a concave curve for the wet case and a convex curve for dry days. Therefore we came up with the following formula for the fit:
-
-\begin{align}
-	\mathrm{c}_\mathrm{wet} &= \frac{-a_{\mathrm{c}, \mathrm{wet}} - 1}{a_{\mathrm{c}, \mathrm{wet}}^2 * c - a_{\mathrm{c}, \mathrm{wet}}^2 - a_{\mathrm{c}, \mathrm{wet}}}  - \frac{1}{a_{\mathrm{c}, \mathrm{wet}}} \nonumber \\
-	\mathrm{c}_\mathrm{dry} &= \frac{-a_{\mathrm{c}, \mathrm{dry}} - 1}{a_{\mathrm{c}, \mathrm{dry}}^2 * c - a_{\mathrm{c}, \mathrm{dry}}^2 - a_{\mathrm{c}, \mathrm{dry}}}  - \frac{1}{a_{\mathrm{c}, \mathrm{dry}}}
-	\label{eq:cloud_mean}
-\end{align}
-
-with $a_{\mathrm{c}, \mathrm{wet}} < 0$ and $a_{\mathrm{c}, \mathrm{dry}} > 0$.
-
-The standard deviation on the other hand becomes 0 when the amount of mean monthly cloud fraction reaches the outer limits 0 and 1. Hence we have an concave parabola with the formula
-
-\begin{align}
-	\sigma_{\mathrm{c}, \mathrm{wet}} &= a_{\mathrm{c}, \mathrm{wet}}^2 \cdot \mathrm{c}_\mathrm{wet} \cdot (1 - \mathrm{c}_\mathrm{wet}) \nonumber \\
-	\sigma_{\mathrm{c}, \mathrm{dry}} &= a_{\mathrm{c}, \mathrm{dry}}^2 \cdot \mathrm{c}_\mathrm{dry} \cdot (1 - \mathrm{c}_\mathrm{dry}) \label{eq:cloud_sd}
-\end{align}
-
-with $a_{\mathrm{c}, \mathrm{wet}}, a_{\mathrm{c}, \mathrm{dry}} \geq 0$. Results of the fits can be seen in figure \ref{fig:cloud}, \ref{fig:cloud_sd} and table \ref{tab:cloud-corr}.
-
-
-\subsubsection{Wind speed}
-\begin{figure}
-	\includegraphics[width=12cm]{figures/wind.pdf}
-	\caption[Correlation of wind speed on wet and dry days to the monthly mean]{Correlation of wind speed on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:wind}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=2]{figures/wind.pdf}
-	\caption[Correlation of standard deviation of wind speed to the monthly mean]{Correlation of standard deviation of the wind speed on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
-	\label{fig:wind_sd}
-\end{figure}
-
-The parameterization of wind speed is based upon the same equations \eqref{eq:linear} and \eqref{eq:sd_linear} as temperature and shown in the figures \ref{fig:wind} and \ref{fig:wind_sd}. Following \cite{ParlangeKatz2000} we additionally use a square root transformation (see line \ref{a:gwgen:cross-end} in the model algorithm \ref{a:gwgen}). 
-
-
-\subsubsection{Cross correlation} \label{sec:corr}
-Following \cite{Richardson1981} we use cross correlation to calculate the residuals and, following \cite{ParlangeKatz2000}, we use a square root transformation for the wind speed.
-
-From the data in the EECRA database for the cloud parameterization (see figure \ref{fig:stations}) we get the
-\begin{equation}
-A = \input{figures/A.tex}
-\qquad
-B = \input{figures/B.tex} \label{eq:AB}
-\end{equation}
-
-where the columns and rows correspond to min. and max. temperature, cloud fraction and square root of wind speed.
-
-The above matrices \eqref{eq:AB} where calculated via
-
-\begin{equation}
-A = M_1M_0^{-1} \qquad BB^T = M_0 - M_1M_0^{-1}M_1^T
-\end{equation}
-
-from the lag-0 and lag-1 covariance  matrices $M_0$ and $M_1$ with
-
-\begin{equation}
-M_0 = \input{figures/M0.tex}
-\qquad
-M_1 = \input{figures/M1.tex}.
-\end{equation}
-
-\subsection{Evaluation} \label{sec:eval}
-\begin{figure}
-	\includegraphics[width=12cm, page=1]{figures/quants.pdf}
-	\caption[QQ-plots for all variables and all quantiles]{QQ-plots for all variables with all quantiles (1, 5, 10, 25, 50, 75, 90, 95 and 99) for ${\mu=\ldots\, \mathrm{mm}}$, $\xi=\ldots$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval. Plots for wind speed and minimum temperature used the bias correction from \autoref{sec:bias}.}
-	\label{fig:all_quants}
-\end{figure}
-\begin{figure}
-	\includegraphics[width=12cm, page=3]{figures/quants.pdf}
-	\caption[QQ-plots for different quantiles for precipitation]{QQ-plot for different quantiles for precipitation for ${\mu=15\, \mathrm{mm}}$, $\xi=0.08303$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval.}
-	\label{fig:precip_quants}
-\end{figure}
-%Furthermore we merged the data from the cloud database into the GHCN dataset. In the first step we found all GHCN stations that are within a radius of one kilometer for each station in the EECRA database. In the second step we then merged the EECRA station into the GHCN dataset based upon the closest station found (if existent). This procedure resulted in about 3'400 stations from the cloud database that could be merged into the GHCN dataset.
-%
-%For validation purposes, we took 500 stations out of the 16'590 mentioned above, excluded them from the parameterization and used them for evaluation. Our parameterization then also only uses months with a complete record and the evaluation uses only yearly complete series. The finally used stations are shown in figure \ref{fig:stations}.
-
-To evaluate our model, we merged the EECRA dataset into the GHCN data. For each station in the EECRA database we identified the closest GHCN station within 1km. Doing so, resulted in about 1200 stations. We compared the simulated years against the observed years and hence took only the complete years per station. This resulted in about 500 evaluation stations, shown in figure \ref{fig:stations}.
-
-We calculated the monthly input for our weather generator and compared the daily simulation from our model to the original daily data. Since we cannot expect from the weather generator to represent the exact timing during the month, we are restricted to compare the two distributions.
-
-Figure \ref{fig:all_quants} shows the comparison of the simulated versus the observed quantiles. For temperature, wind and cloud fraction, the model does an excellent job of downscaling monthly input to daily resolution. Also precipitation looks good when mangling all the quantiles, however, a closer look into figure \ref{fig:precip_quants} shows that the higher precipitation percentiles are well captured using the hybrid Gamma-GP distribution, the lower percentiles however show worse results. The same holds for the wind speed (not shown here). The lower values of the two variables, however, are very close to the precision of the observation ($0.1\, \unit{mm}$ for precipitation and $0.1\, \unit{m/s}$ for wind speed). Secondly, they are ecologically not as important as the higher percentiles.\footnote{Note that the plots for wind speed and minimum temperature were bias corrected using the approach in \autoref{sec:bias}.}
-
-In table \ref{tab:freq} we also compare the simulated versus the observed frequencies. For very light rain (<=1mm), light rain (1-10mm), heavy rain (10-20mm) and very heavy rain (>20mm). As we can see, our model underestimates the occurence of very light rain events ($21.6\%$ instead of $27.0\%$) and overestimates the light rain events ($55\%$ instead of $47\%$) but performs much better than other climate models \citep{Dai2006,SunSolomonDaiEtAl2006}, especially when it comes to the heavy rain events.
-
-\begin{table}
-	\caption[Simulated and observed precipitation frequencies.]{Simulated and observed precipitation frequencies for certain ranges. The frequency is defined as the number of precipitation occurences in the specified range, divided by the total number of precipitation occurences.}
-	\label{tab:freq}
-	\begin{tabular}{lrr}
-		\tophline
-		{} &  Simulated &  Observed \\
-		Precipitation [mm]      &            &           \\
-		\middlehline
-		(0, 1]    &      0.216 &     0.270 \\
-		(1, 10]   &      0.550 &     0.470 \\
-		(10, 20]  &      0.115 &     0.133 \\
-		(20, $\infty$) &      0.120 &     0.127 \\
-		\bottomhline
-	\end{tabular}
-\end{table}
-
-
-\subsection{Bias correction} \label{sec:bias}
-\begin{figure}
-	\includegraphics[width=12cm]{figures/wind_tmin_bias_correction.pdf}
-	\caption[min. temperature and wind bias correction]{Basis for the minimum temperature (left) and wind bias correction (right). For the left plot (min. Temperature), each data point corresponds to the difference of a simulated percentile to the observed percentile. For the right plot (wind speed), each data point corresponds to the fraction of simulated to the observed square root of the wind speed for a given percentile. The random number on the x-axis represents the residual value from a normal distribution centered at 0 with standard deviation of unity, as it is used in the cross correlation approach \citep{Richardson1981}.}
-	\label{fig:bias}
-\end{figure}
-
-After evaluating the results of GWGEN for wind speed and minimum temperature for the different quantiles (see previous \autoref{sec:eval}) we found a strong correlation between the deviation from the simulated and the observed quantile.
-
-For the minimum temperature, we use an empirical distribution correction approach (quantile-mapping, \cite{LafonDadsonBuysEtAl2012}) with the third order polynomial shown in figure \ref{fig:bias} to transform the simulated minimum temperature data based upon the modeled quantile. The coefficients of this polynomial are calculated a posteriori based upon the bias from simulated to the observed quantile for all percentiles between 1 and 99. The resulting function $f_{T_\mathrm{min}}(u)$ is then used in the weather generator to correct the minimum temperature $T_\mathrm{min}$ via
-\begin{equation}
-T_\mathrm{min} = T_{\mathrm{min}, biased} - f_{T_\mathrm{min}}(u) \label{eq:bias-tmin}
-\end{equation}
-where $u\in\mathbb R$ corresponds to the number from the normal distribution drawn for the cross correlation (section \ref{sec:corr} and \cite{Richardson1981}).
-
-Furthermore, we found that the fraction of simulated to observed wind speed for a given percentile follows strongly a logistic function or a third order polynomial (figure \ref{fig:bias}). Hence, as we did for minimum temperature, we use a quantile mapping approach and a posteriori correlate the square root of the fraction of simulated to observed wind speed with the percentile in the normal distribution. The resulting function $f(u)$, is then used inside the weather generator to correct the the wind speed $w$ via
-\begin{equation}
-w = w_\mathrm{biased} \ f(u). \label{eq:bias-wind}
-\end{equation}.
-
-
-\subsection{Sensitivity analysis}
-Our hybrid Gamma-GP distribution has two parameters, the GP shape and the threshold parameter, which could not be related in a sufficiently sophisticated way to any of the simulated variables. Hence, we determined the parameters using a sensitivity analysis.
-
-We chose two methods: the first one is the direct comparison of the quantiles (see previous section), the second one is a Kolmogorov-Smirnov (KS) test that evaluates whether two data samples come from significantly different distributions. Our criteria where
-
-\begin{enumerate}
-	\item The $R^2$  correlation coefficient between simulated and observed quantiles \label{item:sens_rsquared}
-	\item The fraction $\frac{\text{simulated precipitation}}{{\text{observed precipitation}}}$ from the slopes in \ref{fig:precip_quants} and it's deviation from unity \label{item:sens_slope}
-	\item the fraction of simulated (station specific) years that are significantly different from the observation \label{item:sens_ks}
-	\item The mean of the above values \label{item:sens_mean}
-\end{enumerate}
-
-We tried two different approaches for the threshold: firstly, a fixed crossover point, secondly a quantile based crossover point. For the latter, the model chooses to use the GP distribution if the quantile of the drawn random number is above a certain  quantile. This introduces a flexible crossover point in our hybrid distribution which, however, did not improve the results significantly. Hence we decided to only show the results of the fixed crossover point.
-
-The values of the crossover point for  our sensitivity analysis were 2, 2.5, 3, 4 and from 5 to 100 in steps of 5. Furthermore we varied the GP shape parameter from 0 to 3 in steps of 0.1 (810 experiments in total). The results of this sensitivity analysis are shown in the supplementary material, figure \ref{fig:sens}.
-
-In general we found that the three criteria \ref{item:sens_rsquared}, \ref{item:sens_slope} and \ref{item:sens_ks} could not be optimized all together at the same time. The $R^2$ is best for high thresholds and low GP shape parameters, the slope is best for intermediate threshold and a high GP shape and the KS statistic is best for low threshold and intermediate GP shape parameters.
-
-However, $R^2$ did not vary that much (from 0.68 to 0.74) and from a visual evaluation of the corresponding quantile plots we saw that the higher quantiles (>90) were much better represented for a better KS result. Hence we chose to follow the KS test criteria, which is also the strictest of our evaluation methods but again compared the different quantile plots to get good results for the higher quantiles.  Finally, we chose a threshold of $5\,\unit{mm}$ and a GP shape parameter of $1.5$. For this setting, $83.6\%$ of the simulated years do not show a significant difference compared to the observation, the mean $R^2$ of the plots in figure \ref{fig:precip_quants} is $0.70$ and the mean deviation of the slope from unity is $0.18$ and for the upper quantiles (90 to 100), $0.1$.
-
-Nevertheless, in total the results seem to be fairly independent of the two parameters since even the amount of years without significant differences vary from $70\%$ to only $86\%$. It is however better than the gamma distribution alone with only $76.2\%$ of station years not differing significantly and a slope deviation from unity for the upper quantiles of $0.26$.
+In the following sections we describe Global-WGEN (GWGEN), a weather generator parameterized using more than 50~million daily weather observations from all continents and latitudes. We demonstrate how updated schemes for simulating precipitation occurrence and amount, and for bias correcting wind speed, further improve the quality of the model simulations. We perform an extensive model evaluation and parameter uncertainty analysis in order to settle on a parameter set that provides the most accurate, globally applicable results. We comment on the limitations of the model and priorities for future research. GWGEN is an open-source, stand-alone model that may be incorporated into any number of models designed to work at global scale, including, e.g., vegetation, hydrology, climatology, and animal distribution models.
 
 
 \section{Model description} \label{sec:model}
-The parameterization described in section \ref{sec:param} is incorporated into a stand-alone model. It requires additional total monthly precipitation, the number of wet days, mean minimum and maximum temperature, mean cloud fraction and wind speed as input. The output are the same variables with daily resolution. This section summarizes the basic workflow in the model which is also shown schematically in algorithm \ref{a:gwgen}.
+\begin{figure}
+	\includegraphics[width=8.3cm]{Figures/f01.pdf}
+	\caption[Schematic workflow of GWGEN]{Schematic workflow of GWGEN. After smoothing the monthly input, the Markov Chain is used to decide, whether it is a dry or a wet day. If it is a wet day, we draw a random number from the Gamma-GP distribution. Furthermore, the other means of the variables ($\bar{T}_\mathrm{min/max}, \bar{c}, \bar{w}$) are adjusted and their daily values are calculated using the estimated standard deviations and residuals. The wind speed furthermore undergoes a square root transformation before applying the cross correlation and in the end is corrected using the bias correction. A quality check in the end restricts our model to be within a $5\%$ range of the observed total precipitation and to replicate the number of wet days from the input.}
+	\label{fig:schema}
+\end{figure}
+GWGEN requires the following six monthly summary values as input: 1) total monthly precipitation, 2) the number of days in the month with measurable precipitation (i.e., wet days), 3-4) monthly mean daily minimum and maximum temperature, 5) mean cloud fraction, and 6) wind speed. The model outputs are the same variables at daily resolution. This section summarizes the basic workflow in the model which is also shown schematically in Figure \ref{fig:schema} and Algorithm \autoref{a:gwgen}.
 
-The first approximation of the daily variables comes from smoothing the monthly time series using the algorithm described in \cite{RymesMyers2001}.
+The first approximation of the daily variables comes from smoothing the monthly time series using a mean-preserving algorithm \citep{RymesMyers2001}.
 
-For precipitation we then first use the markov chain approach from section \ref{sec:markov} to decide the wet/dry state of the day. If the day is a wet day, we calculate the gamma parameters using the equations \eqref{eq:gamma_scale} and \eqref{eq:gamma_shape}. The resulting distribution allows us to draw a random number, the precipitation amount of the currently simulated day. If we are above the threshold $\mu$, we draw a second random number from the GP distribution parameterized via equation \eqref{eq:gp_scale} and the chosen GP shape.
+For precipitation we then first use the Markov Chain approach (section \ref{sec:markov}) to decide the wet/dry state of the day. If it is a wet day, we calculate the gamma parameters using the equations \eqref{eq:gamma_scale} and \eqref{eq:gamma_shape}. The resulting distribution allows us to draw a random number, the precipitation amount of the currently simulated day. If we are above the threshold $\mu$, we draw a second random number from the GP distribution parameterized via equation \eqref{eq:gp_scale} and the chosen GP shape.
 
-The next step modifies the means of temperature, wind speed and cloud fraction depending on the wet/dry state of the day (lines \ref{a:gwgen:adjust_wet} and \ref{a:gwgen:adjust_dry} in algorithm \ref{a:gwgen}). After that, we use the cross-correlation approach described in \cite{Richardson1981} and lines \ref{a:gwgen:cross} - \ref{a:gwgen:cross-end} and calculate the other variables. Finally we use the quantile-based bias correction described in section \ref{sec:bias} to correct the simulated wind speed and minimum temperature.
+The next step modifies the means of temperature, wind speed and cloud fraction depending on the wet/dry state of the day (lines \ref{a:gwgen:adjust_wet} and \ref{a:gwgen:adjust_dry} in algorithm \ref{a:gwgen}). After that, we use the cross-correlation approach described in \cite{Richardson1981} (lines \ref{a:gwgen:cross} - \ref{a:gwgen:cross-end} and \autoref{sec:corr}) and calculate the daily values of these variables. Finally we use the quantile-based bias correction described in section \ref{sec:bias} to correct the simulated wind speed.
 
-We restrict the weather generator to reproduce the exact number of wet days ($\pm1$) as the input and to be within a $5\%$ range of the total monthly precipitation (with a maximum allowed deviation of $0.5\,\unit{mm}$). Hence, if the program cannot produce these results, the procedure described above is repeated (see line \ref{a:gwgen:accuracy-criteria}).
+We restrict the weather generator to reproduce the exact number of wet days ($\pm1$) as the input and to be within a $5\%$ range of the total monthly precipitation (with a maximum allowed deviation of $0.5\,\unit{mm}$). If the program cannot produce these results, the procedure described above is repeated (see line \ref{a:gwgen:accuracy-criteria}).
 
 \begin{algorithm}
 	\renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -351,10 +55,10 @@ We restrict the weather generator to reproduce the exact number of wet days ($\p
 		\ENSURE daily $P_i\, [\unit{mm/d}], c_i, T_i\, [^\circ\unit{C}], w_i \, [\unit{m/s}]$ and the wet/dry state $s_i\in\{0, 1\}$
 		\FOR{month $m$ in $input$}
 		\STATE smooth the monthly data using \cite{RymesMyers2001}
-		%		\WHILE{the total simulated precipitation deviates more than $5\%$ or $0.5\,\unit{mm}$ from $P_\mathrm{in}$, or the number of simulated wet days deviates more than one from $n_\mathrm{in}$} \label{a:gwgen:accuracy-criteria}
-		\WHILE{$\left|\sum_{d_i \in m} P_i - P_\mathrm{in}\right| > \mathrm{min}\left(5\%\cdot P_\mathrm{in}, 0.5mm\right)$ or $\left|n_\mathrm{sim} - n_\mathrm{in}\right| > 2$} \label{a:gwgen:accuracy-criteria}
+		\STATE Set $j=0$, $\chi = 0$
+		\WHILE{$j \equiv 0$ or $\left|\sum_{d_i \in m} P_i - P_\mathrm{in}\right| > \mathrm{min}\left(5\%\cdot P_\mathrm{in}, 0.5mm\right)$ or $\left|n_\mathrm{sim} - n_\mathrm{in}\right| > 1$} \label{a:gwgen:accuracy-criteria}
 		\FOR{day $d_i$ in $m$}
-		\STATE Calculate $p_{11}, p_{101}, p_{001}$ after equations \eqref{eq:p11} - \eqref{eq:p001} using $n$ 				\COMMENT{Precipitation occurence after \cite{Wilks1999}}
+		\STATE Calculate $p_{11}, p_{101}, p_{001}$ after equations \eqref{eq:p11} - \eqref{eq:p001} using $n$ 				\COMMENT{Precipitation occurence after \cite{Wilks1999}} \label{a:gwgen:markov}
 		\STATE Use the Markov chain to determine whether $d_i$ is wet ($s_i = 1$) or dry ($s_i = 0$)
 		%				\STATE Draw a random number $u\in[0, 1]$
 		%				\IF{$P_{i-1} > 0$}
@@ -369,13 +73,13 @@ We restrict the weather generator to reproduce the exact number of wet days ($\p
 		\STATE Draw a random number $P_i$ from the Gamma-GP distribution, eq. \eqref{eq:GammaGP}
 		\STATE Set $T_{\mathrm{min}, i} = T_{\mathrm{min}, \mathrm{wet}}, T_{\mathrm{max}, i} = T_{\mathrm{max}, \mathrm{wet}}, c_i = c_\mathrm{wet}, w_i = w_\mathrm{wet}$ from eq. \eqref{eq:linear} and \eqref{eq:cloud_mean} and tables \ref{tab:t-corr}, \ref{tab:cloud-corr} \label{a:gwgen:adjust_wet}
 		\STATE Set $
-		\sigma_{T_\mathrm{min},i} = \sigma_{T_\mathrm{min},\mathrm{wet}}, \sigma_{T_\mathrm{max},i} = \sigma_{T_\mathrm{max},\mathrm{wet}}, \sigma_{w,i} = \sigma_{w,\mathrm{wet}}, \sigma_{c,i} = \sigma_{c,\mathrm{wet}}$ from eq. \eqref{eq:sd_linear} and \eqref{eq:cloud_sd} and tables \ref{tab:t-corr}, \ref{tab:cloud-corr}
+		\sigma_{T_\mathrm{min},i} = \sigma_{T_\mathrm{min},\mathrm{wet}}, \sigma_{T_\mathrm{max},i} = \sigma_{T_\mathrm{max},\mathrm{wet}}, \sigma_{w,i} = \sigma_{w,\mathrm{wet}}, \sigma_{c,i} = \sigma_{c,\mathrm{wet}}$ from eq. \eqref{eq:temp_sd}, \eqref{eq:cloud_sd} and \eqref{eq:sd_wind} and tables \ref{tab:t-corr}, \ref{tab:t-sd-corr}, \ref{tab:cloud-corr}
 		\ELSE
 		\STATE Set $P_i = 0\,\unit{mm/d}$
 		\STATE Set $T_{\mathrm{min}, i} = T_{\mathrm{min}, \mathrm{dry}}, T_{\mathrm{max}, i} = T_{\mathrm{max}, \mathrm{dry}}, c_i = c_\mathrm{dry}, w_i = w_\mathrm{dry}$ from eq. \eqref{eq:linear} and \eqref{eq:cloud_mean} and tables \ref{tab:t-corr}, \ref{tab:cloud-corr}
 		\label{a:gwgen:adjust_dry}
 		\STATE Set $
-		\sigma_{T_\mathrm{min},i} = \sigma_{T_\mathrm{min},\mathrm{dry}}, \sigma_{T_\mathrm{max},i} = \sigma_{T_\mathrm{max},\mathrm{dry}}, \sigma_{w,i} = \sigma_{w,\mathrm{dry}}, \sigma_{c,i} = \sigma_{c,\mathrm{dry}}$ from eq. \eqref{eq:sd_linear} and \eqref{eq:cloud_sd} and tables \ref{tab:t-corr}, \ref{tab:cloud-corr}
+		\sigma_{T_\mathrm{min},i} = \sigma_{T_\mathrm{min},\mathrm{dry}}, \sigma_{T_\mathrm{max},i} = \sigma_{T_\mathrm{max},\mathrm{dry}}, \sigma_{w,i} = \sigma_{w,\mathrm{dry}}, \sigma_{c,i} = \sigma_{c,\mathrm{dry}}$ from eq. \eqref{eq:temp_sd}, \eqref{eq:cloud_sd} and \eqref{eq:sd_wind} and tables \ref{tab:t-corr}, \ref{tab:t-sd-corr}, \ref{tab:cloud-corr}
 		\ENDIF
 		\STATE Draw 4 normally distributed random numbers $\epsilon\in\mathbb{R}^4$ \COMMENT{Cross correlation after \cite{Richardson1981}} \label{a:gwgen:cross}
 		\STATE Set the residuals 
@@ -386,7 +90,8 @@ We restrict the weather generator to reproduce the exact number of wet days ($\p
 		\STATE Calculate daily variables via \\
 		$T_{\mathrm{min},i} = \chi_{T_\mathrm{min}} \cdot \sigma_{T_\mathrm{min},i} + T_{\mathrm{min}, i} \qquad c_{i} = \chi_{c} \cdot \sigma_{c,i} + c_{i}$ \\
 		$T_{\mathrm{max},i} = \chi_{T_\mathrm{max}} \cdot \sigma_{T_\mathrm{max},i} + T_{\mathrm{max}, i} \qquad w_{i} = \left(\chi_{w} \cdot \sqrt{\sigma_{w,i}} + \sqrt{w_{i}}\right)^2$ \label{a:gwgen:cross-end}
-		\STATE Apply bias correction for $T_\mathrm{min}$ (eq. \eqref{eq:bias-tmin}) and $w$ (eq. \eqref{eq:bias-wind}) 
+		\STATE Apply bias correction $w$ (eq. \eqref{eq:bias-wind}) 
+		\STATE $j = j + 1$
 		\ENDFOR
 		\ENDWHILE
 		\ENDFOR
@@ -394,14 +99,440 @@ We restrict the weather generator to reproduce the exact number of wet days ($\p
 \end{algorithm}
 
 
-\section{Applications and limitations}
-GWGEN is designed for downscaling monthly precipitation, minimum and maximum temperature, wind speed and cloud fraction to a daily resolution. Through the extensive amount of data used for the parameterization, GWGEN is applicable on the entire globe without the need for spatial information. However one should be careful when using it for small regional experiments (e.g. on the catchment scale) where other, more specialized and regional weather generators might be better.
+\section{Model development}
 
-\section{Outlook and conclusions}
-Our weather generator model uses a global dataset of precipitation, temperature and cloudiness to downscale monthly to daily data. Our results show that some simple relationships are applicable on the whole globe and can be used to within a reasonable accuracy for the estimation of the weather distribution throughout a month.
+GWGEN is based on the WGEN weather generator \citep{Richardson1981}, using the method of defining the model parameters based on monthly summaries described by \cite{GengDevriesSupit1986} and \cite{GengAuburn1987}. GWGEN diverges from the original WGEN by using a hybrid-order Markov chain to simulate precipitation occurrence \citep{Wilks1999}, and a hybrid Gamma-GP distribution \citep{FurrerKatz2008,NeykovNeytchevZucchini2014} to estimate precipitation amount. Temperature, cloud cover, and wind speed are calculated following \citep{Richardson1981}, using cross correlation and depending on the wet/dry-state of the day. We further add a quantile-based bias correction for wind speed and minimum temperature, which improves the simulation results significantly.
 
-Compared to the Gamma distribution the applied hybrid Gamma-GP distribution improves the model results due to its heavy tail. Further improvements might come through correlating the GP shape and location parameter to the region and seasonality \citep{MaraunRustOsborn2009,RustMaraunOsborn2009}.
+In the following subsections, we first describe the global weather station database used to develop and evaluate the model, then describe  the underlying relationships that we use to define GWGEN's parameters.
 
+\subsection{Development of a global weather station database}
+
+\begin{figure}
+	\includegraphics[width=8.3cm]{Figures/f02.pdf}
+	\caption[Weather stations used for parameterization and evaluation of the weather generator.]{Weather stations used for parameterization and evaluation of the weather generator. The uppermost panel shows the locations of the stations used for parameterizing precipitation and temperature, the middle panel shows the stations for cloud fraction and wind speed, as well as for calculating the cross correlations between temperature, cloud fraction, and wind speed. The lower plot shows the location of the stations used to evaluate the model, which were excluded from the parameterization stations.}
+	\label{fig:stations}
+\end{figure}
+
+To parameterize GWGEN, we assembled a global dataset of daily meteorological observations. Precipitation and minimum and maximum daily temperature come from the daily Global Historical Climatology Network (GHCN-Daily) database \citep{MenneDurreVoseEtAl2012,Menne2012}. The GHCN-Daily consists of observations collected at ca. 100'000 weather stations on all continents and many oceanic islands. As the GHCN-Daily stations are highly concentrated in some parts of the world, particularly in the conterminous United States, we selected stations for our study using a geographic anti-aliasing filter to avoid an especially strong geographic bias in the generation of the model parameters. Dividing the world up into a 0.5$^{\circ}$ grid, we selected the single station with the longest record in each cell, if one was present. While the GHCN-Daily units for precipitation have a nominal precision of 0.1 mm, several of the stations in the United States reported  precipitation in fractions of an inch, which were later converted to mm. To ensure uniform precision across all of our calibration stations --- this was particularly important when generating the probability density functions for precipitation amount --- we selected only those GHCN-Daily stations where all precipitation amounts between 0.1 and 1.0 mm d$^{-1}$ were reported in the record. This resulted in 9508 stations covering all continents, although the distribution is strongly heterogenous, with the majority of the stations in North America, despite our geographic filter (Figure \ref{fig:stations}, top panel). For cloud cover, windspeed, and to calculate cross-correlations between temperature, cloud cover, and windspeed, we used the Extended Edited Cloud Report Archive (EECRA) database \citep{HahnWarren1999}. The geographic distribution of the 6978 EECRA stations we selected is different than the GHCN-Daily, with more stations in Europe (Figure \ref{fig:stations}, middle panel), but overall a relatively similar number of stations were used from both datasets. For the observations from both GHCN-Daily and EECRA, we made one additional filtering step, selecting only complete months, i.e., months with no days having missing observations, for further processing. In total, our database of daily meteorological observations used in the model parameterization contains ca. 69~million individual records.
+
+Finally, we reserved some weather station records for model evaluation that were not used for model parameterization. These were individual stations, or two stations separated by a maximum distance of 1 km, where all of the daily meteorological variables that GWGEN simulates ($P,\,T_\mathrm{min},\,T_\mathrm{max},\, c,\,w$) were recorded on the same dates in the EECRA database. This merged selection from EECRA and GHCN resulted in a set of 921 stations representing ca. 15~million daily records, with observations on all continents, although the geographic distribution is once again highly heterogenous, with a particularly high density of stations in Japan and Germany (Figure \ref{fig:stations}, bottom panel).
+
+
+\subsection{Parameterization} \label{sec:param}
+
+\subsubsection{Precipitation occurrence} \label{sec:markov}
+
+\begin{figure}
+	\includegraphics[width=8.3cm]{Figures/f03.pdf}
+	\caption[Transition probabilities vs. wet fraction]{Transition probabilities vs. wet fraction. The red density plot in the background shows the density of the observations, and the blue lines are the linear regression line of the probability against the wet fraction. The fit for the $p_{11}$ transition probability was forced to the point $(1, 1)$, the others were forced to $(0, 0)$. The underlying data for the fits correspond to the means of the the multi-year series for each month for each station.}
+	\label{fig:markov}
+\end{figure}
+
+Following \cite{GengDevriesSupit1986}, we expect to find a good relationship between the fraction of days in a month with measurable precipitation and the probability that any given day will be wet. Following \cite{Wilks1999} we use a hybrid-order model that retains first-order Markov dependence for wet spells but allows second-order dependence for dry sequences; this hybrid-order scheme has been shown to be a good compromise between performance and simplicity. To parameterize the precipitation occurrence part of the model, we thus calculated transition probabilities for a wet day being followed by a wet day ($p_{11}$), for a wet day being followed by a dry day being followed by a wet day ($p_{101}$) and for two dry days being followed by a wet day ($p_{001})$. We perform this analysis on a station and month-wise basis, i.e., we first extract each of the (complete) Januaries, Februaries, etc. for a given station, and then merge all of the Januaries (Februaries, Marches, etc...) for this station into a single series representing each month. Merging months over several years is particularly important for stations that have relatively little precipitation in a given month; for example, it could take several years of observations to observe a single ($p_{101}$) event. The final transition probabilities were then regressed against the fraction of days in the month with precipitation, which show the characteristic linear relationship described by \cite{GengDevriesSupit1986} (Figure \ref{fig:markov}).
+
+Because the transition probabilities ($p_{001})$ and ($p_{101}$) must be zero by definition when the fraction of wet days ($f_\mathrm{wet}$) is zero, i.e., a completely dry month, we force the linear regression between these quantities to pass through the origin. Likewise, we require the regression line for ($p_{11}$) to equal 1 when $f_\mathrm{wet}$ is 1. One has to note, however, that this methodology artificially increases the $R^2$ coefficient for the fit because we fix the intercept \citep[see for example][]{Gordon1981}. 
+
+The analysis results in the the following relationships:
+
+\begin{align}
+p_{11} &= 0.2549 + 0.7451\cdot f_\mathrm{wet} \label{eq:p11}\\
+p_{101} &= 0.8463 \cdot f_\mathrm{wet} \label{eq:p101}\\
+p_{001} &= 0.7240 \cdot f_\mathrm{wet}. \label{eq:p001}
+\end{align}
+
+In the weather generator (see line \ref{a:gwgen:markov} in algorithm \ref{a:gwgen}) we determine if any given day will have precipitation by calculating the appropriate probability density function selected from  equations \eqref{eq:p11}-\eqref{eq:p001} on the basis of the precipitation state of the previous day (or two). Comparing the calculated probability from the selected equation with a random number $u\in[0, 1]$, a precipitation day is simulated if $u$ is greater than its corresponding probability.
+
+\subsubsection{Precipitation amount} \label{sec:dist_params}
+
+\begin{figure}
+	\includegraphics[width=8.3cm]{Figures/f04.pdf}
+	\caption[Mean precipitation - Gamma scale relationship]{Mean precipitation - Gamma scale relationship. The blue line represents the best fit line of the mean precipitation on wet days to the estimated gamma scale parameter of the corresponding distribution. Each data point corresponds to one multi-year series of one month for one station.}
+	\label{fig:gscale_meanw}
+\end{figure}
+
+Following the original WGEN \citep{Richardson1981}, GWGEN disaggregates precipitation amount using a statistical distribution. A number of different probability density functions have been used to estimate precipitation amount in weather generators including, e.g., single exponential or mixed exponential, one or two parameter gamma, or Weibull distribution \citep{WilksWilby1999}. The strong relationship between the gamma scale parameter and the mean precipitation on wet days noted by \cite{GengDevriesSupit1986} makes generation of precipitation amounts with only monthly input data feasible. It is based upon the fact that the expected value of a gamma random variable equals the product of its two parameters. i.e $E(\Gamma) = \alpha\theta$. The gamma distribution, however, shows poor performance in simulating high-precipitation events consistent with observations. \cite{FurrerKatz2008} and \cite{NeykovNeytchevZucchini2014} suggest that a hybrid probability density function, based on both gamma and the generalized pareto (GP) distribution, has superior accuracy in simulating extreme precipitation events when compared to gamma alone. Because of its superior accuracy and ease of implementation, we therefore adopt the hybrid gamma-GP distribution for simulating precipitation amount in GWGEN.
+
+The probability density function (pdf) of the gamma distribution is defined as
+\begin{equation}
+f(x) = \begin{cases}
+\frac{x^{\alpha - 1}e^{-\frac{x}{\theta}}}{\theta^{\alpha} \Gamma(\alpha)} & \text{for } x > 0 \\
+0 & \text{for } x = 0
+\end{cases} \label{eq:gamma}
+\end{equation}
+where $\alpha > 0$ is the shape, and $\theta > 0$ the scale parameter.
+The pdf of the generalized pareto (GP) distribution is defined via
+\begin{equation}
+g(x) = \begin{cases}
+\frac{1}{\sigma}\, \left( 1 + \frac{\xi\,\left(x - \mu\right)}{\sigma}\right)^{-\frac{1}{\xi} - 1} \label{eq:GP} & \text{for } \xi \neq 0 \\
+\frac{1}{\sigma}e^{-\frac{x-\mu}{\sigma}} & \text{for } \xi = 0
+\end{cases}
+\end{equation}
+with $\sigma > 0$ being the scale parameter and $\xi \in \mathbb{R}$ the shape parameter. $\mu$ is the location parameter.
+
+Following \cite{FurrerKatz2008}, we define the hybrid gamma-GP pdf as
+\begin{equation}
+h(x) = \begin{cases}
+f(x) & \text{for } x \leq \mu \\
+(1 - F(\mu))\,g(x) & \text{for }  x > \mu
+\end{cases}, \label{eq:GammaGP}
+\end{equation}
+where $F(\mu)$ describes the cumulative gamma distribution function at the threshold $\mu$. In our weather generator however, we first draw a random number from the gamma distribution and, if we are above the threshold, we draw another random number from the GP distribution. Thus, the frequency of precipitation events larger than $\mu$ is determined by the gamma distribution, but the actual amount of precipitation simulated when above the threshold $\mu$ is determined by the GP distribution \citep{FurrerKatz2008}.
+
+To determine the parameters of the hybrid distribution for precipitation, we started with the simple strategy by \cite{GengDevriesSupit1986}. As above when calculating the Markov chain parameters, we created multi-year series for each of the parameterization stations for each month and extracted the days with precipitation. If a series contained more than 100 entries, we fit a gamma distribution using maximum likelihood to it in order to estimated the $\alpha$ and $\theta$ parameters.
+
+Following \cite{GengDevriesSupit1986}, we then fit a regression line of the gamma scale parameter against the mean precipitation on wet days $\bar{p}_d$ (see figure \ref{fig:gscale_meanw}) and found the relationship
+\begin{equation}
+\theta = 1.262\, \bar{p}_d. \label{eq:gamma_scale}
+\end{equation}
+As proposed by \cite{GengDevriesSupit1986}, we use this relationship in our model to estimate the scale parameter of the distribution. Using this approach, the gamma shape parameter $\alpha$ is a constant, given via
+\begin{equation}
+\alpha = \frac{\bar{p}_d}{\theta} = \frac{1}{1.262}. \label{eq:gamma_shape}
+\end{equation}
+
+The GP scale parameter $\sigma$ on the other hand is calculated during the simulation following \cite{NeykovNeytchevZucchini2014} via
+
+\begin{equation}
+\sigma = \frac{1 - F(\mu)}{f(\mu)}. \label{eq:gp_scale}
+\end{equation}
+
+The other parameters of the GP distribution are obtained through a sensitivity analysis described in section \ref{sec:sens}.
+
+\subsubsection{Temperature}
+
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f05.pdf}
+	\caption[Correlation of minimum temperature on wet and dry days to the monthly mean]{Correlation of minimum temperature on wet and dry days to the monthly mean. The y-axes show the mean minimum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
+	\label{fig:tmin}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f06.pdf}
+	\caption[Correlation of maximum temperature on wet and dry days to the monthly mean]{Correlation of maximum temperature on wet and dry days to the monthly mean. The y-axes show the mean maximum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
+	\label{fig:tmax}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f07.pdf}
+	\caption[Correlation of standard deviation of min. and max. temperature to the monthly mean]{Correlation of standard deviation of the minimum and maximum temperature on wet and dry days to the monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The bars have a width of $0.1^\circ C$ (the data accuracy) and indicate the mean standard deviation for a given mean minimum temperature in one month. The lines are fitted to these bars, where the green and red polynomials of order 5 are the use all the data below or above $0^\circ C$ respectively and the blue and violet lines are a linear extrapolation of the data below $-40^\circ C$ (or $-30^\circ C$ for $T_\mathrm{max}$) or above $25^\circ C$ (or $35^\circ C$)  respectively. The red density plot in the background indicates the spread of the data. The bars and the density plot are based on the single month for each station (i.e. not the multi-year monthly series as for, e.g. mean temperature (figure \ref{fig:tmin} and \ref{fig:tmax})). Parameters of the fits are also shown in table \ref{tab:t-corr}.}
+	\label{fig:temp_sd}
+\end{figure}
+\begin{table}[t]
+	\caption[Fit results of temperature correlation for wet and dry days.]{Fit results of temperature correlation for wet and dry days for figures \ref{fig:tmin}, \ref{fig:tmax}, \ref{fig:wind} and \ref{fig:wind_sd}. The coefficients $c_0$ to $c_3$ correspond to the coefficients used in equations \eqref{eq:linear} and \eqref{eq:sd_wind}.}
+	\label{tab:t-corr}
+	\begin{tabular}{llccccc}
+		\tophline
+		plot &                          variable &  $R^2$ &   $c_0$ &  $c_1$ &   $c_2$ &  $c_3$ \\
+		\middlehline
+		\ref{fig:tmax} &  $T_{\mathrm{max}, \mathrm{dry}}$ & 0.9969 & 0.0727 & 1.0211 & 0 & 0 \\
+		\ref{fig:tmax} &  $T_{\mathrm{max}, \mathrm{wet}}$ & 0.9752 & -0.5204 & 0.9459 & 0 & 0 \\
+		\ref{fig:tmin} &  $T_{\mathrm{min}, \mathrm{dry}}$ & 0.9972 & -0.5100 & 1.0188 & 0 & 0 \\
+		\ref{fig:tmin} &  $T_{\mathrm{min}, \mathrm{wet}}$ & 0.9840 & 1.0411 & 0.9685 & 0 & 0 \\
+		\ref{fig:wind_sd} &  $w_{\mathrm{sd}, \mathrm{dry}}$ & 0.4243 & 0 & 1.0860 & -0.2407 & 0.0222 \\
+		\ref{fig:wind_sd} &  $w_{\mathrm{sd}, \mathrm{wet}}$ & 0.5003 & 0 & 0.8184 & -0.1263 & 0.0093 \\
+		\ref{fig:wind} &  $w_{\mathrm{dry}}$ & 0.9930 & 0 & 0.9437 & 0 & 0 \\
+		\ref{fig:wind} &  $w_{\mathrm{wet}}$ & 0.9723 & 0 & 1.0937 & 0 & 0 \\
+		\bottomhline
+	\end{tabular}
+\end{table}
+\begin{table}[t]
+	\caption[Fit results of the correlation of temperature standard deviation with the mean.]{Fit results of the correlation of temperature standard deviation with the corresponding mean on wet/dry days for figure \ref{fig:temp_sd}. The underlying equations are shown in equation \eqref{eq:temp_sd}.}
+	\label{tab:t-sd-corr}
+	\begin{tabular}{llccccccc}
+		\tophline
+		&            &  $R^2$ &   $c_0$ &   $c_1$ &   $c_2$ &   $c_3$ &    $c_4$ &      $c_5$ \\
+		variable & interval &        &         &         &         &         &          &            \\
+		\middlehline
+		$T_{\mathrm{max}, \mathrm{sd}, \mathrm{dry}}$ & (-$\infty$, -30] & 0.0125 & 7.3746 & 0.0154 & 0 & 0 & 0 & 0 \\
+		& (-30, 0.0] & 0.6721 & 4.6170 & -0.3387 & -0.0188 & -0.0003 & 0.000003 & 0.0000001 \\
+		& (0.0, 35] & 0.9744 & 4.7455 & -0.0761 & 0.0189 & -0.0013 & 0.00003 & -0.0000002 \\
+		& (35, $\infty$) & 0.0390 & 3.2554 & -0.0218 & 0 & 0 & 0 & 0 \\
+		$T_{\mathrm{max}, \mathrm{sd}, \mathrm{wet}}$ & (-$\infty$, -30] & 0.0366 & 6.6720 & 0.0364 & 0 & 0 & 0 & 0 \\
+		& (-30, 0.0] & 0.7362 & 3.8601 & -0.2186 & 0.0039 & 0.0015 & 0.00006 & 0.0000007 \\
+		& (0.0, 35] & 0.9508 & 3.7919 & -0.0313 & 0.0161 & -0.0012 & 0.00003 & -0.0000002 \\
+		& (35, $\infty$) & 0.2530 & 5.5529 & -0.0973 & 0 & 0 & 0 & 0 \\
+		$T_{\mathrm{min}, \mathrm{sd}, \mathrm{dry}}$ & (-$\infty$, -40] & 0.6006 & 10.8990 & 0.1271 & 0 & 0 & 0 & 0 \\
+		& (-40, 0.0] & 0.9509 & 3.5676 & -0.1154 & 0.0282 & 0.0020 & 0.00004 & 0.0000003 \\
+		& (0.0, 25] & 0.9825 & 3.7941 & 0.0330 & -0.0150 & 0.0019 & -0.0001 & 0.000002 \\
+		& (25, $\infty$) & 0.7784 & -4.6194 & 0.2261 & 0 & 0 & 0 & 0 \\
+		$T_{\mathrm{min}, \mathrm{sd}, \mathrm{wet}}$ & (-$\infty$, -40] & 0.1661 & 9.7272 & 0.1011 & 0 & 0 & 0 & 0 \\
+		& (-40, 0.0] & 0.9285 & 3.0550 & -0.2116 & 0.0137 & 0.0014 & 0.00004 & 0.0000003 \\
+		& (0.0, 25] & 0.9633 & 3.2187 & -0.0451 & 0.0209 & -0.0026 & 0.00010 & -0.000001 \\
+		& (25, $\infty$) & 0.0089 & 0.5571 & 0.0244 & 0 & 0 & 0 & 0 \\
+		\bottomhline
+	\end{tabular}
+\end{table}
+
+Following the standard WGEN methodology \citep{Richardson1981} and \cite{GengDevriesSupit1986}, daily temperature is determined through 2 processes: First, the wet/dry state of the day, and second the cross correlation (\autoref{sec:corr}).
+
+In the weather generator, we know from the Markov chain (\autoref{sec:markov}), whether the current simulated day is a wet or dry day. Based upon the simple linear relationships
+
+\begin{align}
+\bar{x}_\mathrm{wet} &= c_{0, x, \mathrm{wet}} + c_{1, x, \mathrm{wet}} \cdot \bar{x} \nonumber \\
+\bar{x}_\mathrm{dry} &= c_{0, x, \mathrm{dry}} + c_{1, x, \mathrm{dry}} \cdot \bar{x} \label{eq:linear}
+\end{align}
+
+we adjust the monthly mean $\bar{x}$ of the variable $x\in\{T_\mathrm{min}, T_\mathrm{max}\}$. 
+
+To estimate the values of the parameters $c_0$ and $c_1$ in the above equations, we follow the same procedure as for the parameters of the Markov chain (\autoref{sec:markov}). We extracted the complete months for $T_\mathrm{min}$ and $T_\mathrm{max}$ from the GHCN-Daily dataset and created a multi-year series for each month and station. We then regressed the mean on wet and dry days separated against the overall mean of each month (Figures \ref{fig:tmin} and \ref{fig:tmax}). Through this procedure, we estimate the parameters necessary for equations \eqref{eq:linear} (see table \ref{tab:t-corr}).
+
+To estimate residual noise, we also need an estimate of the standard deviation of the variable (see \autoref{sec:corr}). Figure \ref{fig:temp_sd} shows the correlation between standard deviation on wet and dry days and the corresponding mean. The means of the standard deviations (black bars in figure \ref{fig:temp_sd}) indicate a strong but non-linear relationship between the standard deviation and the corresponding mean. The correlation changes particularly at $0^\circ\, C$. We therefore use two different polynomials of order 5 for the values below and above the freezing point. Furthermore, to account for the sparse data below $-40^\circ\, C$  and above $25^\circ\, C$ for minimum temperature (or $-30^\circ\, C$ and $35^\circ\, C$ for maximum temperature), we use an extrapolation for the extremes as indicated by the blue and violet lines in figure \ref{fig:temp_sd}. The formulae for the standard deviations $\sigma$ of minimum and maximum temperature are therefore a combination of 4 polynomials:
+
+\begin{align}
+\sigma_{T_\mathrm{min},\mathrm{wet/dry}} &= \begin{cases}
+p_1(\bar{T}_{\mathrm{min}, \mathrm{wet/dry}}), & \text{for } \bar{T}_{\mathrm{min}, \mathrm{wet/dry}} \leq -40^\circ\, C \\
+p_5(\bar{T}_{\mathrm{min}, \mathrm{wet/dry}}), & \text{for } -40^\circ\, C < \bar{T}_{\mathrm{min}, \mathrm{wet/dry}} \leq 0^\circ\, C \\
+p_5(\bar{T}_{\mathrm{min}, \mathrm{wet/dry}}), & \text{for } 0^\circ\, C < \bar{T}_{\mathrm{min}, \mathrm{wet/dry}} \leq 25^\circ\, C \\
+p_1(\bar{T}_{\mathrm{min}, \mathrm{wet/dry}}), & \text{for } 25^\circ\, C < \bar{T}_{\mathrm{min}, \mathrm{wet/dry}}
+\end{cases} \nonumber \\
+\sigma_{T_\mathrm{max},\mathrm{wet/dry}} &= \begin{cases}
+p_1(\bar{T}_{\mathrm{max}, \mathrm{wet/dry}}), & \text{for } \bar{T}_{\mathrm{max}, \mathrm{wet/dry}} \leq -30^\circ\, C \\
+p_5(\bar{T}_{\mathrm{max}, \mathrm{wet/dry}}), & \text{for } -30^\circ\, C < \bar{T}_{\mathrm{max}, \mathrm{wet/dry}} \leq 0^\circ\, C \\
+p_5(\bar{T}_{\mathrm{max}, \mathrm{wet/dry}}), & \text{for } 0^\circ\, C < \bar{T}_{\mathrm{max}, \mathrm{wet/dry}} \leq 35^\circ\, C \\
+p_1(\bar{T}_{\mathrm{max}, \mathrm{wet/dry}}), & \text{for } 35^\circ\, C < \bar{T}_{\mathrm{max}, \mathrm{wet/dry}}
+\end{cases}. \label{eq:temp_sd}
+\end{align}
+
+$p_1$ in eq. \eqref{eq:temp_sd} denotes a polynomial of order 1, $p_5$ a polynomial of order 5. The coefficients of the different polynomials are shown in table \ref{tab:t-sd-corr}.
+
+These coefficients are based on the means of the standard deviation (black bars in figure \ref{fig:temp_sd}). We chose this procedure to give the same weight to all temperatures. Otherwise the fit would be dominated by the temperature values around the freezing points.
+
+\subsubsection{Cloud fraction}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f08.pdf}
+	\caption[Correlation of cloud fraction on wet and dry days to the monthly mean]{Correlation of cloud fraction on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
+	\label{fig:cloud}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f09.pdf}
+	\caption[Correlation of standard deviation of cloud fraction to the monthly mean]{Correlation of standard deviation of the cloud fraction on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
+	\label{fig:cloud_sd}
+\end{figure}
+\begin{table}[t]
+	\caption[Fit results of cloud correlation for wet and dry days.]{Fit results of cloud correlation for wet and dry days for figure \ref{fig:cloud}}
+	\label{tab:cloud-corr}
+	\begin{tabular}{llccc}
+		\tophline
+		plot &                         variable &     $a$ & std. err. of $a$ &  $R^2$ \\
+		\middlehline
+		\ref{fig:cloud} &  $c_{\mathrm{dry}}$ & 0.4302 & 0.0013 & 0.8745 \\
+		\ref{fig:cloud} &  $c_{\mathrm{wet}}$ & -0.7376 & 0.0006 & 0.3881 \\
+		\ref{fig:cloud_sd} &  $c_{\mathrm{sd}, \mathrm{dry}}$ & 1.0448 & 0.0004 & 0.2803 \\
+		\ref{fig:cloud_sd} &  $c_{\mathrm{sd}, \mathrm{wet}}$ & 0.9881 & 0.0006 & 0.0802 \\
+		\bottomhline
+	\end{tabular}
+\end{table}
+
+Monthly mean cloud fraction is disaggregated, as for temperature, using the standard WGEN procedure of adding statistical noise to a wet- or dry-day mean and accounting for cross-correlation among the different weather variables. For the parameterization of the cloud fraction equations, we used the EECRA dataset. The original dataset contains eight measurements per day of the total cloud cover in units of octas, i.e., values ranging from 0 (clear sky) to 8 (overcast). Hence, to calculate the daily cloud fraction, those values were averaged and divided by 8 to produce a daily mean.
+
+To adjust the monthly mean depending on the wet/dry state of the day, we could not use a simple linear relationship as we used for temperature because cloud fraction is bounded by a lower limit 0 and an upper limit of 1. Furthermore, we observed that cloud cover on wet days is usually greater or equal to the monthly mean cloud cover, whereas the cloud cover on dry days is usually less or equal to the monthly mean cloud cover. This results in a concave curve for the wet case and a convex curve for dry days. We used a qualitative graphical analysis to develop "best guess" equations that had the desired shape and propose the following formulae for the regression linking cloud cover on wet or dry days to the overall mean:
+
+\begin{align}
+\bar{\mathrm{c}}_\mathrm{wet} &= \frac{-a_{\mathrm{c}, \mathrm{wet}} - 1}{a_{\mathrm{c}, \mathrm{wet}}^2 \cdot \bar{c} - a_{\mathrm{c}, \mathrm{wet}}^2 - a_{\mathrm{c}, \mathrm{wet}}}  - \frac{1}{a_{\mathrm{c}, \mathrm{wet}}} \nonumber \\
+\bar{\mathrm{c}}_\mathrm{dry} &= \frac{-a_{\mathrm{c}, \mathrm{dry}} - 1}{a_{\mathrm{c}, \mathrm{dry}}^2 \cdot \bar{c} - a_{\mathrm{c}, \mathrm{dry}}^2 - a_{\mathrm{c}, \mathrm{dry}}}  - \frac{1}{a_{\mathrm{c}, \mathrm{dry}}}
+\label{eq:cloud_mean}
+\end{align}
+
+with $a_{\mathrm{c}, \mathrm{wet}} < 0$ and $a_{\mathrm{c}, \mathrm{dry}} > 0$.
+
+The standard deviation of cloud cover fraction becomes 0 when the mean monthly cloud fraction reaches both the minimum or maximum limits of 0 and 1. Hence, for $c_\mathrm{sd,dry}$ and $c_\mathrm{sd,wet}$ we have an concave parabola with the formula
+
+\begin{align}
+\sigma_{\mathrm{c}, \mathrm{wet}} &= a_{\mathrm{c}, \mathrm{wet}}^2 \cdot \bar{\mathrm{c}}_\mathrm{wet} \cdot (1 - \bar{\mathrm{c}}_\mathrm{wet}) \nonumber \\
+\sigma_{\mathrm{c}, \mathrm{dry}} &= a_{\mathrm{c}, \mathrm{dry}}^2 \cdot \bar{\mathrm{c}}_\mathrm{dry} \cdot (1 - \bar{\mathrm{c}}_\mathrm{dry}) \label{eq:cloud_sd}
+\end{align}
+
+with $a_{\mathrm{c}, \mathrm{wet}}, a_{\mathrm{c}, \mathrm{dry}} \geq 0$. Results of the fits can be seen in figure \ref{fig:cloud}, \ref{fig:cloud_sd} and the parameters in table \ref{tab:cloud-corr}.
+
+
+\subsubsection{Wind speed}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f10.pdf}
+	\caption[Correlation of wind speed on wet and dry days to the monthly mean]{Correlation of wind speed on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
+	\label{fig:wind}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f11.pdf}
+	\caption[Correlation of standard deviation of wind speed to the monthly mean]{Correlation of standard deviation of wind speed on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line, a third order polynomial to the underlying red density plot. The black bars have a width of $0.1\, \unit{m}\, \unit{s}^{-1}$, the accuracy of the input data, and indicate the mean standard deviations for the given interval range. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
+	\label{fig:wind_sd}
+\end{figure}
+
+The parameterization of the mean wind speed is based upon the same linear equation \eqref{eq:linear} as temperature. For the standard deviation however, we use a third-order polynomial given that is forced through the origin, given via
+\begin{align}
+\sigma_{w, \mathrm{wet}}(\bar{w}_{\mathrm{wet}}) &= c_{1, w, \mathrm{wet}}\, \bar{w}_{\mathrm{wet}} + c_{2, w, \mathrm{wet}}\, \bar{w}_{\mathrm{wet}}^2 + c_{3, w, \mathrm{wet}}\, \bar{w}_{\mathrm{wet}}^3 \nonumber \\
+\sigma_{w, \mathrm{dry}}(\bar{w}_{\mathrm{dry}}) &= c_{1, w, \mathrm{dry}}\, \bar{w}_{\mathrm{dry}} + c_{2, w, \mathrm{dry}}\, \bar{w}_{\mathrm{dry}}^2 + c_{3, w, \mathrm{dry}}\, \bar{w}_{\mathrm{dry}}^3 \label{eq:sd_wind}.
+\end{align}
+
+This better resolves the complex behavior close to $0\,\unit{m}\,\unit{s}^{-1}$ compared to a linear fit. The plots are shown in the figures \ref{fig:wind} and \ref{fig:wind_sd} and the parameters for the fits are shown in table \ref{tab:t-corr}.
+
+\subsubsection{Cross correlation} \label{sec:corr}
+Following \cite{Richardson1981} we use cross correlation to add additional residual noise to the simulated meteorological variables, which provides more realism in the daily weather result. This methodology, based on \cite{Matalas1967} preserves the serial and the cross correlation between the simulated variables. It implies that the serial correlation of each
+variable may be described by a first-order linear autoregressive model
+
+Given the cross correlation matrix $M_0\in\mathbb{R}^4\times\mathbb{R}^4$ and the lag-1 correlation matrix $M_1 \in\mathbb{R}^4\times\mathbb{R}^4$, we calculate 
+\begin{equation}
+A = M_1M_0^{-1} \qquad BB^T = M_0 - M_1M_0^{-1}M_1^T.
+\end{equation}
+
+The matrices $A, B, M_0$ and $M_1$ are calculated using the stations from the EECRA database in figure \ref{fig:stations}. The results are
+
+\begin{equation}
+M_0 = \left( \begin{matrix}
+1. & 0.565 & 0.041 & 0.035\\
+0.565 & 1. & -0.089 & -0.043\\
+0.041 & -0.089 & 1. & 0.114\\
+0.035 & -0.043 & 0.114 & 1.\\
+\end{matrix} \right)
+\qquad
+M_1 = \left( \begin{matrix}
+0.933 & 0.55 & 0.016 & 0.03\\
+0.557 & 0.417 & -0.066 & -0.043\\
+0.004 & -0.095 & 0.599 & 0.093\\
+0.011 & -0.063 & 0.061 & 0.672\\
+\end{matrix} \right).
+\end{equation}
+
+leading to
+
+\begin{equation}
+A = \left( \begin{matrix}
+0.916 & 0.031 & -0.018 & 0.001\\
+0.485 & 0.135 & -0.069 & -0.047\\
+0.004 & -0.043 & 0.592 & 0.023\\
+0.012 & -0.043 & -0.02 & 0.672\\
+\end{matrix} \right)
+\qquad
+B = \left( \begin{matrix}
+0.358 & 0. & 0. & 0.\\
+0.112 & 0.809 & 0. & 0.\\
+0.142 & -0.06 & 0.785 & 0.\\
+0.077 & -0.016 & 0.061 & 0.733\\
+\end{matrix} \right) \label{eq:AB}.
+\end{equation}
+
+The columns and rows in the two matrices correspond to min. and max. temperature, cloud fraction and square root of wind speed, respectively.
+
+In the weather generator, the variables $T_\mathrm{min}, T_\mathrm{max}, c$ and $w$ are then calculated using a combination of residual noise $\chi_i$ (where $i$ denotes the current simulated day) and the mean of the variables. $\chi_i$ is determined by the other variables and the previous day using $A$ and $B$ from above \citep{Richardson1981,Matalas1967}. Hence, $\chi_i$ is given via
+\begin{equation}
+\chi_i = 
+\begin{pmatrix} 
+\chi_{T_\mathrm{min}} & \chi_{T_\mathrm{max}} & \chi_c & \chi_w
+\end{pmatrix} = A\chi_{i-1} + B\epsilon \in \mathbb{R}^4.
+\end{equation}
+The daily values for the variables are then calculated via
+
+\begin{align}
+T_{\mathrm{min},i} &= \chi_{T_\mathrm{min}} \cdot \sigma_{T_\mathrm{min},\mathrm{wet/dry}} + \bar{T}_{\mathrm{min}, \mathrm{wet/dry}} \qquad c_{i} = \chi_{c} \cdot \sigma_{c,\mathrm{wet/dry}} + \bar{c}_{\mathrm{wet/dry}} \\
+T_{\mathrm{max},i} &= \chi_{T_\mathrm{max}} \cdot \sigma_{T_\mathrm{max},\mathrm{wet/dry}} + \bar{T}_{\mathrm{max}, \mathrm{wet/dry}} \qquad w_{i} = \left(\chi_{w} \cdot \sqrt{\sigma_{w,\mathrm{wet/dry}}} + \sqrt{\bar{w}_\mathrm{wet/dry}}\right)^2
+\end{align}
+
+with $\sigma_{T_\mathrm{min},\mathrm{wet/dry}}, \sigma_{T_\mathrm{max},\mathrm{wet/dry}}$ from eq. \eqref{eq:temp_sd}, $\sigma_{c,\mathrm{wet/dry}}$ from eq. \eqref{eq:cloud_sd}, $\sigma_{w,\mathrm{wet/dry}}$ from eq. \eqref{eq:sd_wind}, $\bar{T}_{\mathrm{min}, \mathrm{wet/dry}}, \bar{T}_{\mathrm{max}, \mathrm{wet/dry}}, \bar{w}_\mathrm{wet/dry}$ from eq. \eqref{eq:linear} and $\bar{c}_{\mathrm{wet/dry}}$ from eq. \eqref{eq:cloud_mean}.
+
+Since this procedure always requires the residuals from the previous day, $\chi_{i-1}$, we initialize $\chi_0$ with 0, simulate the month and then simulate it again.
+
+Note that, through the entire procedure, wind speed is subject to a square-root transformation (also when calculating $M_0$ and $M_1$) to account for the fact that it is not normally distributed.
+
+\subsection{Model Evaluation} \label{sec:eval}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f12.pdf}
+	\caption[QQ-plots for all variables and all quantiles]{QQ-plots for all variables with all quantiles (1, 5, 10, 25, 50, 75, 90, 95 and 99) for ${\mu=5.0\,\unit{mm}\, \mathrm{mm}}$, $\xi=1.5$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval. The plots compares the simulated quantile from the list above of one year of one station to the corresponding observed quantile of the same year and station. The plot for wind speed underwent used the bias correction from \autoref{sec:bias}.}
+	\label{fig:all_quants}
+\end{figure}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f13.pdf}
+	\caption[QQ-plots for different quantiles for precipitation]{QQ-plot for different quantiles for precipitation for ${\mu=5.0\unit{mm}}$, $\xi=1.5$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval. The plots compare the simulated quantile of one year of one station to the corresponding observed quantile of the same year and station. }
+	\label{fig:precip_quants}
+\end{figure}
+
+To evaluate GWGEN, we started with the daily meteorology at the evaluation stations described above and calculated monthly summaries. We used this monthly data to drive the model and simulate daily meteorology. The resulting daily series now has the same length as the observed meteorology from the GHCN and EECRA database. Because we cannot expect the weather generator to reproduce the weather exactly as observed, for example the number of rainy days in a month may be the same as observed but they may not occur in precisely the same order, our evaluation is restricted to comparing the statistical properties of the input observed versus the output simulated daily meteorology.
+
+Figure \ref{fig:all_quants} shows the comparison of simulated versus observed values for each of the five meteorological variables handled by GWGEN. For temperature, wind, and cloud fraction, the model does an excellent job of downscaling monthly input to daily resolution\footnote{Note that the plot for wind speed has been bias corrected using the approach in \autoref{sec:bias}.}. The comparison between precipitation amounts looks good when considering all of the data, however a closer look into the results (Fig. \ref{fig:precip_quants}) shows that while the higher precipitation percentiles are well captured using the hybrid Gamma-GP distribution, the lower percentiles show somewhat worse results. This observation of poor performance for very low values also holds true for wind speed (not shown here). The lower values of the two variables, however, are very close to the precision of the observation ($0.1\, \unit{mm}$ for precipitation and  $0.1\, \unit{m}\, \unit{s}^{-1}$ for wind speed). Very small precipitation amounts and low wind speeds are also less biophysically and ecologically important compared to the higher percentiles. We therefore consider the results of the evaluation largely acceptable.
+
+In table \ref{tab:freq} we also compare the simulated versus the observed frequencies. For very light rain (<=1mm), light rain (1-10mm), heavy rain (10-20mm) and very heavy rain (>20mm). As we can see, our model underestimates the occurrence of very light rain events ($28.6\%$ instead of $36.4\%$) and overestimates the light rain events ($58.3\%$ instead of $48.6\%$) but generally performs much better than GCMs \citep{Dai2006,SunSolomonDaiEtAl2006}, especially when it comes to the heavy rain events.
+
+\begin{table}
+	\caption[Simulated and observed precipitation frequencies.]{Simulated and observed precipitation frequencies for certain ranges. The frequency is defined as the number of precipitation occurences in the specified range, divided by the total number of precipitation occurences.}
+	\label{tab:freq}
+	\begin{tabular}{lcc}
+		\tophline
+		{} &  Simulated &  Observed \\
+		Precip. range [mm] &             &           \\
+		\middlehline
+		(0, 1]             &    0.285688 &  0.364014 \\
+		(1, 10]            &    0.583330 &  0.486415 \\
+		(10, 20]           &    0.074063 &  0.090178 \\
+		(20, $\infty$]          &    0.056920 &  0.059392 \\
+		\bottomhline
+	\end{tabular}
+\end{table}
+
+\subsection{Bias correction} \label{sec:bias}
+\begin{figure}
+	\includegraphics[width=12cm]{Figures/f14.pdf}
+	\caption[wind bias correction]{Basis for the wind bias correction. For the left plot, each data point corresponds to the difference of a simulated percentile to the observed percentile. For the right plot (wind speed), each data point corresponds to the fraction of simulated to the observed wind speed for a given percentile. The random number on the x-axis represents the residual value from a normal distribution centered at 0 with standard deviation of unity, as it is used in the cross correlation approach \citep{Richardson1981}.}
+	\label{fig:bias}
+\end{figure}
+
+After evaluating the results of GWGEN for wind speed for the different quantiles (see previous \autoref{sec:eval}) we found a strong, systematic bias between the simulated and the observed values. This observation led us to adopt a further measure to improve the quality of the model output by implementing a quantile-based bias correction.
+
+We use an empirical distribution correction approach (quantile-mapping) \citep{LafonDadsonBuysEtAl2012} to a posteriori correct the simulated data. In the quantile evaluation (previous \autoref{sec:eval}) we saw that the simulated wind speed is a linear function of the observed wind speed, i.e. $w_{sim} = \text{intercept} + \text{slope} \cdot w_{obs}$ (best fit line in figure \ref{fig:all_quants}). Therefore, we use two steps here, one is for the difference between simulation and observation (ideally 0), the other one is the fraction of observation and simulation (ideally 1). The first one corresponds to the intercept with the y-axis in figure \ref{fig:all_quants}, the second one to the slope of the best fit line. The analysis is based on every second percentile between 1 and 100 (i.e. $1, 3, 5, \ldots$) and mapped to it's corresponding random number $u\in\mathbb{R}$ from a normal distribution as it is used for the cross correlation in the weather generator (section \ref{sec:corr}, x-axis in figure \ref{fig:bias} and \cite{Richardson1981}). 
+
+Regarding the intercept (fig. \ref{fig:bias}, left) we see that it strongly follows an exponential function given through
+\begin{equation}
+f_{exp}(u) = \mathrm{e}^{a\, u + b}, \qquad a, b, u \in \mathbb{R} \label{eq:wind_intercept}.
+\end{equation}
+The slope (fig. \ref{fig:bias}, right) on the other hand can be described by a simple third-order polynomial given by
+\begin{equation}
+p3(u) = c_0 + c_1\, u + c_2\, u^2 + c_3\, u^3, \qquad c_0, c_1, c_2, c3, u \in\mathbb{R} \label{eq:wind_slope}
+\end{equation}
+Hence, given the best fit lines in figure \ref{fig:bias}, the simulated wind speed is corrected via
+\begin{equation}
+w'_{sim} = \frac{w_{sim} - f_{exp}(u)}{p3(u)} \label{eq:bias-wind}
+\end{equation}
+with $a =1.1582, b = -1.3359, c_0 = 0.9954, c_1 = 0.8508, c_2 = 0.0278, c_3 = -0.0671$.
+
+
+\subsection{Sensitivity analysis} \label{sec:sens}
+The Generalized-Pareto part of the hybrid Gamma-GP distribution, which we used to simulate precipitation amount, has two parameters: the GP shape, and the threshold parameter. Unlike the gamma parameters, we were unable to relate these GP parameters to any of the monthly summary data we use as input to GWGEN. Hence, we decided to set fixed values for these parameters, and determine them through a sensitivity analysis.
+
+To select the "best" values of the GP parameters, we compared simulated with observed precipitation amounts, running GWGEN with a wide range of realistic parameter values. To quantitatively assess the model performance, we used two metrics: 1) direct comparison of the quantiles (see previous section), and 2) a Kolmogorov-Smirnov (KS) test that evaluates whether two data samples come from significantly different distributions. Our criteria were
+
+\begin{enumerate}
+	\item The $R^2$  correlation coefficient between simulated and observed quantiles \label{item:sens_rsquared}
+	\item The fraction $\frac{\text{simulated precipitation}}{{\text{observed precipitation}}}$ from the slopes in figure \ref{fig:precip_quants} and it's deviation from unity \label{item:sens_slope}
+	\item the fraction of simulated (station specific) years that are significantly different (KS test) from the observation \label{item:sens_ks}
+	\item The mean of the above values \label{item:sens_mean}
+\end{enumerate}
+
+We tried two different approaches to select the gamma-GP crossover threshold: first we tried a fixed crossover point, second we used a quantile-based crossover point. For the latter, the model chooses to use the GP distribution if the quantile of the random number drawn from the gamma distribution is above a certain quantile threshold. This introduces a flexible crossover point in our hybrid distribution which, however, did not improve the results significantly. We therefore show here only the results using the fixed crossover point.
+
+The values of the crossover point for  our sensitivity analysis were 2, 2.5, 3, 4 and from 5 to 20 in steps of 2.5 and 20 to 100 in steps of 5. Furthermore we varied the GP shape parameter from 0.1 to 3 in steps of 0.1 (810 experiments in total). The results of this sensitivity analysis are shown in the supplementary material, figure \ref{fig:sens}.
+
+In general we found that the three criteria \ref{item:sens_rsquared}, \ref{item:sens_slope} and \ref{item:sens_ks} could not be optimized all together at the same time. The $R^2$ is best for high thresholds and low GP shape parameters, the slope is best for low to intermediate thresholds and a low GP shape and the KS statistic is best for low threshold and intermediate GP shape parameters.
+
+However, $R^2$ did not vary that much (from 0.68 to 0.74) and from a visual evaluation of the corresponding quantile plots we saw that the higher quantiles (>90) were much better represented for a better KS result. Hence we chose to follow the KS test criteria, which is also the strictest of our evaluation methods but again compared the different quantile plots to get good results for the higher quantiles.  Finally, we chose a threshold of $5\,\unit{mm}$ and a GP shape parameter of $1.5$. For this setting, $81.7\%$ of the simulated years do not show a significant difference compared to the observation, the mean $R^2$ of the plots in figure \ref{fig:precip_quants} is $0.81$ and the mean deviation of the slope from unity is $0.10$ and for the upper quantiles (90 to 100), $0.017$.
+
+Nevertheless, in total the results seem to be fairly independent of the two parameters since even the amount of years without significant differences vary from $73\%$ to only $83\%$. It is however better than the gamma distribution alone which still has $78.6\%$ of station years not differing significantly but with a slope deviation from unity for the upper quantiles of $0.16$. Thus using the hybrid Gamma-GP distribution improves the simulation of high-amount precipitation events by roughly factor 10 compared to a standard Gamma approach.
+
+\section{Limitations} \label{sec:limits}
+As demonstrated above, GWGEN successfully downscales monthly to daily meteorology with good correlation and low bias when compared to observations. However, there are a few limitations of the model as currently described that should be noted. Importantly, this version of GWGEN neither downscales all conceivable meteorological variables, nor does it provide a mechanism for generating daily meteorological timeseries across multiple points that are spatially autocorrelated. Concerning the former point, while GWGEN simulates daily precipitation, temperature, cloud cover, and windspeed, it does not currently handle other variables that might be important in land surface modeling, such as humidity or wind direction. On the latter point, the lack of explicit simulation of spatial autocorrelation may make GWGEN unsuitable for certain applications, e.g., regional high-resolution hydrological modeling in small catchments (< ca. 2500 km$^2$), where having the capability to simulate flood and other extremes is important. This is because the the weather generator could, e.g., simulate rainfall on different days in different parts of the catchment, where in reality storm events would be highly autocorrelated in space and controlled by mesoscale meteorological conditions.
+
+\section{Discussion and Outlook} \label{sec:discussion}
+GWGEN successfully downscales monthly to daily meteorology, for any point on the globe, in any climate, in any season, and in any time in recent earth history and into the near future (e.g., next century). It extends the original Richardson-type weather generators to simulate wind speed along with precipitation, temperature, and cloud cover. The model requires only monthly values of the meteorological variables to be downscaled, and does not rely on any other spatial information, e.g., whether or not the location is in the tropics.
+
+In general, the results of our downscaled meteorology are excellent, with all simulated variables showing both very high correlation and limited bias when compared to observations. We improved the simulation of daily precipitation amount by replacing the Gamma distribution used in the original Richardson-type weather generators with a hybrid Gamma-GP distribution, which results in the improved simulation of heavy precipitation events. The GP distribution is based upon a globally fixed shape and location parameter, which may be an oversimplification, but is still ten times more accurate than traditional methods that used Gamma alone. Our extensive sensitivity analysis to determine the best coefficients for the shape and location parameters of the GP distribution suggest that further improvements might come through correlating the GP parameters to geographic region and/or seasonality \citep{MaraunRustOsborn2009,RustMaraunOsborn2009} or by introducing a dynamical location parameter \citep{FrigessiHaugRue2002}. Finally, we introduced a step to correct for systematic bias in the downscaling of temperature and wind speed.
+
+Despite the limitations noted above, GWGEN will be useful in a wide range of applications, from global vegetation and crop modeling, to large-scale hydrologic analyses, to understanding animal behavior, to forecasting of fire, insect outbreaks, and other ecosystem disturbances. GWGEN may even be envisaged as a potential replacement for very large and cumbersome gridded datasets of high-temporal resolution meteorology such as CRUNCEP \citep{ViovyCiais2016}, especially for models that use meteorological forcing at a daily timestep. The weather generator is particularly suited for the incorporation into models that run on a spatial grid, for example, GWGEN can readily be incorporated into existing DGVMs such as LPJ-LMfire \citep{PfeifferSpessaKaplan2013} or LPJ-ML \citep{BondeauSmithZaehleEtAl2007} that already rely on a weather generator to provide daily meteorology for certain processes. 
+
+While GWGEN does not handle spatial autocorrelation, in most DGVMs there is no lateral connection between gridcells, and therefore an explicit representation of spatial autocorrelation in the driving daily meteorological data would have no effect on the model output. We further note that if the monthly data used to drive the model are spatially autocorrelated --– this would be the case when using gridded climatology for example --– then the result of the weather generator will also preserve this autocorrelation, at least when the model results are analyzed on monthly or longer timescales.
+
+The limitations present in this version of GWGEN could be addressed in future versions. Methods for simultaneous multisite weather generation exist \citep{Wilks1998,Wilks1999a,Wilks1999b} and could be adapted to GWGEN. However, even simpler methods to approximate spatial autocorrelation could be possible. Running GWGEN with gridded monthly meteorology --- this is the primary application we foresee for the current version of the model --- means that the input variables are already highly correlated in space, i.e., the monthly climate in one gridcell generally closely resembles neighboring cells, outside of complex terrain containing sharp, monotonic climate gradients, e.g., rain shadows. Thus, one simple way of achieving a measure of spatial autocorrelation in GWGEN would be to impose a spatial autocorrelation field on the sequence of random numbers used to impose stochastic noise in the downscaling functions. If the random number sequence is similar between gridcells, then, e.g., rain is likely to fall on the same day, given that the transition probabilities will likely also be similar. Over moderate distances, e.g., <50's of km, it might even be sufficient to use the same random seed across all gridcells in a neighborhood. This would have the effect of producing strongly autocorrelated daily meteorology in space, with the only variations being imposed by the underlying input monthly climatology.
+
+Furthermore, it would be straightforward to include additional meteorological variables in the model framework, handling, e.g., humidity in the same way that temperatures, cloud cover, and wind speed are disaggregated. Other variables, such as pressure and wind direction, might be more difficult using the basic GWGEN structure because of the importance of autocorrelation, particularly at high spatial resolution, and might benefit from a different approach towards weather generation. Finally, GWGEN only downscales meteorology from monthly to daily values; for models that require an even shorter timestep, e.g., 6-hourly, some extension of the model functionality would be required. For certain variables, e.g., temperatures, sub-daily downscaling could be easily implemented \citep{CesaraccioSpanoDuceEtAl2001}, for other variables, such as precipitation, a large literature on downscaling methods exists \citep[e.g.][]{BennettRobertsonWardEtAl2016}, and global datasets of hourly meteorology for model calibration are available \citep[e.g., the Integrated Surface Database,][]{SmithLottVose2011}.
+
+
+\section{Conclusions}
+Compiling a global database of daily precipitation, temperature, cloud cover, and wind speed measurements, we explored the relationship between daily meteorology and monthly summaries first described in the context of weather downscaling by \cite{GengAuburn1987}. Our analysis of more than 50 million individual records showed that daily-to-monthly relationships are relatively stable in space and time, and constant across a very wide range of stations from all latitudes and climate zones. With the resulting relationships, we parameterized a WGEN/SIMMETEO-type weather generator, with the intention of creating a generic scheme that could be applied anywhere over the earth's land surface for the past, present, and (near) future. 
+
+\section{Code availability} \label{sec:code}
+GWGEN, is open source software, and the code, utility programs for parameterization, evaluation and manipulating the raw weather station data, and complete documentation are available at \citep{SommerKaplan2017a}. The original weather station database can be made available upon request to the authors or downloaded from \cite{HahnWarren1999} and \cite{MenneDurreVoseEtAl2012}. The weather generator module is programmed in FORTRAN, the parameterization, evaluation and other supplementary tools are written in Python mainly using the numerical python libraries numpy and scipy \citep{JonesOliphantPetersonEtAl2001}, statsmodels \citep{SeaboldPerktold2010}, as well as matplotlib \citep{Hunter2007} and psyplot \citep{Sommer2017} for the visualization. Detailed installation instructions can be found in the user manual: \url{https://arve-research.github.io/gwgen/}.
 
 \clearpage
 
@@ -410,17 +541,16 @@ Compared to the Gamma distribution the applied hybrid Gamma-GP distribution impr
 
 \subsection{Sensitivity analysis}                               %% Appendix A1, A2, etc.
 \begin{figure}[!h]
-	\includegraphics[width=12cm]{figures/sensitivity_results.pdf}
-	\caption[Results of the sensitivity analysis]{Results of the sensitivity analysis for the (a) correlation coefficient $R^2$, (b) deviation from a slope of unity, (c) the fraction of significant different station years, (d) the mean of (a) - (c). For the plots in (a) and (b) the mean of the 25th, 50th, 75th, 90th, 95th and 99th percentiles are used. In general, 1 (dark green) is best, 0 (white) is worst. The dark red fields indicate experiments that failed because of a too low threshold and too high GP shape parameter. Note also the logarithmic scale on the y-axis.}
+	\includegraphics[width=12cm]{Figures/f15.pdf}
+	\caption[Results of the sensitivity analysis]{Results of the sensitivity analysis for the (a) correlation coefficient $R^2$, (b) deviation from a slope of unity, (c) the fraction of significant different station years, (d) the mean of (a) - (c). For the plots in (a) and (b) we used the means of the 25th, 50th, 75th, 90th, 95th and 99th percentiles. In general, 1 (dark green) is best, 0 (white) is worst. The dark red fields indicate experiments that failed because of a too low threshold and too high GP shape parameter. Note the logarithmic scale on the y-axis.}
 	\label{fig:sens}
 \end{figure}
 
 
-\authorcontribution{JOK conceived the model and analyses, wrote the prototype code and performed preliminary analyses, PS developed and documented the final version of the code (including parameterization), performed all of the final analyses, and okay, something else, created the graphical output. Both authors contributed to the writing of the manuscript}
-
+\authorcontribution{JOK conceived the model and analyses, wrote the prototype code and performed preliminary analyses, PS developed and documented the final version of the code (including parameterization and evaluation), performed all of the final analyses, and created the graphical output. Both authors contributed to the writing of the manuscript}
 
 \begin{subacknowledgements}
-	This work was supported by the European Research Council (COEVOLVE, 313797) and the Swiss National Science Foundation (ACACIA, CR10I2\_146314). We thank Shawn Koppenhoefer for assistance compiling and querying the weather databases and Alexis Berne and Grégoire Mariéthoz for helpful suggestions on the analyses. We are grateful to NOAA NCDC and the University of Washingtion for providing free of charge the GHCN-Daily and EECRA databases, respectively.
+	This work was supported by the European Research Council (COEVOLVE, 313797) and the Swiss National Science Foundation (ACACIA, CR10I2\_146314). We thank Shawn Koppenhoefer for assistance compiling and querying the weather databases and Alexis Berne and Grégoire Mariéthoz for helpful suggestions on the analyses. We are grateful to NOAA NCDC and the University of Washington for providing free of charge the GHCN-Daily and EECRA databases, respectively.
 \end{subacknowledgements}
 
 \end{subappendices}

@@ -1,0 +1,129 @@
+\pdfminorversion=4
+\documentclass[20pt, table]{beamer}
+
+%%%%%%%%%%%%%%%%%%%%%%%   PLEASE DO NOT CHANGE THIS PART   %%%%%%%%%%%%%%%%%%%%%%%%%%
+\useinnertheme{rectangles}
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{helvet}
+\usepackage[overlay, absolute]{textpos}
+\usepackage{setspace}
+\usepackage{color}
+\geometry{papersize={25.4cm,19.05cm}}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[loop]{animate}
+\usepackage{setspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,tikzmark,fit,positioning,matrix,scopes,chains,overlay-beamer-styles, calc}
+%%%%%%%%%%%%%%%%%%%   BEGIN OF THE MAIN PART OF THE DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+% For every picture that defines or uses external nodes, you'll have to
+% apply the 'remember picture' style. To avoid some typing, we'll apply
+% the style to all pictures.
+\tikzstyle{every picture}+=[remember picture]
+
+\begin{frame}{}
+\tiny
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+minimum height=2em]
+\tikzstyle{element} = [
+rectangle, inner sep=5pt, minimum width=15mm, very  thick, draw = black,
+top  color=blue!20!white!20, bottom  color=blue!70!white]
+\begin{tikzpicture}[ampersand replacement=\&, align=center, text width=6em]
+\node (m) [%
+matrix of nodes,
+nodes in empty cells,
+row  sep=10mm,column  sep=10mm,
+nodes={text centered,anchor=center},
+row 4/.style={visible on=<2->},
+row 5/.style={visible on=<2->},
+row 6/.style={visible on=<2->},
+row 7/.style={visible on=<2->},
+] {
+	|[element]| Monthly Input \& \& \& \& |[element]| Daily Output  \\
+	|[cloud] (mpr)| total precipitation $p_\mathrm{obs}$ \& \& |[decision] (prrand)| estimate $\Gamma$ \& |[block] (pgp)| estimate GP \& |[cloud] (dpr)| daily precipitation \\
+	|[cloud] (nwetobs)| number of wet days $n_{\mathrm{wet, obs}}$ \& \& |[decision] (markov)| Markov chain. Is the day wet or not? \&  \& |[cloud] (nwetsim) | Simulated wet days $n_{\mathrm{wet, sim}} \mathrel{+}= 1$  \\
+	|[cloud] (mtmin)| mean min. Temperature \& \& \& |[block] (resid) | Calculate residuals \& |[cloud] (dtmin)| daily min. Temp. \\
+	|[cloud] (mtmax)| mean max. Temperature \& \& \& \& |[cloud] (dtmax)| daily max. Temp. \\
+	|[cloud] (mcloud)| mean cloud fraction \& \& \& \& |[cloud] (dcloud)| daily cloud fraction \\
+	|[cloud] (mwind)| mean wind speed \& \& \& |[block] (std) | Calculate std. dev. \& |[cloud] (dwind)| daily wind speed \\
+};
+
+% arrows for nwet
+\draw [line width=0.5mm] (markov.north) |- ([xshift=-1.5cm,yshift=1em]markov.north) |- (prrand.west);
+\node[above=of markov.north, yshift=-2em, xshift=-0.7cm]{yes};
+\path [line, line width=0.5mm, dashed] (markov.east) -- node [near start, yshift=1em] {yes} (nwetsim.west);
+\path [line, line width=0.5mm] (nwetobs.east) |- (markov.west);
+
+% arrows from precip
+\draw [line width=0.5mm, dashed] (mpr.east) -- (prrand.west);
+%\path [line, line width=0.5mm, dashed] (prrand.east) -- (dpr.west);
+\path [line, line width=0.5mm, dashed] (prrand.east) -- node [near start, above] {$\Gamma > \mu$} (pgp.west);
+\path [line, line width=0.5mm, dashed] (prrand.north)  |- node [near start, above] {$\Gamma \leq \mu$} ([yshift=40pt]dpr.west) -- (dpr.west);
+\path [line, line width=0.5mm, dashed] (pgp.east) |- (dpr.west);
+
+% arrows to adjust
+\visible<2->{
+	\node[fit=(m-4-3)(m-7-3),block] (adjust) {Adjust means for wet/dry status};
+	\node[right=of mtmax.east](adjustin) {};
+	\node (adjustinN) at ([xshift=-10pt]adjust.north) {};
+	\path [line, line width=0.5mm] (markov.south) + (-10pt, 0) -- (adjustinN.center);
+	\draw [line width=0.5mm] (mtmin) -| (adjustin.east);
+	\draw [line width=0.5mm] (mtmax.east) -| (adjustin.east);
+	\draw [line width=0.5mm] (mcloud.east) -| (adjustin.east);
+	\path [line, line width=0.5mm] (mwind.east) -- ([yshift=0.7em]adjust.south west);
+	\path [line, line width=0.5mm] (adjustin.east) -- ([yshift=3.2em]adjust.west);	
+	\node[fit=(m-4-2.north)(m-7-2.south),block,fill=green!20] (smoothing) {Smoothing};
+}
+
+% arrows from adjust
+\visible<2->{
+	\node[right=of adjust.east, xshift=0.06\textwidth](residout) {};
+	\node[right=of adjust.east, xshift=0.08\textwidth](residin) {};
+	\node[right=of adjust.east, xshift=-0.06\textwidth](adjustout) {};
+	\draw [line width=0.5mm] (adjust.east) --  (adjustout.center);
+	\path [line, line width=0.5mm] (adjustout.center) |- (resid.west);
+	\path [line, line width=0.5mm] (adjustout.center) |- (std.west);
+	\path [line, line width=0.5mm] ([yshift=0.7em]adjust.south east) -- (std.west) node [pos=0.2, above] (twind) {$\sqrt{w}$};
+	\draw [line width=0.5mm] (adjustout.center) |- (residout.center);
+	\draw [line width=0.5mm] (resid.east) -| (residout.center);
+	\draw [line width=0.5mm] (std.east) -| (residout.center);
+	\draw [line width=0.5mm] (residout.center) -| (residin.center);
+	\path [line, line width=0.5mm] (residin.center) |- (dtmin.west);
+	\path [line, line width=0.5mm] (residin.center) |- (dtmax.west);
+	\path [line, line width=0.5mm] (residin.center) |- (dcloud.west);
+	\path [line, line width=0.5mm] (residin.center) |- (dwind.west) node [pos=0.33, right] (twind) {$w^2$, bias correction};}
+
+\node [rectangle, fit=(prrand)(adjust)(nwetsim)(dpr), draw, line width=0.5mm, label={Daily loop $d$}, inner sep=2em] (loop) {};
+
+\visible<3->{
+	\node [decision, right=of loop.east, text width=10em, xshift=-2.5cm] (check) {
+		$n_\mathrm{wet,obs} == n_\mathrm{wet,sim} \pm 1$ \\
+		$p_\mathrm{obs} == p_\mathrm{sim} \pm 5\%$
+	};
+	\path [line, line width=0.5mm] (loop.east) -- (check.west);
+	\node [above=of check, block] (nextmonth) {next month};
+	\node [below=of check, block] (repeatmonth) {repeat month};
+	\path [line, line width=0.5mm] (check.north) -- node [near start, xshift=10pt] {yes} (nextmonth);
+	\path [line, line width=0.5mm] (check.south) -- node [near start, xshift=10pt] {no} (repeatmonth);
+	\path [line, line width=0.5mm] (repeatmonth) |- ([yshift=-10pt, xshift=-40pt]loop.south west) |- ([yshift=15pt]loop.south west);
+	\path [line, line width=0.5mm] (nextmonth) -- ([xshift=30pt]nextmonth.east);
+}
+
+
+\end{tikzpicture}
+\end{frame}
+
+\end{document}
