@@ -32,7 +32,7 @@ The current geological period is the Quaternary. It is characterized by glacial-
 
 The end of this period can be used for data-model comparisons due to the availability of paleo-climate archives. It started with the \gls{lig} about 127'000 years ago and was followed by the \gls{lgm} at 21'000 years ago. The warming of the atmosphere in the following interglacial  has been interrupted by a rapid cooling, called the Younger Dryas, between 12'900 and 11'700 years ago, which then let to the onset of the current epoch, the Holocene \citep{WalkerJohnsenRasmussenEtAl2009} \addref[check \cite{WalkerJohnsenRasmussenEtAl2009}].
 
-\todo[inline]{Add some background on the Holocene. How did it change (global mean temperature estimate?), how was the insolation? CO$_2$ effects, impact of the ice sheets during the early holocene, changes in altitude, large-scale atmospheric circulation, human influences.}
+\todo[inline, size=\normalsize]{Add some background on the Holocene. How did it change (global mean temperature estimate?), how was the insolation? CO$_2$ effects, impact of the ice sheets during the early holocene, changes in altitude, large-scale atmospheric circulation, human influences.}
 
 This epoch is of particular interest because the continental setup is comparable to nowadays while still having a climate that is significantly different from present day \addref[PMIP paper]. Additionally we have a large set of proxies available to quantify the climate, independent from the model estimates, and for the entire globe \citep{WannerBeerButikoferEtAl2008} \addref[check \cite{WannerBeerButikoferEtAl2008}]. 
 
@@ -44,49 +44,24 @@ The most abundant climate proxy, that I will also focus on in the next chapters,
 
 The ability to serve as a proxy for the past arises from the chemically stable polymer sporopollenin, that allows it to be preserved over very long periods of time, in various environments such as lakes, wetlands or ocean sediments \addref[Manus review paper] \citep{FaegriKalandKrzywinski1989, Havinga1967}. Pollen are produced by seed-bearing plants (spermatophytes, \cite{Wodehouse1935} \addref[Don't know about \cite{Wodehouse1935}, took it from Manus review paper...]) and as such have a high spatial continuity and prevalence. Their compositions (closely related to the surrounding vegetation) is highly dependent on the climate and allows the reconstruction of the latter through an inverse modelling approach \addref[cite some MAT, WAPLS, Bayesian, etc. papers].
 
-\rewrite{\textbf{This paragraph should be rewritten based on \cite{Grimm2008}, section 1.3.1!} Another useful feature of this proxy for data-model intercomparisons is the existence of databases for fossil pollen assemblages. Freely available data comes from the \gls{epd} \citep{VincensLezineBuchetEtAl2007} or the \gls{napd}, that both started in the 80s, and more recent from Africa and Latin America \citep{FyfeBeaulieuBinneyEtAl2009, FlantuaHooghiemstraGrimmEtAl2015, MarchantAlmeidaBehlingEtAl2002}). Another recent attempt is the Neotoma database \citep{WilliamsGrimmBloisEtAl2018}, a global multiproxy database that also incorporates many of the regional pollen databases.}
-The use of the above-mentioned proxies, particularly pollen, for paleo-climate reconstruction has a long academic tradition in geology \citep{Bradley1985} and provides the source of large-scale paleo-climatic reconstructions in number of different studies \citep{MauriDavisCollinsEtAl2015, DavisBrewerStevensonEtAl2003, MarsicekShumanBartleinEtAl2018, NeukomSteigerGomezNavarroEtAl2019, NeukomBarbozaErbEtAl2019}\addref[add more..., Climate12K].
+The usefulness for large-scale data-model intercomparisons additionally arises from the existence of regional databases for fossil pollen assemblages. The earliest examples are the \gls{epd} and \gls{napd}  that both started aroun 1990 and developed a similar structure in order to be compatible \citep{Grimm2008, FyfeBeaulieuBinneyEtAl2009} . This let to the development of other regional pollen databases, such as the Latin American Pollen Database (LAPD) \citep[LAPD, ][]{FlantuaHooghiemstraGrimmEtAl2015, MarchantAlmeidaBehlingEtAl2002} in 1994 or the African Pollen Database \citep[APD][]{VincensLezineBuchetEtAl2007} in 1996, and others \citep[see][]{Grimm2008}. These attempts finally let to the development of the Neotoma database \citep{WilliamsGrimmBloisEtAl2018}, a global multiproxy database that incorporates many of the regional pollen databases.
 
-\todo[inline]{Add paragraph about heterogeneity of data, distribution of data, accessibility of data -- need for software tools}
+The use of the above-mentioned proxies, particularly pollen, for paleo-climate reconstruction has a long academic tradition in geology \citep{Bradley1985} and provides the source of large-scale paleo-climatic reconstructions in number of different studies \citep{MauriDavisCollinsEtAl2015, DavisBrewerStevensonEtAl2003, MarsicekShumanBartleinEtAl2018, NeukomSteigerGomezNavarroEtAl2019, NeukomBarbozaErbEtAl2019}\addref[add more..., Climate12K]. They however have multiple uncertainties, that are often difficult to estimate and to consider. The main challenge for a data-model comparison are dating uncertainties, but often also about the influence of seasonality on the proxy (e.g. whether it represents summer, winter or annual temperature) and the quality of the record. Another challenge is the proper handling of uncertainties of the inverse modelling approach\addref[cite some MAT papers], spatial coverage of the proxy (see chapter \ref{chp:straditize}), and, considering pollen assemblages, the various naming schemes for pollen taxa that need to be considered for large-scale reconstructions\addref[that North-US/South-US discrepancy...].
 
 
-\subsection{Model Simulations from the Holocene}  \label{sec:intro-paleo-model}
-\todo[inline]{add PMIP experments, highlight transient model runs}
+\subsection{Model Simulations of the Holocene}  \label{sec:intro-paleo-model}
+As mentioned in the earlier section \ref{sec:intro-paleo}, paleoclimate simulations of \glspl{esm} played in important role in previous intercomparisons. The Holocene analysis within past \gls{pmip} versions focused mainly on the mid-Holocene around 6000 years before present, a time period with a different latitudinal and seasonal distribution of incoming solar radiation (insolation) but greenhouse gas concentrations similar to the preindustrial period \citep{Otto-BliesnerBraconnotHarrisonEtAl2017}. The main findings from previous intercomparisons are an underestimation of polar amplification in \gls{pmip}2 and \gls{pmip}3 models due to sea ice and vegetational feedbacks, and an underestimation of the north-south temperature gradient over Europe \citep{ClimateChange2014a, MassonDelmotteKageyamaBraconnotEtAl2006, ZhangSundqvistMobergEtAl2010, BrewerGuiotTorre2007, DavisBrewer2009}.
 
-\todo[inline]{Add paragraph about size of data, distribution of data, accessibility of data -- need for software tools}
+The focus on only a short time slice (mainly due to the high computational costs for running an \gls{esm} over a large simulation period) however has several complications. Climate changes, i.e. the shift into a different climatic state, cannot be simulated and high dating uncertainties hinder a credible comparison of models and proxies\addref. Therefore multiple recent studies published and proposed increasing efforts for transient model simulations, i.e. simulations that cover multiple millenia during the last deglaciation \citep{IvanovicGregoireKageyamaEtAl2016} and the Holocene \citep{Otto-BliesnerBraconnotHarrisonEtAl2017}. Several studies used \glspl{emic} for transient simulations that cover parts of the last 12'000 years \citep[e.g.][]{RocheRenssenPaillardEtAl2011, MenvielTimmermannTimmEtAl2011, GregoireValdesPayne2015} and a few used a global coupled \gls{esm} \citep[chapter \ref{chp:teles}]{VarmaPrangeMerkelEtAl2012, OttoBliesnerRussellClarkEtAl2014}. As stated by \cite{WeitzelWagnerSjolteEtAl2019}, those model results can clarify the role of internal climate variability for Holocene temperature trends and large-scale patterns.
 
-\todo[inline]{Add models for transient runs: LOVECLIM, TRACE, MPI-ESM-LR, HadCM3, FAMOUS}
+Despite the computational costs for running these models, technical challenges arise from the size of the data that easily exceeds the size of multiple Gigabyte per climatic variable with a monthly resolution. It requires software that is able to deal with data too large to fit into memory (see section \ref{sec:intro-software-model} and chapter \ref{chp:psyplot}) and automated techniques to identify patterns in the data (see chapter \ref{chp:teles}).
+
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
 \section{Software for Paleoclimatology} \label{sec:intro-software}
-
-\begin{enumerate}
-	\item History of Software development in Earth System Science
-	\begin{itemize}
-		\item Development of Climate models
-		\item Statistics
-		\item Visualization
-		\item Distribution and Synthesis of Data
-		\item Quantitative and large-scale reconstructions through proxies
-	\end{itemize}
-	\item An overview on open-source Software Development
-	\begin{itemize}
-		\item
-		Version control
-		\item
-		Transparency
-		\item
-		Automated tests through Continuous Integration
-		\item
-		Accessible and extensive documentation
-		\item
-		Distribution of Software through Package managers (conda, PyPi,
-		Docker)
-	\end{itemize}
-\end{enumerate}
 
 The usage of software is crucial for the quantitative reconstruction of Earth's Climate. Paleoclimate research is facing an information overload problem and requires innovative methodologies in the realm of visual analytics, the interplay between automated analysis techniques and interactive visualization \citep{KeimAndrienkoFeketeEtAl2008, Nocke2014}. As such, a visual representation of the paleoclimate reconstruction has been essential for both, proxies \citep{Nichols1967, Bradley1985, Grimm1988} and models \citep{Phillips1956, RautenhausBoettingerSiemenEtAl2018, NockeSterzelBoettingerEtAl2008, Nocke2014, BoettingerRoeber2019}, although the visualization methods significantly differ due to the differences in data size and data heterogeneity.
 
@@ -180,18 +155,19 @@ One step further, compared to package managers, are the distribution of virtual 
 
 \section{Challenges tackled in this thesis} \label{sec:intro-thesis-overview}
 
-\begin{itemize}
-	\item Visual analysis of large amounts of data (psyplot)
-	\item Synthesizing and Distributing large amounts of proxy data (straditize, EMPD/POLNET viewer)
-	\item Understanding and modelling past climates with statistical methods (Teleconnections, GWGEN)
-	\item Thesis structure:
-		\begin{enumerate}
-			\item Software tools: Chapters \ref{chp:psyplot}, \ref{chp:straditize}, \ref{chp:empd}
-			\item Numerical tools: Chapters \ref{chp:gwgen}, \ref{chp:teles}
-			\item \hyperlink{appendix}{Appendix}
-		\end{enumerate}
-\end{itemize}
+I present several new tools in this thesis that tackle the aspects described in the previous sections. It is divided into two parts: Part \ref{part:software} are the software chapters \ref{chp:psyplot}, \ref{chp:straditize} and \ref{chp:empd} that introduce new packages developed for paleoclimate analysis. Part \ref{part:numerics} consists of the analysis chapters \ref{chp:gwgen} and \ref{chp:teles} that address two use-cases tackling the combination of observations and models for an informed paleoclimate understanding.
 
+The first part starts with the visualization framework psyplot in chapter \ref{chp:psyplot}, a suite of python packages that are designed for interactive visual analysis of data both from a \gls{gui} and the command line. The scope of this software is not limited to paleoclimate analysis and serves a more general purpose. As such, it serves as a base infrastructure for many of the topics described in the other chapters.
+
+Straditize, described in the next chapter \ref{chp:straditize}, addresses the problem of gathering paleo-climate information that has been collected during the pre-digital area. This software is a semi-automated digitization package for stratigraphic diagrams, particularly pollen diagrams. Straditize is built on top of psyplot and its \gls{gui} and as such provides a rich interactive documentation and visualization methods of the software tools.
+
+Chapter \ref{chp:empd} covers the last aspect of software usage for paleoclimate data: data distribution. In this chapter I describe new infrastructural tools for the sustainable management of a community-driven pollen database, the \glsfirst{empd}. They consist of a flexible and lightweight map-based web interface, the EMPD-viewer, into the data and a webserver for an automated administration of the database. Within this section, I also present another use case for the EMPD-viewer that is adapted to a large northern-hemispheric database of fossil and modern pollen records.
+
+The second part starts with the weather generator GWGEN in chapter \ref{chp:gwgen}, a statistical model that uses modern relationships in observational data to inform large-scale paleo climate models with temporally downscaled temperature, precipitation, cloud cover and wind speed records.
+
+Finally, in chapter \ref{chp:teles} I investigate the question to what extent large-scale atmospheric circulation features can be estimated from proxy data. In this analysis I analyze the long-term stability of spatial correlation patterns between surface temperature and northern hemispheric teleconnections based on three \glspl{esm}.
+
+This thesis finishes with the conclusions in chapter \ref{chp:conclusions} which summarizes the new tools and findings and provides an outlook for the further development of the methods presented. In the \hyperlink{appendix}{Appendix} I present another work that has developed in a cooperation which is also based on the infrastructural tools from psyplot and GWGEN (appendix \ref{chp:iucm}), and I provide a list of the publications during my thesis (appendix \ref{chp:publications}) and an overview about all the software packages that have been developed (appendix \ref{chp:software}).
 
 \printbibliography[heading=subbibintoc]
 
