@@ -34,7 +34,7 @@ In the following sections we describe Global-WGEN (GWGEN), a weather generator p
 
 \section{Model description} \label{sec:model}
 \begin{figure}
-	\includegraphics[width=8.3cm]{Figures/f01.pdf}
+	\includegraphics[width=8.3cm]{gwgen-figures/f01.pdf}
 	\caption[Schematic workflow of GWGEN]{Schematic workflow of GWGEN. After smoothing the monthly input, the Markov Chain is used to decide, whether it is a dry or a wet day. If it is a wet day, we draw a random number from the Gamma-GP distribution. Furthermore, the other means of the variables ($\bar{T}_\mathrm{min/max}, \bar{c}, \bar{w}$) are adjusted and their daily values are calculated using the estimated standard deviations and residuals. The wind speed furthermore undergoes a square root transformation before applying the cross correlation and in the end is corrected using the bias correction. A quality check in the end restricts our model to be within a $5\%$ range of the observed total precipitation and to replicate the number of wet days from the input.}
 	\label{fig:schema}
 \end{figure}
@@ -110,7 +110,7 @@ In the following subsections, we first describe the global weather station datab
 \subsection{Development of a global weather station database}
 
 \begin{figure}
-	\includegraphics[width=8.3cm]{Figures/f02.pdf}
+	\includegraphics[width=8.3cm]{gwgen-figures/f02.pdf}
 	\caption[Weather stations used for parameterization and evaluation of the weather generator.]{Weather stations used for parameterization and evaluation of the weather generator. The uppermost panel shows the locations of the stations used for parameterizing precipitation and temperature, the middle panel shows the stations for cloud fraction and wind speed, as well as for calculating the cross correlations between temperature, cloud fraction, and wind speed. The lower plot shows the location of the stations used to evaluate the model, which were excluded from the parameterization stations.}
 	\label{fig:stations}
 \end{figure}
@@ -125,7 +125,7 @@ Finally, we reserved some weather station records for model evaluation that were
 \subsubsection{Precipitation occurrence} \label{sec:markov}
 
 \begin{figure}
-	\includegraphics[width=8.3cm]{Figures/f03.pdf}
+	\includegraphics[width=8.3cm]{gwgen-figures/f03.pdf}
 	\caption[Transition probabilities vs. wet fraction]{Transition probabilities vs. wet fraction. The red density plot in the background shows the density of the observations, and the blue lines are the linear regression line of the probability against the wet fraction. The fit for the $p_{11}$ transition probability was forced to the point $(1, 1)$, the others were forced to $(0, 0)$. The underlying data for the fits correspond to the means of the the multi-year series for each month for each station.}
 	\label{fig:markov}
 \end{figure}
@@ -147,7 +147,7 @@ In the weather generator (see line \ref{a:gwgen:markov} in algorithm \ref{a:gwge
 \subsubsection{Precipitation amount} \label{sec:dist_params}
 
 \begin{figure}
-	\includegraphics[width=8.3cm]{Figures/f04.pdf}
+	\includegraphics[width=8.3cm]{gwgen-figures/f04.pdf}
 	\caption[Mean precipitation - Gamma scale relationship]{Mean precipitation - Gamma scale relationship. The blue line represents the best fit line of the mean precipitation on wet days to the estimated gamma scale parameter of the corresponding distribution. Each data point corresponds to one multi-year series of one month for one station.}
 	\label{fig:gscale_meanw}
 \end{figure}
@@ -202,17 +202,17 @@ The other parameters of the GP distribution are obtained through a sensitivity a
 \subsubsection{Temperature}
 
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f05.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f05.pdf}
 	\caption[Correlation of minimum temperature on wet and dry days to the monthly mean]{Correlation of minimum temperature on wet and dry days to the monthly mean. The y-axes show the mean minimum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
 	\label{fig:tmin}
 \end{figure}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f06.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f06.pdf}
 	\caption[Correlation of maximum temperature on wet and dry days to the monthly mean]{Correlation of maximum temperature on wet and dry days to the monthly mean. The y-axes show the mean maximum temperature on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
 	\label{fig:tmax}
 \end{figure}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f07.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f07.pdf}
 	\caption[Correlation of standard deviation of min. and max. temperature to the monthly mean]{Correlation of standard deviation of the minimum and maximum temperature on wet and dry days to the monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The bars have a width of $0.1^\circ C$ (the data accuracy) and indicate the mean standard deviation for a given mean minimum temperature in one month. The lines are fitted to these bars, where the green and red polynomials of order 5 are the use all the data below or above $0^\circ C$ respectively and the blue and violet lines are a linear extrapolation of the data below $-40^\circ C$ (or $-30^\circ C$ for $T_\mathrm{max}$) or above $25^\circ C$ (or $35^\circ C$)  respectively. The red density plot in the background indicates the spread of the data. The bars and the density plot are based on the single month for each station (i.e. not the multi-year monthly series as for, e.g. mean temperature (figure \ref{fig:tmin} and \ref{fig:tmax})). Parameters of the fits are also shown in table \ref{tab:t-corr}.}
 	\label{fig:temp_sd}
 \end{figure}
@@ -298,12 +298,12 @@ These coefficients are based on the means of the standard deviation (black bars 
 
 \subsubsection{Cloud fraction}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f08.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f08.pdf}
 	\caption[Correlation of cloud fraction on wet and dry days to the monthly mean]{Correlation of cloud fraction on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
 	\label{fig:cloud}
 \end{figure}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f09.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f09.pdf}
 	\caption[Correlation of standard deviation of cloud fraction to the monthly mean]{Correlation of standard deviation of the cloud fraction on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:cloud-corr}.}
 	\label{fig:cloud_sd}
 \end{figure}
@@ -346,12 +346,12 @@ with $a_{\mathrm{c}, \mathrm{wet}}, a_{\mathrm{c}, \mathrm{dry}} \geq 0$. Result
 
 \subsubsection{Wind speed}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f10.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f10.pdf}
 	\caption[Correlation of wind speed on wet and dry days to the monthly mean]{Correlation of wind speed on wet and dry days to the monthly mean.The y-axes show the mean cloud fraction on wet or dry days respectively, the blue line corresponds to the best fit line. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
 	\label{fig:wind}
 \end{figure}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f11.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f11.pdf}
 	\caption[Correlation of standard deviation of wind speed to the monthly mean]{Correlation of standard deviation of wind speed on wet and dry days to the corresponding monthly mean. The y-axes show the standard deviation, the x-axes the mean on wet or dry days respectively. The blue line corresponds to the best fit line, a third order polynomial to the underlying red density plot. The black bars have a width of $0.1\, \unit{m}\, \unit{s}^{-1}$, the accuracy of the input data, and indicate the mean standard deviations for the given interval range. Parameters of the fits are also shown in table \ref{tab:t-corr}.}
 	\label{fig:wind_sd}
 \end{figure}
@@ -433,12 +433,12 @@ Note that, through the entire procedure, wind speed is subject to a square-root 
 
 \subsection{Model Evaluation} \label{sec:eval}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f12.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f12.pdf}
 	\caption[QQ-plots for all variables and all quantiles]{QQ-plots for all variables with all quantiles (1, 5, 10, 25, 50, 75, 90, 95 and 99) for ${\mu=5.0\,\unit{mm}\, \mathrm{mm}}$, $\xi=1.5$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval. The plots compares the simulated quantile from the list above of one year of one station to the corresponding observed quantile of the same year and station. The plot for wind speed underwent used the bias correction from \autoref{sec:bias}.}
 	\label{fig:all_quants}
 \end{figure}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f13.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f13.pdf}
 	\caption[QQ-plots for different quantiles for precipitation]{QQ-plot for different quantiles for precipitation for ${\mu=5.0\unit{mm}}$, $\xi=1.5$. The blue lines are linear regression from simulation to observation. The red line shows the ideal fit (the identity line). Blue shaded areas represent the $95\%$ confidence interval. The plots compare the simulated quantile of one year of one station to the corresponding observed quantile of the same year and station. }
 	\label{fig:precip_quants}
 \end{figure}
@@ -467,7 +467,7 @@ In table \ref{tab:freq} we also compare the simulated versus the observed freque
 
 \subsection{Bias correction} \label{sec:bias}
 \begin{figure}
-	\includegraphics[width=12cm]{Figures/f14.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f14.pdf}
 	\caption[wind bias correction]{Basis for the wind bias correction. For the left plot, each data point corresponds to the difference of a simulated percentile to the observed percentile. For the right plot (wind speed), each data point corresponds to the fraction of simulated to the observed wind speed for a given percentile. The random number on the x-axis represents the residual value from a normal distribution centered at 0 with standard deviation of unity, as it is used in the cross correlation approach \citep{Richardson1981}.}
 	\label{fig:bias}
 \end{figure}
@@ -543,7 +543,7 @@ GWGEN, is open source software, and the code, utility programs for parameterizat
 
 \subsection{Sensitivity analysis}                               %% Appendix A1, A2, etc.
 \begin{figure}[!h]
-	\includegraphics[width=12cm]{Figures/f15.pdf}
+	\includegraphics[width=12cm]{gwgen-figures/f15.pdf}
 	\caption[Results of the sensitivity analysis]{Results of the sensitivity analysis for the (a) correlation coefficient $R^2$, (b) deviation from a slope of unity, (c) the fraction of significant different station years, (d) the mean of (a) - (c). For the plots in (a) and (b) we used the means of the 25th, 50th, 75th, 90th, 95th and 99th percentiles. In general, 1 (dark green) is best, 0 (white) is worst. The dark red fields indicate experiments that failed because of a too low threshold and too high GP shape parameter. Note the logarithmic scale on the y-axis.}
 	\label{fig:sens}
 \end{figure}
