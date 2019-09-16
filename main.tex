@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Masters/Doctoral Thesis 
+% Masters/Doctoral Thesis
 % LaTeX Template
 % Version 2.5 (27/8/17)
 %
@@ -35,7 +35,7 @@ singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespac
 %nohyperref, % Uncomment to not load the hyperref package
 headsepline, % Uncomment to get a line under the header
 %chapterinoneline, % Uncomment to place the chapter title next to the number on one line
-%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout,
 ]{MastersDoctoralThesis} % The class file specifying the document structure
 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
@@ -93,6 +93,7 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	CUSTOM LATEX PACKAGES
 %----------------------------------------------------------------------------------------
+\usepackage{tikz}
 \usepackage{appendix}
 \usepackage{amsmath}
 \usepackage{algorithmic}
@@ -118,11 +119,19 @@ headsepline, % Uncomment to get a line under the header
 		{\thinmuskip3mu\relax
 			\def\mu{\text{\textmu}}\def~{\,}%
 			\ifx\f@series\testbx\mathbf{#1}\else\mathrm{#1}\fi}}}
-		
+
 \newcounter{addrefcounter}
-		
+
 \newcommand{\addref}[1][]{\stepcounter{addrefcounter}\todo[color=red!40]{\theaddrefcounter: Add reference. #1}}
 \newcommand{\rewrite}[1]{\todo[color=green!40, size=\normalsize, inline]{#1}}
+
+\newcommand{\bibforkey}[1]{%
+	\defbibcheck{key#1}{
+		\iffieldequalstr{entrykey}{#1}
+		{}
+		{\skipentry}}%
+	\printbibliography[heading=none,check=key#1]%
+}
 
 % put bars and labels under the part in toc
 \titlelabel{\thetitle\quad}
@@ -132,7 +141,7 @@ headsepline, % Uncomment to get a line under the header
 {}{\partname~}
 {\hfill\contentspage}%
 [\addvspace{0.3ex}\titlerule\addvspace{1.5ex}]%
-		
+
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
@@ -159,10 +168,10 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{foss}{FOSS}{Free and Open-Source Software}
 \newacronym{ci}{CI}{Continuous Integration}
 \newacronym{api}{API}{Application programming interface}
-\newacronym{gui}{GUI}{Graphical User Interface}
+\newacronym{gui}{GUI}{graphical user interface}
 \newacronym[longplural={Earth System Models of Intermediate Complexity}]{emic}{EMIC}{Earth System Model of Intermediate Complexity}
 
-%\includeonly{Chapters/introduction}
+\includeonly{Chapters/psyplot}
 
 \begin{document}
 
@@ -184,7 +193,7 @@ headsepline, % Uncomment to get a line under the header
 \HRule \\[0.4cm] % Horizontal line
 {\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
 \HRule \\[1.5cm] % Horizontal line
- 
+
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Author:}\\
@@ -194,21 +203,21 @@ headsepline, % Uncomment to get a line under the header
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright} \large
 \emph{Supervisor:} \\
-\href{https://wp.unil.ch/davisgroup/basil-davis}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\href{https://wp.unil.ch/davisgroup/basil-davis}{\supname} % Supervisor name - remove the \href bracket to remove the link
 \end{flushright}
 \end{minipage}\\[3cm]
- 
+
 \vfill
 
 \large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
 \textit{in the}\\[0.4cm]
 \groupname\\\deptname\\[2cm] % Research group name and department name
- 
+
 \vfill
 
 {\large \today}\\[4cm] % Date
 %\includegraphics{Logo} % University/department logo - uncomment to place it
- 
+
 \vfill
 \end{center}
 \end{titlepage}
@@ -238,8 +247,8 @@ headsepline, % Uncomment to get a line under the header
 \include{Chapters/straditize}
 \include{Chapters/empd}
 
-\include{Chapters/gwgen} 
-\include{Chapters/teles}
+\include{Chapters/gwgen}
+\include{Chapters/gridding}
 
 \include{Chapters/conclusions}
 
@@ -269,7 +278,7 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
-	
+
 	\printacronyms[title={List of Abbreviations}]
 
 %----------------------------------------------------------------------------------------
@@ -277,15 +286,15 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 
 %\begin{symbols}{lll} % Include a list of Symbols (a three column table)
-%	
+%
 %	$a$ & distance & \si{\meter} \\
 %	$P$ & power & \si{\watt} (\si{\joule\per\second}) \\
 %	%Symbol & Name & Unit \\
-%	
+%
 %	\addlinespace % Gap to separate the Roman symbols from the Greek
-%	
+%
 %	$\omega$ & angular frequency & \si{\radian} \\
-%	
+%
 %\end{symbols}
 
 % Include the appendices of the thesis as separate files from the Appendices folder
@@ -297,4 +306,4 @@ headsepline, % Uncomment to get a line under the header
 
 %----------------------------------------------------------------------------------------
 
-\end{document}  
+\end{document}
