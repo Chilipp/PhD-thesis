@@ -102,6 +102,9 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[acronym,toc,nomain,savenumberlist,counter=chapter]{glossaries}
 \usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
 \usepackage{titlesec, titletoc}  % necessary for putting bars and labels under the part in toc
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{afterpage}
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM LATEX COMMANDS
@@ -142,6 +145,10 @@ headsepline, % Uncomment to get a line under the header
 {\hfill\contentspage}%
 [\addvspace{0.3ex}\titlerule\addvspace{1.5ex}]%
 
+\makeatletter
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+\makeatother
+
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
@@ -170,8 +177,15 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{api}{API}{Application programming interface}
 \newacronym{gui}{GUI}{graphical user interface}
 \newacronym[longplural={Earth System Models of Intermediate Complexity}]{emic}{EMIC}{Earth System Model of Intermediate Complexity}
+\newacronym{jja}{JJA}{summer (June, July and August)}
+\newacronym{djf}{DJF}{winter (December, January and February)}
+\newacronym{mat}{MAT}{modern analogue technique}
+\newacronym{gam}{GAM}{Generalized Additive Model}
+\newacronym{mcmc}{MCMC}{Markov chain Monte Carlo}
+\newacronym{lapd}{LAPD}{Latin American Pollen Database}
+\newacronym{apd}{APD}{African Pollen Database}
 
-\includeonly{Chapters/psyplot}
+\includeonly{Chapters/empd}
 
 \begin{document}
 
