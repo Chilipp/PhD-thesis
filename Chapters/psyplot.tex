@@ -30,15 +30,14 @@ The framework is extended by multiple plugins: psy-simple \citep{Sommer2017b} fo
 
 \section{Introduction}  \label{sec:psyplot-review}
 
-\todo[inline, size=\normalsize]{Write visualizations review \citep{NockeSterzelBoettingerEtAl2008, RautenhausBoettingerSiemenEtAl2018, SullivanTrainorGuitton2019, SullivanKaszynski2019, BoettingerRoeber2019}}
+The mathematical and statistical processing of climate data is closely related to its visualization and analysis. But in traditional visual analytics literature, these two aspects are commonly treated in separate manners. \cite{KeimAndrienkoFeketeEtAl2008} for instance, (following \cite{Wijk2005}) distinguish two steps of visual analytics, the initial data processing with statistical or mathematical techniques, and a \textit{sense-making loop} of visualization, exploration and the gain of new knowledge. \cite{BoettingerRoeber2019} distinguish the \textit{filtering} step (data processing), and \textit{mapping}/\textit{rendering} step that describes the visualization. Also in the literature there is a clear division between the climate visualization (or visual analytic) papers and the standard statistical or climate literature that describes new methods for data processing. Visualization research focuses mainly on advanced visualization tools such as ParaView \citep{Ayachit2015}, VAPOR \citep{ClyneMininniNortonEtAl2007} or Avizo\footnote{\url{https://www.fei.com/
+software/avizo3d/}} \citep[e.g.][]{RautenhausBoettingerSiemenEtAl2018, NockeBuschmannDongesEtAl2015, WongShenLeungEtAl2014, BoettingerRoeber2019} whereas statistical or climate literature commonly uses R \citep{RCT2019}, Python \citep{Oliphant2006, PerezGrangerHunter2011}, \glspl{cdo} \citep{Schulzweida2019} or other command-line tools.
 
-The mathematical and statistical processing of climate data works closely together with its visualization and analysis and are usually treated in separate manners. \cite{KeimAndrienkoFeketeEtAl2008} for example, (following \cite{Wijk2005}) distinguish two steps of visual analytics, the initial data processing with statistical or mathematical techniques, and a \textit{sense-making loop} of visualization, exploration and the gain of new knowledge. \cite{BoettingerRoeber2019} distinguish the \textit{filtering} step (data processing), and \textit{mapping}/\textit{rendering} step that describes the visualization. Also in the literature there is a clear division between the climate visualization (or visual analytic) papers and the standard statistical or climate literature that describes new methods for data processing. Visualization research focuses mainly on advanced visualization tools such as ParaView \citep{Ayachit2015}, VAPOR \citep{ClyneMininniNortonEtAl2007} or Avizo\addref \citep[e.g.][]{RautenhausBoettingerSiemenEtAl2018, NockeBuschmannDongesEtAl2015, WongShenLeungEtAl2014, BoettingerRoeber2019} whereas statistical or climate literature commonly uses R \citep{RCT2019}, Python \citep{Oliphant2006, PerezGrangerHunter2011}, \glspl{cdo} \citep{Schulzweida2019} or other command-line tools.
+This separation, however, devalues the interplay between the new knowledge from the visualization step, that commonly raises the need for more statistical and mathematical processing of the initial data. This calls for integrated and flexible tools that tackle both steps: the data processing and the visualization, a requirement that is currently not fulfilled by the visualization tools described above. An example software that integrates data processing and data visualization is provided with the Earth System Model Evaluation Tool (ESMValTool) \citep{EyringRighiLauerEtAl2016}. This framework provides common diagnostics for \glspl{esm} to enable model intercomparisons. The tool, however has limited interactivity and a slow learning curve for the implementation of new diagnostics.
 
-However, these two aspects commonly interplay and the new knowledge from the visualization step will raise the need for more statistical and mathematical processing of the initial data. This calls for integrated and flexible tools that tackle both steps: the data processing and the visualization. An example for such a tool is provided through the Earth System Model Evaluation Tool (ESMValTool) \citep{EyringRighiLauerEtAl2016} that provides common diagnostics for \glspl{esm} to enable model intercomparisons. The tool, however has limited interactivity and a slow learning curve for the implementation of new diagnostics.
+This lack leads to large efforts of climate scientists to develop scripts for the data processing and visualization. They usually do not follow a systematic framework and as such need to be adapted every time a new project starts which also make them difficult to share with other researchers. The new \textit{psyplot} framework wants to generalize this data processing and visualization by providing a framework that is highly flexible, interoperates with standard computational data processing tools and enables flexible visualizations and adaptations. The software is written in the programming language Python \citep{PerezGrangerHunter2011} and builds upon the visualization package \textit{matplotlib} \citep{Hunter2007} and the N-dimensional array processing package \textit{xarray} \citep{HoyerHamman2017}, that closely interoperates with the numeric packages numpy and scipy \citep{JonesOliphantPetersonEtAl2001, Oliphant2006} and the parallel computing library dask \citep{DDT2016}. Due to the flexibility of Python, it can be used from the command-line, a \gls{gui} (section \ref{sec:psyplot-gui}) or jupyter notebooks\footnote{\url{https://jupyter.org/}} \citep{KluyverRaganKelleyPerezEtAl2016}. As such, it supports out-of-core computation (i.e. the processing of data too large to fit into memory), a rich set of visualization methods from matplotlib, and can be extended to other visualization packages, such as the 3D-visualization framework VTK \citep{Sommer2019a}.
 
-This lack leads to large efforts of climate scientists to develop scripts for the data processing and visualization. They usually do not follow a systematic framework and as such need to be adapted every time a new project starts and they are difficult to share with other researchers. The new \textit{psyplot} framework wants to generalize this data processing and visualization by providing a framework that is highly flexible, interoperates with standard computational data processing tools and enables flexible visualizations and adaptations. The software is written in the programming language Python \citep{PerezGrangerHunter2011} and builds upon the visualization package \textit{matplotlib} \citep{Hunter2007} and the N-dimensional array processing package \textit{xarray} \citep{HoyerHamman2017}, that closely interoperates with the numeric packages numpy and scipy \citep{JonesOliphantPetersonEtAl2001, Oliphant2006} and the parallel computing library dask \citep{DDT2016}. Due to the flexibility of Python, it can be used from the command-line, a \gls{gui} (section \ref{sec:psyplot-gui}) or jupyter notebooks\footnote{\url{https://jupyter.org/}} \citep{KluyverRaganKelleyPerezEtAl2016}. As such, it supports out-of-core computation (i.e. the processing of data too large to fit into memory), a rich set of visualization methods from matplotlib, and can be extended to other visualization packages, such as the 3D-visualization framework VTK \citep{Sommer2019a}.
-
-The next section \ref{sec:psyplot-framework} provide an overview of the framework with it's data model, plugins and \gls{gui}, and section \ref{sec:psyplot-conclusions} discusses further usage and extensions to the software. For further information, usage and implementation examples I also refer to the online documentation\footnote{the psyplot documentation is hosted at \url{https://psyplot.readthedocs.io}}.
+The next section \ref{sec:psyplot-framework} provide an overview of the framework with it's data model, plugins and \gls{gui}. Sections \ref{sec:psyplot-conclusions} and \ref{sec:psyplot-outlook} finally discuss further usage and extensions to the software. For more information, usage and implementation examples I also refer to the online documentation \url{https://psyplot.readthedocs.io}.
 
 \section{The psyplot framework}  \label{sec:psyplot-framework}
 
@@ -61,7 +60,7 @@ psyplot acts as a high-level interface into the packages \textit{xarray} and \te
 
 The core structure of psyplot consists of five base classes that interact with each other, the visualization objects \textit{Plotter} and its \textit{Formatoptions}, the data objects \textit{DataArray} and an \textit{InteractiveList} of them, and a collection of all of them, the psyplot \textit{Project}. It is schematically visualized in figure \ref{fig:psyplot-core}.
 
-The most highl-evel \gls{api} object is the psyplot project that consists of multiple data objects that are (or are not) visualized. The main purpose is a parallel handling of multiple plots/arrays that may also interact with each other (e.g. through the sharing of formatoptions). It mainly spreads update commands to it's contained objects, but also serves as a filter for the data objects. Furthermore, one project may be split up into sub projects which then only control a specific part of the main project, e.g. for a specific formatting of only a small part of the data.
+The most high-level \gls{api} object is the psyplot project that consists of multiple data objects that are (or are not) visualized. The main purpose is a parallel handling of multiple plots/arrays that may also interact with each other (e.g. through the sharing of formatoptions). It mainly spreads update commands to it's contained objects, but also serves as a filter for the data objects. Furthermore, one project may be split up into sub projects which then only control a specific part of the main project, e.g. for a specific formatting of only a small part of the data.
 
 The next level is the \textit{DataArray} from the xarray package (or more explicitly, it's accessor, the \textit{InteractiveArray}$^{\ref{foot:xraccessors}}$), that holds the data of one (or more) variables (e.g. temperature) and its corresponding coordinates (e.g. time, latitude, longitude, etc.). It may be one or multidimensional depending on the chosen visualization method. psyplot offers several methods to provide the coordinates for the plotting of different grids to make the visualization easier. The software can interprete CF Conventions\footnote{\url{http://cfconventions.org}} and UGRID conventions for unstructured grids \citep{JagersStuebeGrossEtAl2018}.
 
@@ -127,32 +126,42 @@ As the psy-reg and psy-maps plugins, psy-strat uses the functionalities of the p
 	\label{fig:psyplot-gui-plot-creator}
 \end{figure}
 
-Psyplots objective of providing a platform for flexible and convenient data analysis is complemented through the psyplot\_gui package. This extension to the framwork provides a \gls{gui} for simplified access to the plotting features in psyplot.
+Psyplots objective of providing a platform for flexible and convenient data analysis is further approach with the \textit{psyplot-gui} package. This extension to the framwork provides a \gls{gui} for simplified access to the plotting features in psyplot.
 
-A strong focus is, again, the flexibility of the interface. The package is based on the cross-platform library PyQt5\footnote{PyQt5 can be accessed via \url{https://riverbankcomputing.com/software/pyqt/intro}.}, a very flexible and frequently used package for \acrlongpl{gui}. This enables other software to develop additional features for the package (see psy-strat in the previous section \ref{sec:psyplot-plugins} or straditize in chapter \ref{chp:straditize}) and to flexibly change the layout of the application. The \gls{gui} is additionally complemented with an interactive console to enable a fully integrated python environment for data analysis. This enables the user to run every python command and to load additional packages. 
+A strong focus of this interface is, again, the flexibility. psyplot-gui is based on the cross-platform PyQt5 library\footnote{PyQt5 can be accessed via \url{https://riverbankcomputing.com/software/pyqt/intro}.}, a very flexible and frequently used package for \acrlongpl{gui}. This enables other software to develop additional features for the package (see psy-strat in the previous section \ref{sec:psyplot-plugins}, for instance, or straditize in chapter \ref{chp:straditize}) and to flexibly change the layout of the application. The \gls{gui} is complemented with an interactive console to provide a fully integrated python environment for data analysis.
 
-The next paragraphs provide an overview on the various features, that are also displayed in figure \ref{fig:psyplot-gui} and \ref{fig:psyplot-gui-plot-creator}.
+The next paragraphs provide an overview on the various widgets, that are also displayed in figure \ref{fig:psyplot-gui} and \ref{fig:psyplot-gui-plot-creator}. 
 
 \subsubsection{Console}
-An in-process IPython console based on the qtconsole package\footnote{\url{https://github.com/jupyter/qtconsole}} that provides the possibility to communicate with the psyplot package via the command line and to load any other module or to run any other script or notebook. The console is fully integrated into the \gls{gui}. A change of the current project through the project content widgets (see below), for instance,  also changes the corresponding python variable in the shell. Additionally, the documentation of every python object in the shell can be viewed in the help explorer of the GUI (see below).
+The central aspects to guarantee flexibility of the application is an in-process IPython console, based on the qtconsole package\footnote{\url{https://github.com/jupyter/qtconsole}} that provides the possibility to communicate with the psyplot package via the command line and to load any other module or to run any other script or notebook, or even to run commands in different programming languages, such as R \citep{RCT2019} or Julia \citep{BezansonEdelmanKarpinskiEtAl2017}. The console is fully integrated both ways into the \gls{gui}. The documentation of every python object in the terminal, for instance, can be viewed in the help explorer of the GUI. And vice versa: a change of the current project through the project content widgets, also changes the corresponding python variable in the shell. 
 
 \subsubsection{Help explorer}
-\rewrite{Motivated by the Object inspector of the Scientific PYthon Development EnviRonment Spyder, this widget provides a simple online browser and the possibility to show the documentation of Python objects as an html webpage. The help explorer is connected to several widgets of the GUI and especially to the console, to show the documentation of any python object.}
+As a complement to the console, the \gls{gui} contains a help explorer to provide immediate and dynamic access to the documentation of python objects in the console, rendered as an HTML webpage\footnote{The help explorer widget has been originally motivated by the \textit{Help} widget of the Scientific PYthon Development EnviRonment, Spyder (\url{https://www.spyder-ide.org/}) and uses the sphinx package \citep{Hasecke2019} to convert restructured Text into HTML.}. Furthermore, the help explorer is connected to multiple other widgets of the \gls{gui} in order to provide a dynamically generated documentation. The documentation of available formatoptions in the psyplot project, for instance, are rendered as HTML upon request, in order to make the various plot methods more accessible. The same principle works for the plot methods that are accessible in the plot creator.
 
 \subsubsection{Plot creator}
-\rewrite{A widget to select data from a dataset and visualise it with a plot method of the psyplot package}
+The plot creator (figure \ref{fig:psyplot-gui-plot-creator}) is the starting point of the \gls{gui} into the psyplot framework (at least, if one does not use the console or a script to generate the plots). It loads data from the disk or the in-process console, and essentially provides a wrapper around the psyplot plotting call (see suppl. section \ref{sec:psyplot-example}). It additionally displays the documentation of the method and its associated formatoptions. This widget creates new plots, that are appended to the psyplot project and are accessible through the console and the project content widgets.
 
 \subsubsection{Project content}
-\rewrite{Shows the data arrays, the open datasets and the open figures in the current project}
-
-\subsubsection{Figures and plots}
-\rewrite{Displays the matplotlib figures based on an own backend}
+The psyplot project is the most high-level \gls{api} element in the psyplot framework (see section \ref{sec:psyplot-core}) and is displayed in the project content widgets of the \gls{gui}. All other elements, such as the formatoptions widget or the plot creator, are interfering with the project, and it is accessible as a variable in the console. The project content widget can be used to see the various items in the project, but it is also used to select the specific items for the so-called \textit{current} sub-project. The latter is dynamically set in the console through the \texttt{sp} variable and it is used by the formatoptions widget to update the plotting parameters of the selected items.
 
 \subsubsection{Formatoptions}
-\rewrite{Can be used to change the formatoptions}
+As mentioned in section \ref{sec:psyplot-core}, formatoptions are the core elements in psyplot that control the figure aesthetics of the plots and/or perform data manipulations. The generic formatoptions widget provides access to these parameters, in order to update them for the selected items in the current project. The formatoption itself (i.e. the python object) can in turn generate a widget that is implemented in the formatoptions widget, to make the available options more accessible. The \textit{title} formatoption, for instance, generates a drop-down menu to select variable attributes (e.g. variable name, variable units, etc.) which is then embedded in the formatoptions widget. The modifications of the formatoptions via this widgets, updates the figures of the selected items.
+
+\subsubsection{Figures and plots}
+The plots generated by the plotting methods are displayed in dedicated widgets inside the \gls{gui} and can be dynamically adjusted using the formatoptions widget or the console. The underlying library of the current implemented psyplot plugins, matplotlib, implements multiple backends to display the data interactively, or to export them as PDF, PNG, etc. The psyplot \gls{gui} has implemented a backend on top of the PyQt5 backend of matplotlib, which embeds the figures in the \gls{gui}. psyplot can, however, work with any backend of matplotlib and does not depend on the specific implementation.
 
 \section{Conclusions}  \label{sec:psyplot-conclusions}
-\todo[inline, size=\normalsize]{Further developments with GUI, 3D, shapefiles, other plot methods}
+psyplot \citep{Sommer2017} is a new data visualization framework that integrates rich computational and mathematical software into a flexible framework for visualization. It differs from most of the visual analytic software such that it focuses on extensibility in order to flexibly tackle the different types of analysis questions that arise in pioneering research. The design of the high-level API of the framework enables a simple and standardized usage from the command-line, python scripts or jupyter notebooks. A modular plugin framework enables a flexible development of the framework that can potentially go into many different directions. The additional enhancement with a flexible \gls{gui} makes it the only visualization framework that can be handled from the conveniently command-line, and via point-click handling. It also allows to build further desktop applications on top of the existing framework.
+
+The plugins of psyplot currently provide visualization methods that range from simple line plots, to density plots, regression analysis and geo-referenced visualization in two dimensions. The software is currently entirely based on the visualization methods of matplotlib \citep{Hunter2007}, the most established visualization package in the scientific python community. However, the framework itself is agnostic to the underlying visualization method and can, as such, leverage a variety of existing analytical software.
+
+\section{Outlook}  \label{sec:psyplot-outlook}
+
+The possibilities for further development of the psyplot framework are numerous, due to it's intrinsic generality. The core of the psyplot framework will, in the future, be extended with a standardized algorithm  for the generation of animations. Psyplot projects already have the functionality of being saved to a file and reloaded, but they will also be exportable as python scripts for a more flexible reusability and adaptability. The update process within a psyplot project (currently every item in the project is updated in parallel) also has potential for improvement by using a single-threaded scheduler approach that better reflects if one formatoption depends on the formatoptions of another plotter.
+
+The \gls{gui} has especially high potential for further development, as it still lacks widgets to quickly and intuitively modify the visual appearance of the plots. The only possibility inside the \gls{gui} (besides the console) is to use the formatoptions widget whose main focus however is on flexibility, rather than usability and has, as such, limited possibilities for adaptation to specific use cases.
+
+Another focus will be the development of new plot methods inside the psyplot framework. The major aspect will be on the development of 3D visualization methods of geo-referenced data, using recently published software that builds on top of the visualization toolkit VTK \citep{SullivanKaszynski2019, SullivanTrainorGuitton2019}, see \cite{Sommer2019a}. psyplot has the unique potential to generate 3D visualizations conveniently from the command line, a distinguishing feature, compared to other visualization software packages, such as ParaView or Vapor. Further potential enhancements for visualizations can involve standard interactive visual analytic tools, e.g. such that the interactive selection of features in one plot affects the visualization in another plot (so-called brushing and linking).
 
 \clearpage
 
@@ -160,31 +169,46 @@ An in-process IPython console based on the qtconsole package\footnote{\url{https
 	\section*{Supplementary material}
 	\section{Example call of a plot method}  \label{sec:psyplot-example}
 	
+	\input{psyplot-figures/example_call}  % generated with pygmentize -o example_call.text example_call.py
+	\includegraphics[width=0.45\linewidth]{psyplot-figures/example-call.pdf}
+	
+	\input{psyplot-figures/example_update}
+	\includegraphics[width=0.6\linewidth]{psyplot-figures/example-update.pdf}
 	
 	\section{psy-simple plot methods}  \label{sec:psy-simple-plotmethods}
 	
-		\begin{tabular}{l|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|}
+		\begin{tabular}[c]{l|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|}
 			\toprule
 			\textbf{Plot method} & lineplot & barplot & violinplot \\
 			\hline
-			\textbf{Example} & \missingfigure{lineplot} & \missingfigure{barplot} & \missingfigure{violinplot} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=1]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=2]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=3]{psyplot-figures/psy-simple-demo.pdf} \\
 			\midrule
 			\midrule
 			\textbf{Plot method} & \multicolumn{3}{c}{plot2d} \\
 			\hline
 			\textbf{Grid type} & rectilinear & \multicolumn{2}{c}{unstructured} \\
 			\hline
-			\textbf{Example} & \missingfigure{simple 2D plot} & \missingfigure{simple unstructured plot} & \missingfigure{simple unstructured plot with varying cell size} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=4]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=5]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=6]{psyplot-figures/psy-simple-demo.pdf} \\
 			\midrule
 			\midrule
 			\textbf{Plot method} & \multicolumn{2}{c|}{vector} & combined \\
 			\hline
-			\textbf{Example} & \missingfigure{quiver} & \missingfigure{streamlines} & \missingfigure{combined} \\
+			\textbf{Example} &
+				\includegraphics[width=\linewidth, page=7]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=8]{psyplot-figures/psy-simple-demo.pdf} &
+				\includegraphics[width=\linewidth, page=9]{psyplot-figures/psy-simple-demo.pdf} \\
 			\midrule
 			\midrule
-			\textbf{Plot method} & \multicolumn{2}{c|}{density} & fldmean  \\
+			\textbf{Plot method} & \multicolumn{2}{c|}{density} & {\centering fldmean}  \\
 			\hline
-			\textbf{Example} & \missingfigure{density hist} & \missingfigure{density kde} & \missingfigure{fldmean} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=10]{psyplot-figures/psy-simple-demo.pdf} & \includegraphics[width=\linewidth, page=11]{psyplot-figures/psy-simple-demo.pdf} & \includegraphics[width=\linewidth, page=12]{psyplot-figures/psy-simple-demo.pdf} \\
 			\bottomrule
 		\end{tabular}
 	
@@ -197,12 +221,18 @@ An in-process IPython console based on the qtconsole package\footnote{\url{https
 			\hline
 			\textbf{Grid type} & rectilinear & \multicolumn{2}{c}{unstructured} \\
 			\hline
-			\textbf{Example} & \missingfigure{map 2D plot} & \missingfigure{map unstructured plot} & \missingfigure{map unstructured plot with varying cell size} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=1]{psyplot-figures/psy-maps-demo.pdf} &
+				\includegraphics[width=\linewidth, page=2]{psyplot-figures/psy-maps-demo.pdf} &
+				\includegraphics[width=\linewidth, page=3]{psyplot-figures/psy-maps-demo.pdf} \\
 			\midrule
 			\midrule
 			\textbf{Plot method} & \multicolumn{2}{c|}{mapvector} & combined \\
 			\hline
-			\textbf{Example} & \missingfigure{map quiver} & \missingfigure{map streamlines} & \missingfigure{map combined} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=4]{psyplot-figures/psy-maps-demo.pdf} &
+				\includegraphics[width=\linewidth, page=5]{psyplot-figures/psy-maps-demo.pdf} &
+				\includegraphics[width=\linewidth, page=6]{psyplot-figures/psy-maps-demo.pdf} \\
 			\bottomrule
 		\end{tabular}
 	
@@ -212,18 +242,22 @@ An in-process IPython console based on the qtconsole package\footnote{\url{https
 			\toprule
 			\textbf{Plot method} & \multicolumn{2}{c}{linreg} \\
 			\hline
-			\textbf{Example} & \missingfigure{linreg simple} & \missingfigure{linreg curvy} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=1]{psyplot-figures/psy-reg-demo.pdf} &
+				\includegraphics[width=\linewidth, page=2]{psyplot-figures/psy-reg-demo.pdf} \\
 			\midrule
 			\midrule
 			\textbf{Plot method} & \multicolumn{2}{c|}{densityreg} \\
 			\hline
-			\textbf{Example} & \missingfigure{densityreg simple} & \missingfigure{densityreg curvy} \\
+			\textbf{Example} & 
+				\includegraphics[width=\linewidth, page=3]{psyplot-figures/psy-reg-demo.pdf} &
+				\includegraphics[width=\linewidth, page=4]{psyplot-figures/psy-reg-demo.pdf} \\
 			\bottomrule
 		\end{tabular}
 	
 	\section{psy-strat plot methods}  \label{sec:psy-strat-plotmethods}
 
-		\missingfigure{stratigraphic diagram (straditize paper?)}
+		\includegraphics[width=\linewidth]{psyplot-figures/psy-strat-demo.pdf}
 
 \end{subappendices}\
 

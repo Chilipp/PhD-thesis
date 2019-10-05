@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} example call for generating a map}
+\PY{k+kn}{import} \PY{n+nn}{psyplot.project} \PY{k+kn}{as} \PY{n+nn}{psy}
+
+\PY{n}{maps} \PY{o}{=} \PY{n}{psy}\PY{o}{.}\PY{n}{plot}\PY{o}{.}\PY{n}{mapplot}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{psy\PYZhy{}maps\PYZhy{}demo.nc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  \PY{c+c1}{\PYZsh{} input file name, can also be data in memory}
+    \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t2m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}          \PY{c+c1}{\PYZsh{} variable to plot (can also be multiples}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} formatoptions}
+    \PY{c+c1}{\PYZsh{} colorbar label uses meta attributes of netCDF variable}
+    \PY{n}{clabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}(long\PYZus{}name)s}\PY{l+s+s1}{ [}\PY{l+s+si}{\PYZpc{}(units)s}\PY{l+s+s1}{]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{c+c1}{\PYZsh{} select colormap}
+    \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RdBu\PYZus{}r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{c+c1}{\PYZsh{} focus on a specific lonlatbox given by [lonmin, lonmax, latmin, latmax]}
+    \PY{n}{lonlatbox}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Europe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Europe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Europe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{maps}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}

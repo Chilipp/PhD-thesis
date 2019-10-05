@@ -99,12 +99,15 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage{hyperref}
+\usepackage{fancyvrb}
 \usepackage[acronym,toc,nomain,savenumberlist,counter=chapter]{glossaries}
 \usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
 \usepackage{titlesec, titletoc}  % necessary for putting bars and labels under the part in toc
 \usepackage{multirow}
 \usepackage{longtable}
 \usepackage{afterpage}
+
+\input{pygments-header.tex}
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM LATEX COMMANDS
@@ -185,7 +188,7 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{lapd}{LAPD}{Latin American Pollen Database}
 \newacronym{apd}{APD}{African Pollen Database}
 
-\includeonly{Chapters/empd}
+%\includeonly{Chapters/psyplot}
 
 \begin{document}
 
