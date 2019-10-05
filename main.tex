@@ -141,7 +141,7 @@ headsepline, % Uncomment to get a line under the header
 
 % put bars and labels under the part in toc
 \titlelabel{\thetitle\quad}
-\titleformat{\part}[block]{\normalfont}{\partname\ \thepart }{20pt}{}
+
 \titlecontents{part}%
 [0pt]{\bfseries\large\protect\addvspace{4ex}}
 {}{\partname~}
@@ -260,9 +260,13 @@ headsepline, % Uncomment to get a line under the header
 
 \include{Chapters/introduction}
 
+\part{New Software Tools for Paleoclimate Analysis}  \label{part:software}
+
 \include{Chapters/psyplot}
 \include{Chapters/straditize}
 \include{Chapters/empd}
+
+\part{Numerical Analysis of Paleoclimate Data}  \label{part:numerics}
 
 \include{Chapters/gwgen}
 \include{Chapters/gridding}
