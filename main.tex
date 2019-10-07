@@ -156,7 +156,7 @@ headsepline, % Uncomment to get a line under the header
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
-\makeglossaries
+\makenoidxglossaries
 
 \newacronym{esm}{ESM}{Earth System Model}
 \newacronym{gcm}{GCM}{General Circulation Model}
@@ -300,7 +300,8 @@ headsepline, % Uncomment to get a line under the header
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
-	\printacronyms[title={List of Abbreviations}]
+\printnoidxglossary[type=acronym]
+\printacronyms[title={List of Abbreviations}]
 
 %----------------------------------------------------------------------------------------
 %	SYMBOLS
