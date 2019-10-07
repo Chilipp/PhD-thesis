@@ -69,6 +69,26 @@ The database contains raw pollen counts from various publicly available and priv
 The modern calibration dataset (XXXX samples, see figure \ref{fig:gridding-modern}) is mainly based on the version 2 of the \gls{empd} \citep{DavisZanonCollinsEtAl2013}\todo{Describe origins of modern calibration data, link back to chapter \ref{chp:empd}}. 
 
 
+\subsection{Sample site: Tigalmamine} \label{sec:gridding-sample-site}
+
+\begin{figure}
+	\captionsetup{width=1.2\linewidth}
+	\includegraphics[width=\linewidth]{gridding-figures/tigalmamine-analogue-map.pdf} \\
+	\includegraphics[width=\linewidth]{gridding-figures/tigalmamine-analogue-climates.pdf}
+	\caption[Climate analogues of the Tigalmamine site]{Climate analogues of the Tigalmamine site (red cross). Every circle corresponds to one modern analogue that was one of the fifties closest analogues in at least one sample within the Tigalmamine dataset. The color-coding of each circle is based it's corresponding country (see legend at the top). The marker size in the top plot depends on the usage of the sample as modern analogue. The larger the marker, the more samples in the Tigalmamine dataset use it as modern analogue. Tiny crosses in the map represent the rest of the modern calibration data. The lower plot shows the summer temperature for the analogue (y-axis) at the age of the Tigalmamine sample (x-axis). The marker size in this plot corresponds to the chord distance between modern and fossil pollen assemblage. I.e., the larger the dot, the closer (and more important) the analogue. The dashed line shows the weighted average of all the climate analogues per sample. The age of each Tigalmamine sample is shown with the vertical lines at the bottom of the plot. Red crosses in the lower plot show the Tigalmamine core top sample that has been used as an analogue in 58 out of the 110 samples.}
+	\label{fig:gridding-site-analogues}
+\end{figure}
+
+We chose the pollen record of Tigalmamine in Morocco (32.9N, 5.34W, 1626m) to evaluate our method. The site was first studied by \cite{LambKaars1995}, and the pollen data was downloaded from the European Pollen Database. The chronology and choice of control points used here is that from Giesecke et al \citep{GieseckeDavisBrewerEtAl2013}. The site is well dated with 11 radiocarbon dates, and spans the entire Holocene with 110 samples. The data has been used for a previously published pollen reconstruction based on the modern analogue method \citep{CheddadiLambGuiotEtAl1998}, although this study used a calibration dataset that included modern pollen samples from Morocco that have subsequently been found to have geolocation errors \citep{DavisZanonCollinsEtAl2013}. None of these problematic modern samples have been used in our analysis. 
+
+The site (red cross in figure \ref{fig:gridding-site-analogues}) is located on the southern edge of our study region in an area with a montane Mediterranean vegetation and climate. The Mediterranean has traditionally been considered to be a particularly challenging environment for pollen-based reconstructions because of the effects of long term human impact, and the interplay of precipitation and temperature on vegetation distribution. The fossil pollen record of Tigalmamine shows a mainly forested montane Mediterranean assemblage throughout the Holocene, dominated by evergreen oak, but with an important transition between the early Holocene and late Holocene marked by a change from deciduous Oak to Cedrus (see the pollen diagram in \cite{CheddadiLambGuiotEtAl1998}). The occurrence of Cedrus represents an interesting challenge for any pollen climate transfer function, since this particular taxa is limited in its distribution (and in our calibration dataset) to Morocco and the Lebanon region, while all of the other taxa in the assemblage are widely distributed across the Mediterranean. The strong presence of evergreen Oak also makes the site interesting, because although this taxa is mainly associated with the Mediterranean region, its distribution extends all the way up the west coast of France to Brittany.
+
+Figure \ref{fig:gridding-site-analogues} illustrates these challenges for the particular site. The climate analogues (see next section \ref{sec:gridding-mat}) span a large summer temperature regime of about 10 degrees, from 15 to 25 °C. The upper temperature range is dominated by analogue climates from Spain (orange) which in general shows the highest number analogue matches. The lower temperature regime is dominated by Moroccan samples (green) that are of particular importance during the late Holocene due to the above mentioned presence of Cedrus. During the transition in the mid-Holocene, analogues from across the Mediterranean play a more important role, in particular from Greece, Italy and Turkey. The early Holocene is dominated by modern samples from Spain, but with a much wider and more uniform temperature regime.
+
+The weighted average of the analogues (black dashed line in figure \ref{fig:gridding-site-analogues}) is in general about one to two degrees lower than the one in \cite{CheddadiLambGuiotEtAl1998} (very likely due to the above-mentioned erroneous calibration data they used). The trends are however similar: Higher temperatures in early Holocene  (the \textit{spanish analogues} dominate) with a drop around 6k BP (Moroccan climates). Our weighted average however also shows a clear increase during the past 2000 years, again driven by spanish analogues.
+
+The climatic and geographic space that is covered by the analogues is further discussed in section \ref{sec:gridding-temperature-sampling}.
+
 \subsection{Site-based holocene temperature estimates}  \label{sec:gridding-mat}
 A standard approach for site-based climate reconstruction from fossil pollen assemblages is the so-called \glsfirst{mat} (also called $k$-nearest neighbors). This technique estimates the climate of the fossil sample as the (weighted) climate average of the most similar modern samples (i.e. the closest modern analogues). It has the major advantage that it requires little parameterization efforts and can be applied over a large spatial area that covers many different climate regimes \citep{MauriDavisCollinsEtAl2015}. We apply this method but vary it in our probabilistic setup, such that it better represents the spatial domain of the modern analogues.
 
@@ -130,13 +150,13 @@ With the intrinsic methodological uncertainties of climate and dating in mind, w
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{gridding-figures/age-sampling-methods-realized.pdf}
-	\caption[Scaled histograms of age sampling methods]{Histograms of standardized age sampling methods for the site in section \ref{sec:gridding-site} with and ensemble size of 10'000. Every sampled age has been centered at the reported age or the corresponding sample and scaled by its age uncertainty. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for each of the age sampling methods (section \ref{sec:gridding-age-sampling}).}
+	\caption[Scaled histograms of age sampling methods]{Histograms of standardized age sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000. Every sampled age has been centered at the reported age of the corresponding sample and scaled by its age uncertainty. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for each of the age sampling methods (section \ref{sec:gridding-age-sampling}). Note that \textit{random sort} and \textit{Gibbs} histograms highly overlap.}
 	\label{fig:gridding-age-sampling-methods}
 \end{figure}
 
 Every dataset has an intrinsic monotonicity constrain that the sample deeper down the core has an older age. An inversion of this constrain is very rare and is usually visible in the stratigraphy of the core, such that affected samples are ruled-out before. As such, a classic unconstrained sampling of ages\footnote{\label{foot:unconstrained-note}We call it the unconstrained distribution for convenience, but keeping in mind that every sampled age has to be older than -70 yr cal BP.} using a normal distribution centered at reported sample age and a scale corresponding to the estimated age uncertainty (section \ref{sec:gridding-ageunc}) violates this constrain. Samples are inverted in such a case when their uncertainty intervals overlap and as such the individual ensemble member would not maintain the integrity of the individual core. We illustrate an example for such a core in section \ref{sec:gridding-site}.
 
-\textit{pyleogrid} therefore implements different variants of this constrain. 
+\textit{pyleogrid} therefore implements different variants of this constrain with the Gibbs sampling being the one that is finally used.
 
 \subsubsection{The intuitive approach}
 The most intuitive approach is to randomly draw a sample age and constrain the age of the neighboring sample with it. This can be done in a \textit{forward} manner, such that every older sample has to be older than the previous younger sample, or in a backward manner, i.e. the younger sample has to be younger than the neighboring older sample. We will show in the paragraphs below that this method is not working, nevertheless we mention it here because of the intuitivity of the approach and because the reason for the failure is non-trivial.
@@ -151,7 +171,7 @@ As such, we demonstrate three different algorithms:
 
 As such, \textit{forward} and \textit{backward} algorithms always start with an unconstrained age distribution of the youngest (oldest) sample for every ensemble member. Within the \textit{random start} algorithm, every sample gets the chance to start with an unconstrained age distribution, because the starting point is random for every ensemble member. The constrained age distributions for the consecutive samples are implemented as truncated normal distributions.
 
-The resulting age distributions from the three algorithms are shown in figure \ref{fig:gridding-age-sampling-methods}, together with another method, that is described later in this section. The figure shows the sampled age distributions by the various above-mentioned sampling methods for the site described in section \ref{sec:gridding-site}. To make these age distributions comparable, we transformed them to a standard normal distribution (visualized as the unconstrained distribution in figure \ref{fig:gridding-age-sampling-methods}) prior to visualization, by subtracting the reported age and dividing by the estimated age uncertainty of the corresponding sample. It is obvious from this figure that all of the above-mentioned algorithms produce an artificial bias to the age distribution. The \textit{forward} approach pushes the samples to the upper tail of the distribution, the \textit{backward} approach pushes everything to the lower tail. The \textit{random start} method produces a bimodal distribution with peaks at the upper and lower tail.
+The resulting age distributions from the three algorithms are shown in figure \ref{fig:gridding-age-sampling-methods}, together with another method, that is described later in this section. The figure shows the sampled age distributions by the various above-mentioned sampling methods for the site described in section \ref{sec:gridding-sample-site}. To make these age distributions comparable, we transformed them to a standard normal distribution (visualized as the unconstrained distribution in figure \ref{fig:gridding-age-sampling-methods}) prior to visualization, by subtracting the reported age and dividing by the estimated age uncertainty of the corresponding sample. It is obvious from this figure that all of the above-mentioned algorithms produce an artificial bias to the age distribution. The \textit{forward} approach pushes the samples to the upper tail of the distribution, the \textit{backward} approach pushes everything to the lower tail. The \textit{random start} method produces a bimodal distribution with peaks at the upper and lower tail.
 
 This is also shown with three exemplary samples from the site in the supplementary figure \ref{fig:gridding-age-example-distributions}. The forward method works well for the young sample but pushes all older samples to the upper tail of their distribution, The backward method does the opposite and the random sort method creates a bimodal distribution for the sample in the center of the core, and backward behaves like the forward (backward) algorithm at the older (younger) part of the core.
 
@@ -160,46 +180,82 @@ We explain this initially unexpected results with the overlapping age uncertaint
 
 \subsubsection{The random sorting approach}
 
+These strong biases of the intuitive approach led to another method, that we also show in red in figure \ref{fig:gridding-age-sampling-methods} and supplementary figure \ref{fig:gridding-age-example-distributions}, the \textit{random sort} method. This method consists of two steps: in the first step we draw random age for each sample based on its unconstrained distribution\textsuperscript{\ref{foot:unconstrained-note}}. In the second step, we order these random ages while maintaining the order of samples in each dataset. As such, we assign an age to each sample that is not necessarily drawn from its own distribution, but rather from the one of a neighboring sample. When samples overlap, this then truncates the tails of realized distribution and effectively decreases the reported age uncertainty, as can be seen in the figures \ref{fig:gridding-age-sampling-methods}, \ref{fig:gridding-age-example-distributions}. This approach is mathematically difficult to justify because it violates the common methodology that each sample has a unique confidence interval that it needs to explore. Therefore the method might introduce some hidden biases in the sampled distributions that are difficult to quantify. Nevertheless, the algorithm is very fast and much closer to the desired joint distribution, than the previous \textit{intuitive} approach. We therefore implemented another Gibbs sampling algorithm.
+
+
+\subsubsection{The Gibbs sampling approach}
+
 \begin{figure}
 	\includegraphics[width=\linewidth]{gridding-figures/full-realized-age-distribution.pdf}
 	\caption[Realized age distribution for the entire dataset]{Realized age distribution for the entire dataset (section \ref{sec:gridding-polnet}) with the \textit{random} method (section \ref{sec:gridding-age-sampling}). The individual sample distributions have been centered and scaled as in figure \ref{fig:gridding-age-sampling-methods}.}
 	\label{fig:gridding-full-age-distribution}
 \end{figure}
 
-These strong biases of the intuitive approach led to another method, that we also show in red in figure \ref{fig:gridding-age-sampling-methods} and supplementary figure \ref{fig:gridding-age-example-distributions}, the \textit{random} method. This method consists of two steps: in the first step we draw random age for each sample based on its unconstrained distribution\textsuperscript{\ref{foot:unconstrained-note}}. In the second step, we order these random ages while maintaining the order of samples in each dataset. As such, we assign an age to each sample that is not necessarily drawn from its own distribution, but rather from the one of a neighboring sample. When samples overlap, this then truncates the tails of realized distribution and effectively decreases the reported age uncertainty, as can be seen in the figures \ref{fig:gridding-age-sampling-methods}, \ref{fig:gridding-age-example-distributions} and for the full dataset in figure \ref{fig:gridding-full-age-distribution}. This approach violates the common approach that each sample has a unique confidence interval that it needs to explore and as such might introduce some hidden biases in the sampled distributions. Nevertheless, the algorithm is very fast and much closer to the  desired joint distribution, than the previous \textit{intuitive} approach.
-
-
-\subsubsection{The Gibbs sampling approach}
-The biases of the above-mentioned algorithms led to the development of a \gls{mcmc} sampling algorithm. A standard \gls{mcmc} approach, is to draw a set of random ages for all unconstrained sample distributions in a core at once, until this set of ages satisfies the monotonicity criterion. This is described with the following pseudo-code:
-
-\begin{algorithm}
-	\renewcommand{\algorithmicensure}{\textbf{Output:}}
-	\caption[Classic MCMC approach]{Classic \gls{mcmc} approach}
-	\label{a:gridding-mcmc}
-	\begin{algorithmic}[1]
-		\FOR{$dataset$ in $datasets$}
-		\STATE Set $i = 0$
-		\STATE Set $\vec{\mu}$ as vector reported ages in $dataset$
-		\STATE Set $\vec{\sigma}$ as estimated age uncertainties		
-		\STATE Set $\vec{ages}$ to be of length $\vec{\mu}$
-		\WHILE{$i < 1$ \OR \NOT $is\_monotonic(\vec{ages})$}
-		\STATE $\vec{ages} = \mathcal{N}(\vec{\mu}, \vec{\sigma}^2)$
-		\STATE Set $i = i + 1$
-		\ENDWHILE
-		\ENDFOR
-	\end{algorithmic}
+\begin{algorithm}[h]
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\caption[Classic MCMC approach]{Classic \gls{mcmc} approach. $\mathcal{N}(\mu, \sigma)$ denotes the normal distribution with location parameter $\mu$ and shape parameter $\sigma$.}
+\label{a:gridding-mcmc}
+\begin{algorithmic}[1]
+	\STATE Set $i = 0$
+	\STATE Set $\boldsymbol{\mu}$ as vector of the reported ages in $dataset$
+	\STATE Set $\boldsymbol{\sigma}$ as vector of estimated age uncertainties		
+	\STATE Set $\mathbf{a}$ (the target age vector) to be of length $\boldsymbol{\mu}$
+	\WHILE{$i < 1$ \OR \NOT $is\_monotonic(\mathbf{a})$}
+	\STATE $\mathbf{a} = \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\sigma}^2)$
+	\STATE Set $i = i + 1$
+	\ENDWHILE
+\end{algorithmic}
 \end{algorithm}
 
-This standard approach however did not find a monotonic solution within ten million iterations for a high-resolution site such as it has been presented in the previous section. Therefore we decided to implement a Gibbs sampler, an algorithm that is commonly used in Bayesian inference. \todo[inline]{Describe Gibbs sampler}
+The biases of the above-mentioned algorithms led to the development of a \gls{mcmc} sampling algorithm. A standard \gls{mcmc} approach, is to draw a set of random ages for all unconstrained sample distributions in a core at once, until this set of ages satisfies the monotonicity criterion. For one realization of the ages $\mathbf{a}$ in a given dataset, this is described with the pseudo-code in algorithm \ref{a:gridding-mcmc}. This standard approach however did not find a monotonic solution within ten million iterations for a high-resolution site such as it has been used in the previous section. 
+
+Therefore we decided to implement a Gibbs sampler, an algorithm that is commonly used in Bayesian inference to obtain a sequence of observations in order to approximate a multivariate probability distribution, when this joint distribution is unknown and/or cannot be sampled directly. In our case, this distribution if the distribution of all sample ages in one dataset, where each sample age is conditioned by it's younger and older neighbor. Let $\mathbf{a}^{(i)} = \left(a^{(i)}_1, a^{(i)}_2, \ldots a^{(i)}_N \right)$ be the $i$-th realization of the ages in a dataset with $N$ reported ages $\boldsymbol{\mu}$ and estimated age uncertainties $\boldsymbol{\sigma}$. We start with $\mathbf{a}^{1} = \boldsymbol{\mu}$. For a given $i$ and sample $j\leq N$ in the dataset, we then draw a random number for the sampled age $a^{i}_j$ conditioned by the younger age in the same realization ($t_0 = a^{i}_{j-1}$) and the older age in the previous realization ($t_1 = a^{i-1}_{j+1}$) via
+
+\begin{equation}
+	a^{i}_j = \mathcal{N}^{t_1}_{t_0}(\mu_j, \sigma_j^2)
+\end{equation}
+
+where $\mathcal{N}^b_a(\cdot, \cdot)$ denotes the truncated normal distribution with lower limit $a$ and upper limit $b$. As such, the first realizations are conditioned by the reported ages and are commonly ignored (the so-called \textit{burn-in} period). In our case, we set this number to 1000. 
+Additionally, every sample is conditioned by the previous realization, which creates an autocorrelation between the different realizations. It is therefore a common strategy to only keep every $n$-th realization. An autocorrelation analysis on the different samples in our demonstration site (section \ref{sec:gridding-sample-site}) revealed that autocorrelation gets negligible after ten realizations. Hence, we only keep every tenth realization until we have the desired number of total realizations.
+
+As can be seen in figure \ref{fig:gridding-age-sampling-methods} and \ref{fig:gridding-age-example-distributions}, the outcomes are very close to the above mentioned \textit{random sort} approach. However, a look into the realized distribution of the last sample in figure \ref{fig:gridding-age-example-distributions} reveals a negative bias of the distribution sampled with the \textit{random sort} approach.
+
+The realized (and standardized) distribution of the entire database presented in section \ref{sec:gridding-polnet} is finally shown in figure \ref{fig:gridding-full-age-distribution}. The comparison with the unconstrained distribution in this figure highlights the need for a constrained sampling because the latter significantly reduces the width of the distribution.
 
 \subsection{Temperature sampling}  \label{sec:gridding-temperature-sampling}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{gridding-figures/temp-sampling-methods-realized.pdf}
+	\caption[Scaled histograms of temperature sampling methods]{Histograms of standardized temperature sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000. As in figure \ref{fig:gridding-age-sampling-methods}, every sampled temperature has been centered at the weighted average of the corresponding modern analogues and scaled by the corresponding weighted standard deviation. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for \textit{random start} and \textit{Gibbs} temperature sampling method (section \ref{sec:gridding-age-sampling}). \textit{forward} and \textit{backward} methods are almost similar to the results of the \textit{random start} approach and therefore not shown.}
+	\label{fig:gridding-temp-sampling-methods}
+\end{figure}
+
+As already mentioned in \ref{sec:gridding-mat}, our sampling approach does not use the temperature and uncertainty reported for every single variable. Instead, it samples the underlying distribution. As such, out method can be adapted to multiple site-specific reconstruction methods, such as weighted averaging (WA), weighted-averaging partial-least squares (WAPLS) \citep{BirksBraakLineEtAl1990, BraakJuggins1993} or other approaches \citep[e.g.][]{BirksHeiriSeppaeEtAl2010, BrewerGuiotBarboni2007, Juggins2013}. In this study, we use a \gls{mat} approach (see section \ref{sec:gridding-mat}) and sample the discrete set of climate analogues for each sample. The probability to select an analogue (i.e. it's weight) is thereby determined by the chord distance between the fossil and modern pollen assemblages. The closer the assemblages (relative to the other potential analogues), the higher the weight.
+
+This methodology is substantially different from the standard approach, such that is takes the multimodality of the analogues into account, whereas the standard appraoch (weighted average of the $k$ closest analogues) estimates a unimodal distribution. It additionally better represents the discrete nature of the analogue approach wheras the standard method intrinsically assumes a continuity in the distribution. In fact, only a small part of the available climate space is actually represented by the modern analogues. The 5'500 modern analogues for Tigalmamine, for instance (110 samples with 50 analogues each), are represented by only 240 distinct modern pollen samples with only 131 distinct \gls{jja} temperatures and they eventuelly span a large climate space (see figure \ref{fig:gridding-site-analogues}).
+
+\subsubsection{Climatic constrain}
+The latter gives the motivation for a climatic constrain that ensures the integrity of the individual dataset. It is, for instance, impossible that two samples from the same dataset but 200 years apart experience a temperature difference of five degrees or more between each other. This is, however, a possible combination, considering the underlying set of analogues (see figure \ref{fig:gridding-site-analogues} for instance). We therefore perform a constrained sampling, as in section \ref{sec:gridding-age-sampling}, and implement a fixed temperature threshold $T$. Every sampled analogue in each dataset (i.e. every choice of the discrete distribution for each pollen sample) is constraint to not differ by more than $T$ degrees celsius from its surrounding samples. The exact choice of $T$ is a critical assumption and has a major impact on the realized temperature distribution for each sample. We decided for a very conservative estimate of five degrees, which is only applied if the samples do not differ by more than 1000 years. These choices are further discussed in section \ref{sec:gridding-results}.
+
+In the remainder of this section, we focus on the implementation of this conditional sampling, because of its substantial impact on the realized distribution, as already shown for the sampled ages in section \ref{sec:gridding-age-sampling}. We briefly discuss the same approaches as in section \ref{sec:gridding-age-sampling} (without the \textit{random sort} algorithm because we do not enforce monotonicity here). The core of the method is the same for all approaches: If a climate analogue differs by more than $T$ degrees from the temperature of the conditioning sample, its probability is set to zero. The choice about the \textit{conditioning sample} is dependent on sampling algorithm. Here, we discuss following methods:
+
+\begin{description}
+	\item[forward] The temperature of every older sample must not differ by more than $T$ from its younger sample
+	\item[backward] The temperature of every younger sample must not differ by more than $T$ from its older sample
+	\item[random start] Starting with a random sample in a data, we apply the forward method to older and the backward method to younger samples
+	\item[Gibbs] The choice for each sample is constrained by the younger sample and the older sample from the previous realization of the dataset.
+\end{description}
+
+We described these algorithms already in detail in section \ref{sec:gridding-age-sampling} and therefore focus only on the comparison of results. The only difference is that now, without the monotonicity constrain, \textit{forward} and \textit{backward} methods give the same result as the \textit{random start} method. Therefore we will only focus on the last two methods.
+
+Figure \ref{fig:gridding-temp-sampling-methods} shows the realized distributions for the two methods. As in the corresponding figure for the age sampling (figure \ref{fig:gridding-age-sampling-methods}), we subtracted the weighted average of the climate analogues of the corresponding pollen sample by each of the randomly sampled temperature values, and afterwards divided by the weighted standard deviation, in order to make the drawn temperature values at the different ages comparable. 
+
 \begin{itemize}
 	\item Sampling of analogue climates weighted by squared chord distance
 	\item Can also use different methods (WAPLS, etc.)
 	\item Random starting point
 	\item Mask analogues that have a temperature distance more than 5°C??? From the previous/earlier sample – test this
 \end{itemize}
-As mentioned in section \ref{sec:gridding-mat}, our method alters the standard \gls{mat} approach such that it does not use the weighted average, as it is commonly estimated, but \todo{continue}
 
 \subsection{Gridding}  \label{sec:gridding-gridding}
 \begin{itemize}
