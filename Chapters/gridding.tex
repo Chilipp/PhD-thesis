@@ -42,7 +42,6 @@
 	\item Introducing constraints; climate, training set size, spatial coverage etc
 \end{itemize}
 
-
 \section{Data}  \label{sec:gridding-data}
 
 The ensemble based gridding method is adapted to paleo-climates. In this study, we describe the method using a large set of western Eurasian fossil pollen assemblages that have been transformed to \gls{jja} temperatures. We focus on pollen data because it is the spatially most widely available proxy during the Holocene, but it is important to mention that the reconstruction method is agnostic to the climate proxy, because it does not explicitly use the pollen assemblages but rather alters the standard climate reconstruction method under the aspect of it's methodological uncertainties. As such, the following sections describe the fossil and modern pollen database for this use case (section \ref{sec:gridding-polnet}) and the associated uncertainties of the temperature reconstruction method (section \ref{sec:gridding-mat}) and the dating of the fossil pollen samples (section \ref{sec:gridding-ageunc}).
@@ -150,7 +149,7 @@ With the intrinsic methodological uncertainties of climate and dating in mind, w
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{gridding-figures/age-sampling-methods-realized.pdf}
-	\caption[Scaled histograms of age sampling methods]{Histograms of standardized age sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000. Every sampled age has been centered at the reported age of the corresponding sample and scaled by its age uncertainty. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for each of the age sampling methods (section \ref{sec:gridding-age-sampling}). Note that \textit{random sort} and \textit{Gibbs} histograms highly overlap.}
+	\caption[Scaled histograms of age sampling methods]{Histograms of age sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000. Every sampled age has been centered at the reported age of the corresponding sample and scaled by its age uncertainty. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for each of the age sampling methods (section \ref{sec:gridding-age-sampling}). Note that \textit{random sort} and \textit{Gibbs} histograms highly overlap.}
 	\label{fig:gridding-age-sampling-methods}
 \end{figure}
 
@@ -224,10 +223,16 @@ The realized (and standardized) distribution of the entire database presented in
 
 \subsection{Temperature sampling}  \label{sec:gridding-temperature-sampling}
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\linewidth]{gridding-figures/temp-sampling-methods-realized.pdf}
-	\caption[Scaled histograms of temperature sampling methods]{Histograms of standardized temperature sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000. As in figure \ref{fig:gridding-age-sampling-methods}, every sampled temperature has been centered at the weighted average of the corresponding modern analogues and scaled by the corresponding weighted standard deviation. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for \textit{random start} and \textit{Gibbs} temperature sampling method (section \ref{sec:gridding-age-sampling}). \textit{forward} and \textit{backward} methods are almost similar to the results of the \textit{random start} approach and therefore not shown.}
+	\caption[Scaled histograms of temperature sampling methods]{Histograms of temperature sampling methods for the site in section \ref{sec:gridding-sample-site} with an ensemble size of 10'000 for a climatic constrain of (left) 2 °C, and (right) 5 °C. As in figure \ref{fig:gridding-age-sampling-methods}, every sampled temperature has been centered at the weighted average of the corresponding modern analogues and scaled by the corresponding weighted standard deviation. The black line shows the unconstrained distribution (a standard normal with a standard deviation of 1), the other histograms show the realized distributions for \textit{random start} and \textit{Gibbs} temperature sampling method (section \ref{sec:gridding-age-sampling}).}
 	\label{fig:gridding-temp-sampling-methods}
+\end{figure}
+
+\begin{figure}[!t]
+	\includegraphics[width=\linewidth]{gridding-figures/tigal-sample-climate-violins.pdf}
+	\caption[Realized temperature distributions for a few samples]{Violin plots for sampled temperature distributions of some samples in the Tigalmamine record with a climatic threshold of (top) 2 and (bottom) 5 °C. Blue (left) distributions are realized with the \textit{random start} method, ocher (right) areas with Gibbs sampling. The crosses to the left of each violin shows the locations of the climate analogues. Each cross is color coded by it's chord distance relative to the chord distance of the closest analogue (i.e. the closest analogue has always a weight of 1).}
+	\label{fig:gridding-temp-sampling-violins}
 \end{figure}
 
 As already mentioned in \ref{sec:gridding-mat}, our sampling approach does not use the temperature and uncertainty reported for every single variable. Instead, it samples the underlying distribution. As such, out method can be adapted to multiple site-specific reconstruction methods, such as weighted averaging (WA), weighted-averaging partial-least squares (WAPLS) \citep{BirksBraakLineEtAl1990, BraakJuggins1993} or other approaches \citep[e.g.][]{BirksHeiriSeppaeEtAl2010, BrewerGuiotBarboni2007, Juggins2013}. In this study, we use a \gls{mat} approach (see section \ref{sec:gridding-mat}) and sample the discrete set of climate analogues for each sample. The probability to select an analogue (i.e. it's weight) is thereby determined by the chord distance between the fossil and modern pollen assemblages. The closer the assemblages (relative to the other potential analogues), the higher the weight.
@@ -248,14 +253,9 @@ In the remainder of this section, we focus on the implementation of this conditi
 
 We described these algorithms already in detail in section \ref{sec:gridding-age-sampling} and therefore focus only on the comparison of results. The only difference is that now, without the monotonicity constrain, \textit{forward} and \textit{backward} methods give the same result as the \textit{random start} method. Therefore we will only focus on the last two methods.
 
-Figure \ref{fig:gridding-temp-sampling-methods} shows the realized distributions for the two methods. As in the corresponding figure for the age sampling (figure \ref{fig:gridding-age-sampling-methods}), we subtracted the weighted average of the climate analogues of the corresponding pollen sample by each of the randomly sampled temperature values, and afterwards divided by the weighted standard deviation, in order to make the drawn temperature values at the different ages comparable. 
+Figure \ref{fig:gridding-temp-sampling-methods} shows the realized distributions for the two methods. As in the corresponding figure for the age sampling (figure \ref{fig:gridding-age-sampling-methods}), we subtracted the weighted average of the climate analogues of the corresponding pollen sample by each of the randomly sampled temperature values, and afterwards divided by the weighted standard deviation, in order to make the drawn temperature values at the different ages comparable. Both methods realize a bimodal distribution (a feature that is also visible in the spread of the climate analogues in figure \ref{fig:gridding-site-analogues}) and result in the same distribution when considering a climate constrain of 5 °C. This does not hold for the stronger 2 °C constrain, where the Gibbs method gives more weight to samples below the weighted average. This is caused by the additional constrain of the Gibbs sampling approach where each sample is constrained by the sample of the previous realization. The algorithm always starts with the youngest sample which has a higher probability in the Moroccan regime (green area, figure \ref{fig:gridding-site-analogues}). Due to the constrain of the sample in the previous realization, it then is more likely that we stay in this regime. As such, the distribution tends to get more unimodal compared to the other method, where each realization is entirely independent of the other.
 
-\begin{itemize}
-	\item Sampling of analogue climates weighted by squared chord distance
-	\item Can also use different methods (WAPLS, etc.)
-	\item Random starting point
-	\item Mask analogues that have a temperature distance more than 5°C??? From the previous/earlier sample – test this
-\end{itemize}
+This difference between the two methods and the two climatic constrains is further illustrated in figure \ref{fig:gridding-temp-sampling-violins}, which shows the violin plots for a selection of samples in the Tigalmamine record, separated by method and climatic constrain. As already shown with the standardized temperatures in figure \ref{fig:gridding-temp-sampling-methods}, the two methods are approximately equal under the 5 °C constrain, but differ under the 2 °C constrain, where the Gibbs method tends to sharpen the distribution at the climates of the analogues. Both constrains, however, significantly reduce the realized temperature regime and create a more multimodal distribution.\todo[inline, size=\normalsize]{John should revise this!}
 
 \subsection{Gridding}  \label{sec:gridding-gridding}
 \begin{itemize}
