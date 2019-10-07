@@ -258,12 +258,26 @@ Figure \ref{fig:gridding-temp-sampling-methods} shows the realized distributions
 This difference between the two methods and the two climatic constrains is further illustrated in figure \ref{fig:gridding-temp-sampling-violins}, which shows the violin plots for a selection of samples in the Tigalmamine record, separated by method and climatic constrain. As already shown with the standardized temperatures in figure \ref{fig:gridding-temp-sampling-methods}, the two methods are approximately equal under the 5 °C constrain, but differ under the 2 °C constrain, where the Gibbs method tends to sharpen the distribution at the climates of the analogues. Both constrains, however, significantly reduce the realized temperature regime and create a more multimodal distribution.\todo[inline, size=\normalsize]{John should revise this!}
 
 \subsection{Gridding}  \label{sec:gridding-gridding}
-\begin{itemize}
-	\item 3D of climate (not anomaly)
-	\item Distance in time through weighting
-	\item Paleo-Elevation (ICE-6G)
-	\item Can use any other method than tps
-\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{gridding-figures/elevation-difference.png}
+	\caption[Elevation difference and corrections]{Maximum change of elevation during the Holocene per grid cell (blue background), based on the data from the ICE-6G model. The dots show the applied (maximal) corrections to the samples in these locations. \todo[inline, size=\normalsize]{Elevation figure has to be made nicer.}}
+	\label{fig:gridding-elev-correction}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{gridding-figures/elevation-mask.png}
+\caption[Ice sheet mask of the pollen samples]{Locations of samples (red dots) that have been removed from the input data because they are covered by ice (according to the ICE-6G model, blue background). \todo[inline, size=\normalsize]{ice sheet mask has to be made nicer.}}
+\label{fig:gridding-elev-mask}
+\end{figure}
+
+The underlying gridding algorithm is the same as used by \cite{MauriDavisCollinsEtAl2015}, the thin plate spline regression method (\textit{Tps}) of the \textit{fields} R-package \citep{DouglasNychkaReinhardFurrerJohnPaigeEtAl2017, RCT2019}. This method interpolates the scalar variable (temperature) from the irregularly spaced four dimensional data onto a two dimensional surface (defined by latitude, longitude and elevation) in 3D space. The time component is considered by giving a higher weight to samples that are temporally closer to the target time of the interpolation.
+
+The differences between \cite{MauriDavisCollinsEtAl2015} and our method are nevertheless substantial. The major one is that \cite{MauriDavisCollinsEtAl2015} applied this method once per target time, whereas our ensemble approach applies this method many times to different realizations of the input data. As such, our method can also be interpreted as a bootstrapping approach. It is structurally independent of the underlying regression algorithm and can therefore be extended to use other three- or four-dimensional methods.
+
+Another difference between our study and \cite{MauriDavisCollinsEtAl2015} is the type of climatic variable. \cite{MauriDavisCollinsEtAl2015} calculated interpolated anomalies, whereas we interpolate the absolute climate climate variable as it is derived from the pollen-climate reconstruction method. This has the major advantage that we can directly interpolate to the elevation at a given timestep, whereas \cite{MauriDavisCollinsEtAl2015} used an a posteriori isostatic correction. 
+
+For the reconstruction presented in section \ref{sec:gridding-results}, we use the data of the ICE-6G-C model \citep{ArgusPeltierDrummondEtAl2014, PeltierArgusDrummond2015}, that is also used in the PMIP4 experiments \citep{IvanovicGregoireKageyamaEtAl2016, Otto-BliesnerBraconnotHarrisonEtAl2017, KageyamaBraconnotHarrisonEtAl2018}. To account for the change in elevation, \textit{pyleogrid} also implements a method to correct the elevation of the samples based on the elevation difference in the given input raster for the different time steps. The results of this correction can be seen in figure \ref{fig:gridding-elev-correction}. In addition to this elevation correction, we removed samples from the input data where the ICE-6G model reports an ice coverage of more than 50\% in the grid cell (figure \ref{fig:gridding-elev-mask}). Affected samples are all during the early Holocene in northern Europe.
 
 \subsection{Implementation}  \label{sec:gridding-package}
 
