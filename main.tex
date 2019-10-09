@@ -44,7 +44,9 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[backend=biber,style=authoryear-icomp,sorting=nyt,maxbibnames=100,bibencoding=utf8,natbib,uniquelist=false,maxcitenames=2]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[%
+    backend=biber,style=authoryear-icomp,sorting=nyt,maxbibnames=100,%
+    bibencoding=utf8,natbib,uniquelist=false,uniquename=false,maxcitenames=2,ibidtracker=false]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 \addbibresource{mybib.bib} % The filename of the bibliography
 
