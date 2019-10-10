@@ -73,7 +73,7 @@ headsepline, % Uncomment to get a line under the header
 
 \thesistitle{Software and Numerical Tools for Paleoclimate Analysis} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. Basil A. S. Davis} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
-\examiner{Prof. Dr. Grégoire Mariéthoz, Dr. Basil A. S. Davis, Prof. Dr. John Tipton, Prof. Dr. Christoph Raible} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
+\examiner{Prof. Dr. Grégoire Mariéthoz, Prof. Dr. John Robert Tipton, Prof. Dr. Christoph Cornelius Raible} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Doctor of Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
 \author{Philipp S. \textsc{Sommer}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{Université de Lausanne, Bâtiment Géopolis, 1015 Lausanne} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
@@ -82,7 +82,7 @@ headsepline, % Uncomment to get a line under the header
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{https://www.unil.ch}{Université de Lausanne}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{\href{https://www.unil.ch/idyst/}{Institute of Earth Surface Dynamics (IDYST)}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{\href{https://wp.unil.ch/davisgroup/}{The Davis Group}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\group{\href{https://wp.unil.ch/davisgroup/}{Davis Group}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{\href{https://www.unil.ch/gse}{Faculty of Geosciences and Environment (FGSE)}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
 \AtBeginDocument{
@@ -190,7 +190,8 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{lapd}{LAPD}{Latin American Pollen Database}
 \newacronym{apd}{APD}{African Pollen Database}
 
-%\includeonly{Chapters/gridding}
+\includeonly{Chapters/conclusions}
+%\includeonly{frontmatter}
 
 \begin{document}
 
@@ -224,7 +225,9 @@ headsepline, % Uncomment to get a line under the header
 \emph{Supervisor:} \\
 \href{https://wp.unil.ch/davisgroup/basil-davis}{\supname} % Supervisor name - remove the \href bracket to remove the link
 \end{flushright}
-\end{minipage}\\[3cm]
+\end{minipage}\\[1cm]
+
+\href{https://www.unil.ch}{\includegraphics{unilogo_noir.pdf}} \\[0.5cm] % University/department logo - uncomment to place it
 
 \vfill
 
@@ -232,10 +235,12 @@ headsepline, % Uncomment to get a line under the header
 \textit{in the}\\[0.4cm]
 \groupname\\\deptname\\[2cm] % Research group name and department name
 
+{\large \emph{Jury members:} \\
+\examname}\\[2cm]
+
 \vfill
 
 {\large \today}\\[4cm] % Date
-%\includegraphics{Logo} % University/department logo - uncomment to place it
 
 \vfill
 \end{center}
@@ -264,14 +269,14 @@ headsepline, % Uncomment to get a line under the header
 
 \part{New Software Tools for Paleoclimate Analysis}  \label{part:software}
 
-\include{Chapters/psyplot}
-\include{Chapters/straditize}
 \include{Chapters/empd}
+\include{Chapters/straditize}
+\include{Chapters/psyplot}
 
-\part{Numerical Analysis of Paleoclimate Data}  \label{part:numerics}
+\part{Computational Models}  \label{part:models}
 
-\include{Chapters/gwgen}
 \include{Chapters/gridding}
+\include{Chapters/gwgen}
 
 \include{Chapters/conclusions}
 
