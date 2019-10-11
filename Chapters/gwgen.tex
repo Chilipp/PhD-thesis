@@ -1,6 +1,6 @@
 % GWGEN chapter
 
-\Chapter{GWGEN v1.0}{A globally calibrated scheme for generating daily meteorology from monthly statistics}
+\Chapter[GWGEN: \itshape{A global weather generator for daily meteorology}]{GWGEN v1.0}{A globally calibrated scheme for generating daily meteorology from monthly statistics}
 
 \label{chp:gwgen}
 
@@ -10,8 +10,6 @@
 	\textit{From}
 	\bibforkey{SommerKaplan2017b}
 }
-
-\todo[inline, size=\normalsize]{The header on even pages is not formatted well and figure placements need revision}
 	
 \begin{abstract}
 	While a wide range of earth system processes occur at daily and even sub-daily timescales, many global vegetation and other terrestrial dynamics models historically used monthly meteorological forcing, both to reduce computational demand and because global datasets were lacking. Recently, dynamic land surface modeling has moved towards resolving daily and subdaily processes, and global datasets containg daily and sub-daily meteorology have become available. These meteorological datasets, however, cover only the instrumental era of the last ca. 120 years at best, are subject to considerable uncertainty, and represent extremely large data files with associated computational costs of data input/output and file transfer. For periods before the recent past or into the future, global meteorological forcing can be provided by climate model output, but the quality of these data at high temporal resolution is low, particularly for daily precipitation frequency and amount. Here we present GWGEN, a globally applicable statistical weather generator for the temporal downscaling of monthly climatology to daily meteorology. Our weather generator is parameterized using a global meteorological database and simulates daily values of five common variables: minimum and maximum temperature, precipitation, cloud cover, and wind speed. GWGEN is lightweight, modular, and requires a minimal set of monthly mean variables as input. The weather generator may be used in a range of applications, for example, in global vegetation, crop, soil erosion, or hydrological models. While GWGEN does not currently perform spatially autocorrelated multi-point downscaling of daily weather, this additional functionality could be implemented in future versions. 

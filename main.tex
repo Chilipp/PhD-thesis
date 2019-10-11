@@ -73,7 +73,7 @@ headsepline, % Uncomment to get a line under the header
 
 \thesistitle{Software and Numerical Tools for Paleoclimate Analysis} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. Basil A. S. Davis} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
-\examiner{Prof. Dr. Grégoire Mariéthoz, Prof. Dr. John Robert Tipton, Prof. Dr. Christoph Cornelius Raible} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
+\examiner{Prof. Dr. Grégoire Mariéthoz~(\textit{director}), Basil A. S. Davis~(\textit{co-director}),\\Prof. Dr. John Robert Tipton~(\textit{examiner}), Prof. Dr. Christoph Cornelius Raible~(\textit{examiner})} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Doctor of Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
 \author{Philipp S. \textsc{Sommer}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{Université de Lausanne, Bâtiment Géopolis, 1015 Lausanne} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
@@ -103,7 +103,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{hyperref}
 \usepackage{fancyvrb}
 \usepackage[acronym,toc,nomain,savenumberlist,counter=chapter]{glossaries}
-\usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
+\usepackage[colorinlistoftodos,textsize=tiny,disable]{todonotes}
 \usepackage{titlesec, titletoc}  % necessary for putting bars and labels under the part in toc
 \usepackage{multirow}
 \usepackage{longtable}
@@ -115,8 +115,12 @@ headsepline, % Uncomment to get a line under the header
 %	CUSTOM LATEX COMMANDS
 %----------------------------------------------------------------------------------------
 
-\newcommand\Chapter[2]{
-	\chapter[#1: {\itshape#2}]{#1\\[2ex]\Large\itshape#2}
+\newcommand\Chapter[3][false]{
+	\ifthenelse{\equal{#1}{false}} {%
+		\chapter[#2: {\itshape#3}]{#2\\[2ex]\Large\itshape#3}
+	}{%
+		\chapter[#1]{#2\\[2ex]\Large\itshape#3}
+	}
 }
 \newcommand\tophline{\hline\noalign{\vspace{1mm}}}
 \newcommand\middlehline{\noalign{\vspace{1mm}}\hline\noalign{\vspace{1mm}}}
@@ -190,7 +194,7 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{lapd}{LAPD}{Latin American Pollen Database}
 \newacronym{apd}{APD}{African Pollen Database}
 
-%\includeonly{Chapters/conclusions}
+%\includeonly{Chapters/gridding}
 %\includeonly{frontmatter}
 
 \begin{document}
@@ -253,6 +257,8 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 
 \tableofcontents % Prints the main table of contents
+
+\listoffigures % Prints the list of figures
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
@@ -330,7 +336,7 @@ headsepline, % Uncomment to get a line under the header
 % Uncomment the lines as you write the Appendices
 
 \include{Appendices/publications}
-\include{Appendices/software}
+%\include{Appendices/software}
 
 %----------------------------------------------------------------------------------------
 

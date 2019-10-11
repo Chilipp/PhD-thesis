@@ -1,6 +1,6 @@
 % teleconnections chapter
 
-\Chapter{pyleogrid}{An Ensemble method for Gridding Paleo Proxy Climates}
+\Chapter{pyleogrid}{A Probabilistic Approach for Gridding Paleo Climate Data}
 
 \label{chp:gridding}
 
@@ -35,7 +35,7 @@ The ensemble based gridding method is adapted to paleo-climates. In this study, 
 	\label{fig:gridding-fossil}
 \end{figure}
 
-The source data for this study is a subset of the latest development version of the POLNET database, a northern hemispheric, sub-tropical collection of pollen assemblages \citep{DavisKaplan2017, SommerDavisChevalierEtAl2019}. The purpose of this database is to generate the source for large-scale climate reconstruction during the Holocene (past 12'000 years) that can be used for model-data comparisons. The subset that we use in this study to describe and develop the gridding method contains fossil and modern pollen assemblages of western Eurasia, a region that has already been under investigation in the previous study by \cite{MauriDavisCollinsEtAl2015}. 
+The source data for this study is a subset of the latest development version of the POLNET database, a northern hemispheric, extra-tropical collection of pollen assemblages \citep{DavisKaplan2017, SommerDavisChevalierEtAl2019}. The purpose of this database is to generate the source for large-scale climate reconstruction during the Holocene (past 12'000 years) that can be used for model-data comparisons. The subset that we use in this study to describe and develop the gridding method contains fossil and modern pollen assemblages of western Eurasia, a region that has already been under investigation in the previous study by \cite{MauriDavisCollinsEtAl2015}. 
 
 The fossil database contains raw pollen counts with in total about 1350 datasets that consists of 80500 fossil samples. The majority of the fossil pollen data (left part of figure \ref{fig:gridding-fossil}) comes from the \gls{epd} \citep[ca. 94\%]{FyfeBeaulieuBinneyEtAl2009} and other publicly available databases. The presented dataset extends the database used by \cite{MauriDavisCollinsEtAl2015} especially with a few sites towards the eastern part of the map.
 
@@ -250,14 +250,14 @@ This difference between the two methods and the two climatic constraints is furt
 \subsection{Gridding}  \label{sec:gridding-gridding}
 
 \begin{figure}
-	\includegraphics[width=\linewidth]{gridding-figures/elevation-difference.png}
-	\caption[Elevation difference and corrections]{Maximum change of elevation during the Holocene per grid cell (blue background), based on the data from the ICE-6G model. The dots show the applied (maximal) corrections to the samples in these locations. \todo[inline, size=\normalsize]{Elevation figure has to be made nicer.}}
+	\includegraphics[width=\linewidth]{gridding-figures/elevation-diff.pdf}
+	\caption[Elevation difference and corrections]{Maximum change of elevation during the Holocene per grid cell (blue background), based on the data from the ICE-6G model. The dots show the applied (maximal) corrections to the samples in these locations.}
 	\label{fig:gridding-elev-correction}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=\linewidth]{gridding-figures/elevation-mask.png}
-\caption[Ice sheet mask of the pollen samples]{Locations of samples (red dots) that have been removed from the input data because they are covered by ice (according to the ICE-6G model, blue background). \todo[inline, size=\normalsize]{ice sheet mask has to be made nicer.}}
+\includegraphics[width=\linewidth]{gridding-figures/elevation-mask.pdf}
+\caption[Ice sheet mask of the pollen samples]{Locations of samples (red dots) that have been removed from the input data because they are covered by ice (according to the ICE-6G model, blue background).}
 \label{fig:gridding-elev-mask}
 \end{figure}
 
@@ -306,7 +306,7 @@ Figure \ref{fig:gridding-tigal-recon-k} shows the same figure but for a varying 
 \begin{figure}
 	\captionsetup{width=\linewidth}
 	\includegraphics[width=\linewidth]{gridding-figures/deterministic-vs-ensemble.pdf}
-	\caption[Deterministic approach vs. Ensemble mean]{Deterministic approach vs. ensemble mean (10'000 realizations) at 3k, 6k, 9k and 12k BP (note the different color coding for 12k BP). Each map shows the anomaly with respect to the gridded reconstruction at 0k BP. The deterministic approach (left column) is the input data with temperatures as weighted averages of the 50 closest analogues and without age sampling. The gridded reconstruction has been masked when more than 500km away from the closest sample. The ensemble mean (right column) is overlayed by the corresponding ensemble standard deviation of the anomaly (suppl. figure \ref{fig:gridding-gridded-std}). This overlay is transparent for standard deviations smaller than 2.5 °C and afterwards gets more opaque until it reaches 5 °C. Grid cells in the maps that were covered by more than 50 percent with ice, according to the ICE-6G data, have been masked.\todo[inline]{land should be light gray}}
+	\caption[Deterministic approach vs. Ensemble mean]{Deterministic approach vs. ensemble mean (10'000 realizations) at 3k, 6k, 9k and 12k BP (note the different color coding for 12k BP). Each map shows the anomaly with respect to the gridded reconstruction at 0k BP. The deterministic approach (left column) is the input data with temperatures as weighted averages of the 50 closest analogues and without age sampling. The gridded reconstruction has been masked when more than 500km away from the closest sample. The ensemble mean (right column) is overlayed by the corresponding ensemble standard deviation of the anomaly (suppl. figure \ref{fig:gridding-gridded-std}). This overlay is transparent for standard deviations smaller than 2.5 °C and afterwards gets more opaque until it reaches 5 °C. Grid cells in the maps that were covered by more than 50 percent with ice, according to the ICE-6G data, have been masked.}
 	\label{fig:gridding-gridded-mean}
 \end{figure}
 
@@ -319,13 +319,13 @@ Both methods show similar patterns and span the same temperature range at the on
 
 \begin{figure}
 	\includegraphics[width=\linewidth,page=3]{gridding-figures/temperature-means-per-thresh.pdf}
-	\caption[Impact of climate constraint on gridded results]{Ensemble mean summer temperature anomaly at 9k BP (1'000 realizations) for different temperature constraints. The standard deviation is visualized on top of the mean with an increasing opaqueness (same as in figure \ref{fig:gridding-gridded-mean}).\todo[inline]{land should be light gray (Greenland)}}
+	\caption[Impact of climate constraint on gridded results]{Ensemble mean summer temperature anomaly at 9k BP (1'000 realizations) for different temperature constraints. The standard deviation is visualized on top of the mean with an increasing opaqueness (same as in figure \ref{fig:gridding-gridded-mean}).}
 	\label{fig:gridding-gridded-climate-constraint}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\linewidth,page=3]{gridding-figures/temperature-means-per-k.pdf}
-	\caption[Impact of the number of analogues on the gridded results]{Ensemble mean summer temperature anomaly at 9k BP for numbers of analogues. The standard deviation is visualized on top of the mean with an increasing opaqueness (same as in figure \ref{fig:gridding-gridded-mean}).\todo[inline]{land should be light gray (Greenland)}}
+	\caption[Impact of the number of analogues on the gridded results]{Ensemble mean summer temperature anomaly at 9k BP for numbers of analogues. The standard deviation is visualized on top of the mean with an increasing opaqueness (same as in figure \ref{fig:gridding-gridded-mean}).}
 	\label{fig:gridding-gridded-k}
 \end{figure}
 
@@ -336,7 +336,7 @@ Figure \ref{fig:gridding-gridded-climate-constraint} shows the influence of the 
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{gridding-figures/distance-std-relation.pdf}
-	\caption[Relationship between distance to proxy sites and ensemble standard deviation]{Relationship between distance to proxy sites and the ensemble standard deviation. Each line corresponds to a linear fit where the distance to the closest site in the database for a given grid cell is regressed against the ensemble standard deviation in this cell (figure \ref{fig:gridding-gridded-std}). The different lines represent the different time steps from figure \ref{fig:gridding-gridded-mean}, the value in brackets after each legend label shows the coefficient of determination ($R^2$) for the given regression fit.\todo[inline]{Increase height}}
+	\caption[Relationship between distance to proxy sites and ensemble standard deviation]{Relationship between distance to proxy sites and the ensemble standard deviation. Each line corresponds to a linear fit where the distance to the closest site in the database for a given grid cell is regressed against the ensemble standard deviation in this cell (figure \ref{fig:gridding-gridded-std}). The different lines represent the different time steps from figure \ref{fig:gridding-gridded-mean}, the value in brackets after each legend label shows the coefficient of determination ($R^2$) for the given regression fit.}
 	\label{fig:gridding-dist-std}
 \end{figure}
 
@@ -380,20 +380,21 @@ This sampling successfully reconstructs a probabilistic version of the individua
 	\section{Example of generated age distributions} \label{sec:gridding-suppl-age-example-distributions}
 		\begin{figure}[!h]
 			\includegraphics[width=\linewidth]{gridding-figures/age-sampling-methods-use-case.pdf}
-			\caption[Example of sampled distribution]{Example of three samples from the site in section \ref{sec:gridding-site} and their realized distributions. Sampling algorithms are explained in section \ref{sec:gridding-age-sampling}. Top plots show the box plots of the realized distribution that are visualized with a kernel density estimate in the lower row.\todo[inline]{legend overlaps}}
+			\caption[Example of sampled distribution]{Example of three samples from the site in section \ref{sec:gridding-site} and their realized distributions. Sampling algorithms are explained in section \ref{sec:gridding-age-sampling}. Top plots show the box plots of the realized distribution that are visualized with a kernel density estimate in the lower row.}
 			\label{fig:gridding-age-example-distributions}
 		\end{figure}
+	
+	\clearpage
 	
 	\section{Maps of uncertainties} \label{sec:gridding-suppl-maps}
 		\begin{figure}[h]
 			\includegraphics[width=\linewidth]{gridding-figures/ensemble-std.pdf}
-			\caption[Ensemble standard deviation]{Standard deviation of the ensemble mean summer temperature anomaly (10'000 realizations) at 3k, 6k, 9k and 12k BP. \todo[inline]{Land should be light grey}}
+			\caption[Ensemble standard deviation]{Standard deviation of the ensemble mean summer temperature anomaly (10'000 realizations) at 3k, 6k, 9k and 12k BP.}
 			\label{fig:gridding-gridded-std}
 		\end{figure}
-	
 		\begin{figure}[h]
 			\includegraphics[width=\linewidth]{gridding-figures/ensemble-tps-se.pdf}
-			\caption[Standard error of the Tps gridding method]{Standard error of the gridding algorithm, predicted with the \textit{predictSE} method of the \textit{fields} package \citep{NychkaFurrerPaigeEtAl2017} for the different timeslices. The standard errors are an average of 20 ensemble members, although there is only very little difference between the individual maps.\todo[inline]{Land should be light grey}}
+			\caption[Standard error of the Tps gridding method]{Standard error of the gridding algorithm, predicted with the \textit{predictSE} method of the \textit{fields} package \citep{NychkaFurrerPaigeEtAl2017} for the different timeslices. The standard errors are an average of 20 ensemble members, although there is only very little difference between the individual maps.}
 			\label{fig:gridding-tps-se}
 		\end{figure}
 
