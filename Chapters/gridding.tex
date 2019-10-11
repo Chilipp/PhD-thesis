@@ -12,37 +12,16 @@
 
 \section{Introduction}  \label{sec:gridding-intro}
 
-\todo[inline]{Write gridding introduction}
+Paleo-climate reconstructions are most often undertaken on a site by site basis to provide a record of climate change at a specific place through time. The integration of data obtained from multiple sites however provides the basis for investigating spatially explicit reconstructions of climate through time. This spatio-temporal perspective can provide powerful insights into the climate system that are not easily discernible from the typical 1-dimensional approach associated with single site records. Spatially explicit data allows us to see how spatial patterns in climate variables change through time, providing a way of identifying the underlying causes of climate change. It also allows us to match the spatial scale of Earth-system models, which are based on grid-boxes that often reflect climatic changes at a very different spatial resolution than that experienced at the scale of a single site.
 
-\begin{itemize}
-	\item Why gridding
-	\begin{itemize}
-		\item Data-Model-Intercomparisons)
-		\item Easier to handle
-		\item Energy balance, compatibility with models, grid cell (Area) averages
-		\item Stability of observation network through time
-		\item Not just spatial grid, also regular timestep (problems with pseudo gridding, including time ‘windows’ or ‘slices’
-		\item Understanding past climates, different forcings – independent of models (difficult from point-cloud)
-		\item Filling the gaps
-		\item Spatial scales (Samarthein chironomids etc)
-	\end{itemize}
-	\item Importance of uncertainties
-	\begin{itemize}
-		\item Necessary for data comparisons, interpretation skill of the data
-		\item Proxy climate reconstruction uncertainties are higher (inverse modelling, not always properly defined (MAT)) than for instrumental data
-		\item Age uncertainties can be high (centennial to multi-millennial)
-	\end{itemize}
-	\item Why Tps (can also use something else, but has been used before)
-	\begin{itemize}
-		\item Extrapolation to the gaps (Previous work by mauri et al and davis)
-		\item Pseudo-gridding (marcott, Marsicek 2018, Margo, 2009, Bartlein et al ?2013) has holes
-		\item Data assimiliation (pages2k? Need to look the paper up again) – depends on model
-		\item Bayesian data assimiliation (Weitzel 2019) – depends on model
-		\item Does not require interpolation of time (Marsicek 2018)
-	\end{itemize}
-	\item Other
-	\item Introducing constraints; climate, training set size, spatial coverage etc
-\end{itemize}
+Here we describe a computationally efficient methodology for integrating multiple paleo-climate records from different sites into a single spatio-temporal record that simultaneously takes into account the associated uncertainties. This method also involves projecting the data onto a uniform spatial grid and regular time-step. This approach is different from the conventional approach to gridding, often called \textit{pseudo-gridding}, in which records that fall within a grid box are simply combined in some way to represent the grid box value \citep[e.g.][]{BartleinHarrisonBrewerEtAl2010, MarsicekShumanBartleinEtAl2018, MarcottShakunClarkEtAl2013, WaelbroeckPaulKuceraEtAl2009}. Similarly, samples from the records within a grid box are also combined or binned into time-windows to create a regular time-step. Instead, our methodology leaves the data where it is in time and space and interpolates it through onto a user-defined 3-dimensional spatial grid and regular time-step. This approach has been used in previous studies \citep{DavisBrewerStevensonEtAl2003, MauriDavisCollinsEtAl2014, MauriDavisCollinsEtAl2015}, but here we integrate chronological and reconstruction uncertainties into the gridding process, allowing us to propagate these uncertainties through time and space onto our grid network. 
+
+Gridding has many advantages over other simple mapping approaches, including \textit{pseudo-gridding}. It allows us to calculate more accurately area-averages and energy balances, as well as to make direct comparisons with Earth system models at a comparable grid box size and regular time-step. Gridding also allows a changing paleo-climate site/sample network through time to be stabilized, making it easier to compare one time period with another. We are also able to create a more complete record of climate in time and space, using the entire sampling network to infer climate in places and at times where we may not have a site/sample.
+
+Our new method applies a probability approach to data integration, whereby the full uncertainty of each sample is considered in the gridding process, rather than just the sample mean used in previous methodologies \citep{MauriDavisCollinsEtAl2015}. From this we can calculate the uncertainties associated with the temporal and spatial distances between our reconstruction samples/sites and the points on the grid network. We do this through an ensemble bootstrapping approach in which we repeatedly grid the data, each time using a different set of samples that are randomly generated to reflect the reconstruction and chronological uncertainties of the site network. In this study, we use pollen-data, which provides the most accessible and spatially distributed paleo-climate data available for the late-Quaternary period. 
+
+The strength of this new methodology is that it treats all of the paleo-climate samples and sites as a single integrated paleo-climate record from which it is possible to extract a single regionally coherent climatic reconstruction, complete with uncertainties. Pollen-based reconstructions often have high sample to sample uncertainties, and the vegetation at individual sites can be influenced by non-climatic factors such as soils, disease, fire, migration lag and human impact. Our methodology allows us to fully utilize the large quantity of pollen-data that is available, to extract the regional background climate signal from what may be locally quite noisy data. It also has a significant advantage over other methods that integrate records using Bayesian approaches \citep[e.g.][]{HolmstroemIlvonenSeppaeEtAl2015}, in that it is much more computationally efficient, making it possible to undertake analysis at continental scales with hundreds and thousands of sites and samples. 
+
 
 \section{Data}  \label{sec:gridding-data}
 
