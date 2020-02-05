@@ -6,7 +6,7 @@
 
 \newcommand{\samplediagram}[1][false]{
 	\ref{fig:sample-diagram}\hyperref[fig:sample-diagram]{
-		\ifthenelse{\equal{#1}{false}}{}{#1)}}}
+		\ifthenelse{\equal{#1}{false}}{}{#1}}}
 
 %----------------------------------------------------------------------------------------
 %	SECTION 1
@@ -52,7 +52,7 @@ A pollen diagram highlighting the features in a stratigraphic diagram is provide
 
 \subsubsection{Stratigraphic columns}  \label{sec:straditize-strati-columns}
 A stratigraphic diagram consists of multiple sub diagrams, each visualizing one or more different variables, for example the percentages of different pollen taxa, the concentration of different chemical elements, or the various percentages of different grain sizes. These sub diagrams share one common axis which is usually the age or depth of the core (see fig.~\samplediagram[a]). 
-The diagram is then divided into multiple sub diagrams which we refer to as the columns of the stratigraphic diagram (fig. \samplediagram[b]). Each column visualizes the data of one variable, such as a pollen taxon, or multiple variables where these are plotted within the same column (same x-axis), such as winter and summer precipitation shown in the left most column of figure \samplediagram. The current version of \emph{straditize} requires that the columns do not overlap and that multiple variables plotted in the same column do not overlap either. The software can process multiple variables in a column so long as these are stacked or additive, and therefore they never overlap. An example in a pollen diagram could be where multiple species of, for instance Betula, are plotted as a stacked diagram in a single column so that the sum of the species also shows the total Betula.  
+The diagram is then divided into multiple sub diagrams which we refer to as the columns of the stratigraphic diagram (fig. \samplediagram[b]). Each column visualizes the data of one variable, such as a pollen taxon, or multiple variables where these are plotted within the same column (same x-axis), such as winter and summer precipitation shown in the left most column of figure \samplediagram. The current version of \emph{straditize} requires that the columns do not overlap and that multiple variables plotted in the same column do not overlap either. The software can process multiple variables in a column so long as these are stacked or additive, and therefore they never overlap. An example in a pollen diagram could be where multiple species of, for instance Betula, are plotted as a stacked diagram in a single column so that the sum of the species also shows the total \textit{Betula}.  
 
 At the top of each column it is usual to find the name of the variable plotted in the column. This may be shown at a variety of angles, but usually either vertically, or at an angle or rotated to make it easier to read and fit within the diagram (fig. \samplediagram[c]). This label can be automatically read by \emph{straditize} and the name assigned to the respective column data, although care should be taken as the label is sometimes offset from the column it represents.  
 
@@ -114,7 +114,7 @@ Additionally, the start of each potential column has to contain a user defined n
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{straditize-figures/sample-diagram-data.pdf}
-	\caption[Cleaned binary image of the data part]{Cleaned binary image of the data part of figure \ref{fig:sample-diagram}. Informative features (Y-axes and horizontal lines) have been removed. Exaggerations and occurrences are still in the binary image and are considered separately in section \ref{sec:occurences}.}
+	\caption[Cleaned binary image of the data part]{Cleaned binary image of the data part of figure \ref{fig:sample-diagram}. Informative features (Y-axes and horizontal lines) have been removed. Exaggerations and occurrences are still in the binary image and are considered separately in section \ref{sec:straditize-occurences}.}
 	\label{fig:cleaned-sample}
 \end{figure}
 
@@ -138,7 +138,7 @@ The algorithm then looks for informative features or other features that appear 
 \subsubsection{Handling low taxon values}  \label{sec:straditize-occurences}
 
 One particular feature often associated with pollen diagrams is the use of vertical exaggeration to help visualize changes in low percentages. Ordinarily, low percentages could be viewed better by changing the x-axis scale for the taxa with low percentages, but with pollen data it is also important to be able to make a visual comparison across all of the taxa listed, including those with high pollen percentages. Therefore, a common scale for all taxa is important. The exaggeration (fig. \samplediagram[j]) usually takes the form of a second line outside of the first, usually representing x5 or x10 exaggeration of the scale presented on the x-axis. This line could be expected to have greater precision than the first for any given pixel resolution, but problems emerge when the value of the exaggerated value exceeds the width of the scale on the x-axis, so that the line marking the exaggerated values is truncated at high values above a certain threshold. 
-Another common way to help the reader identify low percentages in pollen diagrams is to use a marker (often a \enquote{+} symbol, fig. \samplediagram[k]) for values below a certain threshold. This can be particularly useful for very low counts where the author wants the reader to be aware that pollen of a certain taxa was found, even if the pollen counted was very low. This is often used for instance with \enquote{important} taxa such as Cereals that can indicate human agricultural activity, and taxa like Larix (Larch) that have notoriously low pollen productivity and where <1.0\% in a pollen diagram may actually represent 20\% of Larix trees in the surrounding landscape. 
+Another common way to help the reader identify low percentages in pollen diagrams is to use a marker (often a \enquote{+} symbol, fig. \samplediagram[k]) for values below a certain threshold. This can be particularly useful for very low counts where the author wants the reader to be aware that pollen of a certain taxa was found, even if the pollen counted was very low. This is often used for instance with \enquote{important} taxa such as \textit{Cereals} that can indicate human agricultural activity, and taxa like \textit{Larix} (Larch) that have notoriously low pollen productivity and where <1.0\% in a pollen diagram may actually represent 20\% of \textit{Larix} trees in the surrounding landscape. 
 For the purpose of digitization, the \emph{straditize} user can either remove these exaggerations, or use some of the functions available in \emph{straditize} to consider both the non-exaggerated and the exaggerated information in the diagram. In the case of the use of symbols to represent values below a threshold, it needs to be decided what value the symbol will represent once it is digitized and turned into numerical data.  In any case, exaggerations and occurences are automatically removed from the image before the diagram is digitized (see next step \ref{sec:straditize-digitize}).
 
 \subsubsection{Digitizing the diagram}  \label{sec:straditize-digitize}
@@ -171,7 +171,7 @@ The algorithm is thereby split into two steps:
 \end{enumerate}
 
 The implementation of step \ref{enum:sample-1} necessarily differs between 
-bar and area/stacked/line diagrams. With bar diagrams \emph{straditize} uses the bars identified in the
+bar and area/stacked or line diagrams. With bar diagrams \emph{straditize} uses the bars identified in the
 previous digitization step (section \ref{sec:straditize-digitize}) to define these rough sample locations, while for the other diagram types the algorithm looks for local extrema in the graph line, i.e. intervals that are lower or higher than the surrounding areas. This implies that each sample is associated with a local minimum or maximum in at least one of the diagram columns. This holds well for pollen diagrams that usually sum up to 100\% across all of the columns or variables in the diagram, but it is however not generally true for all stratigraphic diagrams.
 
 Step \ref{enum:sample-2} then aligns these rough intervals and uses the overlapping information from the different columns to estimate the exact location of the sample. This is described by the following procedure, where we focus on a simple case of only two diagram columns. Assume that the two columns $i$ and $j$ have a sample in the corresponding overlapping intervals $I_i$ and $I_j$ (i.e. $I_i = \left\{r_{i,1}, r_{i,2}, \ldots\right\}$, and $I_j = \left\{r_{j,1}, r_{j,2}, \ldots\right\}$ with $I_i \cap I_j \neq \emptyset$). To find the exact location, \emph{straditize} distinguishes the following cases:
