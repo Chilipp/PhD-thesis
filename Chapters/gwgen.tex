@@ -22,7 +22,7 @@
 
 The development of the first global vegetation models in the 1970’s \citep[e.g.,][]{Lieth1975} brought about the demand for meteorological forcing datasets with global extent and relatively high spatial resolution, e.g., $1^{\circ}\times1^{\circ}$. While a global weather station-based monthly climate dataset was available at this time \citep{WalterLieth1967}, limitations in computers and storage allowed only the simplest treatment of these data. The first global simulations of the net primary productivity of the terrestrial biosphere \citep{Lieth1975}, thus used rasterized polygons of annual meteorological variables that had been crudely interpolated from the station-based climatology. A decade later saw the development of better computers and more sophisticated global vegetation models \citep{PrenticeCramerHarrisonEtAl1992, Prentice1989} that recognized the need for forcing at a sub-annual timestep and development of these models was done in parallel with the first global, gridded high resolution (0.5$^{\circ}$) monthly climatology \citep{LeemansCramer1991}. At the time, monthly meteorological data was the only feasible global data that could be produced, in terms of the raw station data available to feed the interpolation process, the processing time required to produce gridded maps, and the data storage and transfer capabilities of contemporary computer systems and networks. Global gridded monthly climate data thus became the standard for not only large-extent vegetation modeling \citep{HaxeltinePrentice1996a, HaxeltinePrenticeCreswell1996,KaplanBigelowPrenticeEtAl2003, KucharikFoleyDelireEtAl2000, WoodwardSmithEmanuel1995}, but also for a wide range of studies on biodiversity and species distribution \citep[e.g.,][]{ElithGrahamAndersonEtAl2006}, vegetation trace gas emissions \citep[e.g.,][]{GuentherHewittEricksonEtAl1995}, and even the geographic distribution of human diseases \citep[e.g.,][]{BhattGethingBradyEtAl2013}
 
-Over subsequent years, the global gridded monthly climate datasets were improved \citep{NewHulmeJones1999,NewListerHulmeEtAl2002}, developed with very high spatial resolution \citep{HijmansCameronParraEtAl2005}, and expanded beyond climatological mean climate to cover continuous timeseries over decades \citep{HarrisJonesOsbornEtAl2014,MitchellJones2005,NewHulmeJones2000}. The latter was an essential requirement for forcing dynamic global vegetation models (DGVMs) \citep[e.g.,][]{SitchSmithPrenticeEtAl2003}. However, despite increasing quality, spatial resolution, and temporal extent in these datasets, the basic time step remained monthly, partly for legacy reasons --- models had been developed in an earlier era subject to computational limitations and therefore used a monthly timestep for efficiency even if this was no longer strictly a constraint --- and partly because of the challenge in developing a global, high-resolution climate dataset with a daily or shorter timestep still presented a major data management challenge.
+Over subsequent years, the global gridded monthly climate datasets were improved \citep{NewHulmeJones1999,NewListerHulmeEtAl2002}, developed with very high spatial resolution \citep{HijmansCameronParraEtAl2005}, and expanded beyond mean climate to cover continuous timeseries over decades \citep{HarrisJonesOsbornEtAl2014,MitchellJones2005,NewHulmeJones2000}. The latter was an essential requirement for forcing dynamic global vegetation models (DGVMs) \citep[e.g.,][]{SitchSmithPrenticeEtAl2003}. However, despite increasing quality, spatial resolution, and temporal extent in these datasets, the basic time step remained monthly, partly for legacy reasons --- models had been developed in an earlier era subject to computational limitations and therefore used a monthly timestep for efficiency even if this was no longer strictly a constraint --- and partly because of the challenge in developing a global, high-resolution climate dataset with a daily or shorter timestep still presented a major data management challenge.
 
 On the other hand, there was increasing awareness that accurate simulation of many earth surface processes required representation of processes at a shorter-than-monthly timestep. Global simulation of surface hydrology \citep{GertenSchaphoffHaberlandtEtAl2004}, crop growth \citep{BondeauSmithZaehleEtAl2007}, or biogeophysical processes \citep{KrinnerViovyNoblet-DucoudreEtAl2005} needed sub-monthly forcing to produce reliable results. To address this need for better forcing data, two main approaches were taken: either monthly climate data were downscaled online using a stochastic weather generator \citep[e.g.,][]{PfeifferSpessaKaplan2013}, or a sub-daily, high-resolution, gridded climate timeseries was generated directly by merging high-temporal-resolution reanalysis data (e.g., NCEP, 6h, 2.5$^{\circ}$) with high-spatial-resolution monthly climate data (e.g., CRU, 0.5$^{\circ}$). The latter process resulted in the CRUNCEP dataset \citep{ViovyCiais2016,WeiLiuHuntzingerEtAl2014}, which, while global, is large even by modern standards (ca. 350 Gb), is not available at spatial resolution greater than 0.5$^{\circ}$, and covers only the period 1901-2014.
 
@@ -45,7 +45,7 @@ GWGEN requires the following six monthly summary values as input: 1) total month
 
 The first approximation of the daily variables comes from smoothing the monthly time series using a mean-preserving algorithm \citep{RymesMyers2001}.
 
-For precipitation we then first use the Markov Chain approach (section \ref{sec:markov}) to decide the wet/dry state of the day. If it is a wet day, we calculate the gamma parameters using the equations \eqref{eq:gamma_scale} and \eqref{eq:gamma_shape}. The resulting distribution allows us to draw a random number, the precipitation amount of the currently simulated day. If we are above the threshold $\mu$, we draw a second random number from the GP distribution parameterized via equation \eqref{eq:gp_scale} and the chosen GP shape.
+For precipitation we then first use the Markov Chain approach (section \ref{sec:markov}) to decide the wet/dry state of the day. If it is a wet day, we calculate the gamma parameters using the equations \eqref{eq:gamma_scale} and \eqref{eq:gamma_shape}. The resulting distribution allows us to draw a random number, the precipitation amount of the currently simulated day. If we are above the threshold $\mu$, we draw a second random number from the Generalized Pareto (GP) distribution parameterized via equation \eqref{eq:gp_scale} and the chosen GP shape.
 
 The next step modifies the means of temperature, wind speed and cloud fraction depending on the wet/dry state of the day (lines \ref{a:gwgen:adjust_wet} and \ref{a:gwgen:adjust_dry} in algorithm \ref{a:gwgen}). After that, we use the cross-correlation approach described in \cite{Richardson1981} (lines \ref{a:gwgen:cross} - \ref{a:gwgen:cross-end} and \autoref{sec:corr}) and calculate the daily values of these variables. Finally we use the quantile-based bias correction described in section \ref{sec:bias} to correct the simulated wind speed.
 
@@ -135,7 +135,7 @@ Finally, we reserved some weather station records for model evaluation that were
 
 Following \cite{GengDevriesSupit1986}, we expect to find a good relationship between the fraction of days in a month with measurable precipitation and the probability that any given day will be wet. Following \cite{Wilks1999} we use a hybrid-order model that retains first-order Markov dependence for wet spells but allows second-order dependence for dry sequences; this hybrid-order scheme has been shown to be a good compromise between performance and simplicity. To parameterize the precipitation occurrence part of the model, we thus calculated transition probabilities for a wet day being followed by a wet day ($p_{11}$), for a wet day being followed by a dry day being followed by a wet day ($p_{101}$) and for two dry days being followed by a wet day ($p_{001})$. We perform this analysis on a station and month-wise basis, i.e., we first extract each of the (complete) Januaries, Februaries, etc. for a given station, and then merge all of the Januaries (Februaries, Marches, etc...) for this station into a single series representing each month. Merging months over several years is particularly important for stations that have relatively little precipitation in a given month; for example, it could take several years of observations to observe a single ($p_{101}$) event. The final transition probabilities were then regressed against the fraction of days in the month with precipitation, which show the characteristic linear relationship described by \cite{GengDevriesSupit1986} (Figure \ref{fig:markov}).
 
-Because the transition probabilities ($p_{001})$ and ($p_{101}$) must be zero by definition when the fraction of wet days ($f_\mathrm{wet}$) is zero, i.e., a completely dry month, we force the linear regression between these quantities to pass through the origin. Likewise, we require the regression line for ($p_{11}$) to equal 1 when $f_\mathrm{wet}$ is 1. One has to note, however, that this methodology artificially increases the $R^2$ coefficient for the fit because we fix the intercept \citep[see for example][]{Gordon1981}. 
+Because the transition probabilities ($p_{001})$ and ($p_{101}$) must be zero by definition when the fraction of wet days ($f_\mathrm{wet}$) is zero, i.e., a completely dry month, we force the linear regression between these quantities to pass through the origin. Likewise, we require the regression line for ($p_{11}$) to equal 1 when $f_\mathrm{wet}$ is 1. One has to note, however, that this method artificially increases the $R^2$ coefficient for the fit because we fix the intercept \citep[see for example][]{Gordon1981}. 
 
 The analysis results in the the following relationships:
 
@@ -265,7 +265,7 @@ The other parameters of the GP distribution are obtained through a sensitivity a
 	\end{tabular}
 \end{table}
 
-Following the standard WGEN methodology \citep{Richardson1981} and \cite{GengDevriesSupit1986}, daily temperature is determined through 2 processes: First, the wet/dry state of the day, and second the cross correlation (\autoref{sec:corr}).
+Following the standard WGEN methodology \citep{Richardson1981} and \cite{GengDevriesSupit1986}, daily temperature is determined through 2 processes: First, the wet/dry state of the day, and second the cross correlation (section \ref{sec:corr}).
 
 In the weather generator, we know from the Markov chain (\autoref{sec:markov}), whether the current simulated day is a wet or dry day. Based upon the simple linear relationships
 
@@ -368,7 +368,7 @@ The parameterization of the mean wind speed is based upon the same linear equati
 This better resolves the complex behavior close to $0\,\unit{m}\,\unit{s}^{-1}$ compared to a linear fit. The plots are shown in the figures \ref{fig:wind} and \ref{fig:wind_sd} and the parameters for the fits are shown in table \ref{tab:t-corr}.
 
 \subsubsection{Cross correlation} \label{sec:corr}
-Following \cite{Richardson1981} we use cross correlation to add additional residual noise to the simulated meteorological variables, which provides more realism in the daily weather result. This methodology, based on \cite{Matalas1967} preserves the serial and the cross correlation between the simulated variables. It implies that the serial correlation of each
+Following \cite{Richardson1981} we use cross correlation to add additional residual noise to the simulated meteorological variables, which provides more realism in the daily weather result. This method, based on \cite{Matalas1967} preserves the serial and the cross correlation between the simulated variables. It implies that the serial correlation of each
 variable may be described by a first-order linear autoregressive model
 
 Given the cross correlation matrix $M_0\in\mathbb{R}^4\times\mathbb{R}^4$ and the lag-1 correlation matrix $M_1 \in\mathbb{R}^4\times\mathbb{R}^4$, we calculate 
@@ -378,21 +378,20 @@ A = M_1M_0^{-1} \qquad BB^T = M_0 - M_1M_0^{-1}M_1^T.
 
 The matrices $A, B, M_0$ and $M_1$ are calculated using the stations from the EECRA database in figure \ref{fig:stations}. The results are
 
-\begin{equation}
-M_0 = \left( \begin{matrix}
+\begin{align}
+M_0 &= \left( \begin{matrix}
 1. & 0.565 & 0.041 & 0.035\\
 0.565 & 1. & -0.089 & -0.043\\
 0.041 & -0.089 & 1. & 0.114\\
 0.035 & -0.043 & 0.114 & 1.\\
-\end{matrix} \right)
-\qquad
-M_1 = \left( \begin{matrix}
+\end{matrix} \right) \nonumber \\
+M_1 &= \left( \begin{matrix}
 0.933 & 0.55 & 0.016 & 0.03\\
 0.557 & 0.417 & -0.066 & -0.043\\
 0.004 & -0.095 & 0.599 & 0.093\\
 0.011 & -0.063 & 0.061 & 0.672\\
 \end{matrix} \right).
-\end{equation}
+\end{align}
 
 leading to
 
@@ -477,7 +476,7 @@ In table \ref{tab:freq} we also compare the simulated versus the observed freque
 
 After evaluating the results of GWGEN for wind speed for the different quantiles (see previous \autoref{sec:eval}) we found a strong, systematic bias between the simulated and the observed values. This observation led us to adopt a further measure to improve the quality of the model output by implementing a quantile-based bias correction.
 
-We use an empirical distribution correction approach (quantile-mapping) \citep{LafonDadsonBuysEtAl2012} to a posteriori correct the simulated data. In the quantile evaluation (previous \autoref{sec:eval}) we saw that the simulated wind speed is a linear function of the observed wind speed, i.e. $w_{sim} = \text{intercept} + \text{slope} \cdot w_{obs}$ (best fit line in figure \ref{fig:all_quants}). Therefore, we use two steps here, one is for the difference between simulation and observation (ideally 0), the other one is the fraction of observation and simulation (ideally 1). The first one corresponds to the intercept with the y-axis in figure \ref{fig:all_quants}, the second one to the slope of the best fit line. The analysis is based on every second percentile between 1 and 100 (i.e. $1, 3, 5, \ldots$) and mapped to it's corresponding random number $u\in\mathbb{R}$ from a normal distribution as it is used for the cross correlation in the weather generator (section \ref{sec:corr}, x-axis in figure \ref{fig:bias} and \cite{Richardson1981}). 
+We use an empirical distribution correction approach (quantile-mapping) \citep{LafonDadsonBuysEtAl2012} to a posteriori correct the simulated data. In the quantile evaluation (previous \autoref{sec:eval}) we saw that the simulated wind speed is a linear function of the observed wind speed, i.e. $w_{sim} = \text{intercept} + \text{slope} \cdot w_{obs}$ (best fit line in figure \ref{fig:all_quants}). Therefore, we use two steps here, one is for the difference between simulation and observation (ideally 0), the other one is the fraction of observation and simulation (ideally 1). The first one corresponds to the intercept with the y-axis in figure \ref{fig:all_quants}, the second one to the slope of the best fit line. The analysis is based on every second percentile between 1 and 100 (i.e. $1, 3, 5, \ldots$) and mapped to its corresponding random number $u\in\mathbb{R}$ from a normal distribution as it is used for the cross correlation in the weather generator (section \ref{sec:corr}, x-axis in figure \ref{fig:bias} and \cite{Richardson1981}). 
 
 Regarding the intercept (fig. \ref{fig:bias}, left) we see that it strongly follows an exponential function given through
 \begin{equation}
@@ -497,11 +496,11 @@ with $a =1.1582, b = -1.3359, c_0 = 0.9954, c_1 = 0.8508, c_2 = 0.0278, c_3 = -0
 \subsection{Sensitivity analysis} \label{sec:sens}
 The Generalized-Pareto part of the hybrid Gamma-GP distribution, which we used to simulate precipitation amount, has two parameters: the GP shape, and the threshold parameter. Unlike the gamma parameters, we were unable to relate these GP parameters to any of the monthly summary data we use as input to GWGEN. Hence, we decided to set fixed values for these parameters, and determine them through a sensitivity analysis.
 
-To select the "best" values of the GP parameters, we compared simulated with observed precipitation amounts, running GWGEN with a wide range of realistic parameter values. To quantitatively assess the model performance, we used two metrics: 1) direct comparison of the quantiles (see previous section), and 2) a Kolmogorov-Smirnov (KS) test that evaluates whether two data samples come from significantly different distributions. Our criteria were
+To select the "best" values of the GP parameters, we compared simulated with observed precipitation amounts, running GWGEN with a wide range of realistic parameter values. To quantitatively assess the model performance, we used two metrics: 1) direct comparison of the quantiles (see previous section), and 2) a Kolmogo-rov-Smirnov (KS) test that evaluates whether two data samples come from significantly different distributions. Our criteria were
 
 \begin{enumerate}
 	\item The $R^2$  correlation coefficient between simulated and observed quantiles \label{item:sens_rsquared}
-	\item The fraction $\frac{\text{simulated precipitation}}{{\text{observed precipitation}}}$ from the slopes in figure \ref{fig:precip_quants} and it's deviation from unity \label{item:sens_slope}
+	\item The fraction $\frac{\text{simulated precipitation}}{{\text{observed precipitation}}}$ from the slopes in figure \ref{fig:precip_quants} and its deviation from unity \label{item:sens_slope}
 	\item the fraction of simulated (station specific) years that are significantly different (KS test) from the observation \label{item:sens_ks}
 	\item The mean of the above values \label{item:sens_mean}
 \end{enumerate}
@@ -512,7 +511,7 @@ The values of the crossover point for  our sensitivity analysis were 2, 2.5, 3, 
 
 In general we found that the three criteria \ref{item:sens_rsquared}, \ref{item:sens_slope} and \ref{item:sens_ks} could not be optimized all together at the same time. The $R^2$ is best for high thresholds and low GP shape parameters, the slope is best for low to intermediate thresholds and a low GP shape and the KS statistic is best for low threshold and intermediate GP shape parameters.
 
-However, $R^2$ did not vary that much (from 0.68 to 0.74) and from a visual evaluation of the corresponding quantile plots we saw that the higher quantiles (>90) were much better represented for a better KS result. Hence we chose to follow the KS test criteria, which is also the strictest of our evaluation methods but again compared the different quantile plots to get good results for the higher quantiles.  Finally, we chose a threshold of $5\,\unit{mm}$ and a GP shape parameter of $1.5$. For this setting, $81.7\%$ of the simulated years do not show a significant difference compared to the observation, the mean $R^2$ of the plots in figure \ref{fig:precip_quants} is $0.81$ and the mean deviation of the slope from unity is $0.10$ and for the upper quantiles (90 to 100), $0.017$.
+However, $R^2$ did not vary that much (from 0.68 to 0.74) and from a visual evaluation of the corresponding quantile plots we saw that the higher quantiles (>90) were much better represented for a better KS result. Hence, we chose to follow the KS test criteria, which is also the strictest of our evaluation methods but again compared the different quantile plots to get good results for the higher quantiles.  Finally, we chose a threshold of $5\,\unit{mm}$ and a GP shape parameter of $1.5$. For this setting, $81.7\%$ of the simulated years do not show a significant difference compared to the observation, the mean $R^2$ of the plots in figure \ref{fig:precip_quants} is $0.81$ and the mean deviation of the slope from unity is $0.10$ and for the upper quantiles (90 to 100), $0.017$.
 
 Nevertheless, in total the results seem to be fairly independent of the two parameters since even the amount of years without significant differences vary from $73\%$ to only $83\%$. It is however better than the gamma distribution alone which still has $78.6\%$ of station years not differing significantly but with a slope deviation from unity for the upper quantiles of $0.16$. Thus using the hybrid Gamma-GP distribution improves the simulation of high-amount precipitation events by roughly factor 10 compared to a standard Gamma approach.
 
