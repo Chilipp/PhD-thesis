@@ -102,7 +102,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{algorithm}
 \usepackage{hyperref}
 \usepackage{fancyvrb}
-\usepackage[acronym,toc,nomain,savenumberlist,counter=chapter]{glossaries}
+\usepackage[acronym,toc,nomain,savenumberlist]{glossaries}
 \usepackage[colorinlistoftodos,textsize=tiny,disable]{todonotes}
 \usepackage{titlesec, titletoc}  % necessary for putting bars and labels under the part in toc
 \usepackage{multirow}
@@ -273,15 +273,21 @@ headsepline, % Uncomment to get a line under the header
 
 \part{New Software Tools for Paleoclimate Analysis}  \label{part:software}
 
+\glsresetall
 \include{Chapters/empd}
+\glsresetall
 \include{Chapters/straditize}
+\glsresetall
 \include{Chapters/psyplot}
 
 \part{Computational Models}  \label{part:models}
 
+\glsresetall
 \include{Chapters/gridding}
+\glsresetall
 \include{Chapters/gwgen}
 
+\glsresetall
 \include{Chapters/conclusions}
 
 %----------------------------------------------------------------------------------------
@@ -311,8 +317,7 @@ headsepline, % Uncomment to get a line under the header
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
-\printnoidxglossary[type=acronym]
-\printacronyms[title={List of Abbreviations}]
+\printnoidxglossary[type=acronym, title={List of Abbreviations}]
 
 %----------------------------------------------------------------------------------------
 %	SYMBOLS
