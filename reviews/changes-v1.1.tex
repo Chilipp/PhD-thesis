@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL ../PhD-thesis-original/main.tex   Mon Jan 27 19:24:11 2020
-%DIF ADD main.tex                          Wed Feb  5 22:28:40 2020
+%DIF ADD main.tex                          Thu Feb  6 00:46:20 2020
 % Masters/Doctoral Thesis
 % LaTeX Template
 % Version 2.5 (27/8/17)
@@ -112,6 +112,11 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{longtable}
 \usepackage{afterpage}
 
+%DIF 112a112-114
+\setcounter{biburllcpenalty}{7000} %DIF > 
+\setcounter{biburlucpenalty}{8000} %DIF > 
+ %DIF > 
+%DIF -------
 
 \makeatletter
 \def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
@@ -1204,7 +1209,7 @@ psy-maps currently implements additional \DIFdelbegin \DIFdel{formatoptions }\DI
 
 \subsubsection{psy-reg: The psyplot plugin for visualizing and calculating regression plots}
 
-psy-reg performs regression analysis on 1D variables using the methods of the statsmodels \citep{SeaboldPerktold2010} and scipy \citep{JonesOliphantPetersonEtAl2001, Oliphant2007} packages, and visualizes the results with the functionalities of the psy-simple plugin. As such, it implements \DIFdelbegin \DIFdel{formatoptions }\DIFdelend \DIFaddbegin \textit{\DIFadd{formatoptions}} \DIFaddend for univariate regressions, confidence intervals via bootstrapping, and combined plots of the data density and the fitted model (see also supplements \ref{sec:psy-reg-plotmethods}). The necessity for this package arose from the need to visualize a regression model, compare it (visually) with the original data and to use it afterwards. Other python packages either focus only on the generation of the regressions (such as statsmodels or scipy), or on their visualization (such as seaborn \citep{WaskomBotvinnikOKaneEtAl2018}). The psyplot plugin makes it possible to generate the visualization and to access the underlying regression model parameters and uncertainties.
+psy-reg performs regression analysis on 1D variables using the methods of the \DIFdelbegin \DIFdel{statsmodels }\DIFdelend \DIFaddbegin \DIFadd{stats-models }\DIFaddend \citep{SeaboldPerktold2010} and scipy \citep{JonesOliphantPetersonEtAl2001, Oliphant2007} packages, and visualizes the results with the functionalities of the psy-simple plugin. As such, it implements \DIFdelbegin \DIFdel{formatoptions }\DIFdelend \DIFaddbegin \textit{\DIFadd{formatoptions}} \DIFaddend for univariate regressions, confidence intervals via bootstrapping, and combined plots of the data density and the fitted model (see also supplements \ref{sec:psy-reg-plotmethods}). The necessity for this package arose from the need to visualize a regression model, compare it (visually) with the original data and to use it afterwards. Other python packages either focus only on the generation of the regressions (such as statsmodels or scipy), or on their visualization (such as seaborn \citep{WaskomBotvinnikOKaneEtAl2018}). The psyplot plugin makes it possible to generate the visualization and to access the underlying regression model parameters and uncertainties.
 
 psy-reg has been heavily used for the parameterization of the weather generator in chapter \ref{chp:gwgen} which also gave the initial motivation for the package. 
 
@@ -1632,7 +1637,7 @@ The realized (and standardized) distribution of the entire database presented in
 	\label{fig:gridding-temp-sampling-violins}
 \end{figure}
 
-As already mentioned in \ref{sec:gridding-mat}, our sampling approach does not use the temperature and uncertainty reported for every single variable. Instead, it samples the underlying distribution. As such, our method can be adapted to multiple site-specific reconstruction methods, such as weighted averaging (WA), weighted-averaging partial-least squares (WAPLS) \citep{BirksBraakLineEtAl1990, BraakJuggins1993} or other approaches \citep[e.g.][]{BirksHeiriSeppaeEtAl2010, BrewerGuiotBarboni2007, Juggins2013}. In this study, we use a \gls{mat} approach (see section \ref{sec:gridding-mat}) and sample the discrete set of climate analogues for each sample. The probability to select an analogue (i.e. \DIFdelbegin \DIFdel{it's }\DIFdelend \DIFaddbegin \DIFadd{its }\DIFaddend weight) is thereby determined by the chord distance between the fossil and modern pollen assemblages. The closer the assemblages (relative to the other potential analogues), the higher the weight.
+As already mentioned in \ref{sec:gridding-mat}, our sampling approach does not use the temperature and uncertainty reported for every single variable. Instead, it samples the underlying distribution. As such, our method can be adapted to multiple site-specific reconstruction methods, such as weighted averaging (WA), weighted-averaging \DIFdelbegin \DIFdel{partial-least }\DIFdelend \DIFaddbegin \DIFadd{partial least }\DIFaddend squares (WAPLS) \citep{BirksBraakLineEtAl1990, BraakJuggins1993} or other approaches \citep[e.g.][]{BirksHeiriSeppaeEtAl2010, BrewerGuiotBarboni2007, Juggins2013}. In this study, we use a \gls{mat} approach (see section \ref{sec:gridding-mat}) and sample the discrete set of climate analogues for each sample. The probability to select an analogue (i.e. \DIFdelbegin \DIFdel{it's }\DIFdelend \DIFaddbegin \DIFadd{its }\DIFaddend weight) is thereby determined by the chord distance between the fossil and modern pollen assemblages. The closer the assemblages (relative to the other potential analogues), the higher the weight.
 
 This methodology is substantially different from the standard approach, such that \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{it }\DIFaddend takes the multimodality of the analogues into account, whereas the standard \DIFdelbegin \DIFdel{appraoch }\DIFdelend \DIFaddbegin \DIFadd{approach }\DIFaddend (weighted average of the $k$ closest analogues) estimates a unimodal distribution. It additionally better represents the discrete nature of the analogue approach whereas the standard method intrinsically assumes a continuity in the distribution. In fact, only a small part of the available climate space is actually represented by the modern analogues. The 5'500 modern analogues for Tigalmamine, for instance (110 samples with 50 analogues each), are represented by only 240 distinct modern pollen samples with only 131 distinct \gls{jja} temperatures and they eventually span a large climate space (see figure \ref{fig:gridding-site-analogues}).
 
